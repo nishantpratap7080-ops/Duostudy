@@ -10,77 +10,86 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.5s ease, color 0.5s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.4s ease, color 0.4s ease; }
         .font-cursive { font-family: 'Dancing Script', cursive; }
         .font-corsiva { font-family: 'Playfair Display', serif; font-style: italic; }
-
-        /* Modern Dark Mesh Theme */
-        .theme-dark { 
-            background: radial-gradient(circle at 10% 20%, rgba(30, 27, 75, 0.9) 0%, rgba(15, 23, 42, 1) 90%);
-            color: #F8FAFC; 
-        }
-        .theme-dark .panel { 
-            background: rgba(15, 23, 42, 0.7); 
-            border: 1px solid rgba(255, 255, 255, 0.12); 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); 
-            backdrop-filter: blur(24px);
-        }
-        .theme-dark .sub-panel { 
-            background: rgba(2, 6, 23, 0.6); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-        }
-        .theme-dark .text-heading { color: #FFFFFF; }
-        .theme-dark .text-sub { color: #94A3B8; }
-        .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.85); border-color: rgba(255, 255, 255, 0.1); }
-        .theme-dark .input-bg { background: rgba(2, 6, 23, 0.8); border-color: rgba(255, 255, 255, 0.15); color: #F8FAFC; }
-
-        /* Modern Light Mesh Theme */
+        
+        /* Premium Light Theme */
         .theme-light { 
-            background: radial-gradient(circle at 10% 20%, #EEF2FF 0%, #F8FAFC 90%);
+            background: radial-gradient(circle at top left, #F1F5F9, #F8FAFC, #EEF2FF);
             color: #0F172A; 
         }
         .theme-light .panel { 
             background: rgba(255, 255, 255, 0.85); 
-            border: 1px solid rgba(226, 232, 240, 0.9); 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
             box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05); 
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(16px);
         }
         .theme-light .sub-panel { 
-            background: rgba(241, 245, 249, 0.8); 
-            border: 1px solid rgba(226, 232, 240, 0.8); 
+            background: rgba(241, 245, 249, 0.7); 
+            border: 1px solid rgba(226, 232, 240, 0.6); 
         }
         .theme-light .text-heading { color: #0F172A; }
         .theme-light .text-sub { color: #475569; }
         .theme-light .nav-bg { background: rgba(255, 255, 255, 0.85); border-color: rgba(226, 232, 240, 0.8); }
         .theme-light .input-bg { background: #FFFFFF; border-color: #CBD5E1; color: #0F172A; }
+        .theme-light .quote-text { color: #000000 !important; }
 
-        /* Glowing Micro-Interactions */
-        .glow-indigo { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.5); }
-        .glow-pink { box-shadow: 0 0 25px -5px rgba(244, 114, 182, 0.5); }
-        .glow-blue { box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.5); }
+        /* Premium Dark Theme */
+        .theme-dark { 
+            background: radial-gradient(circle at top left, #0B0F19, #020617, #090D16);
+            color: #F1F5F9; 
+        }
+        .theme-dark .panel { 
+            background: rgba(15, 23, 42, 0.75); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(20px);
+        }
+        .theme-dark .sub-panel { 
+            background: rgba(2, 6, 23, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+        .theme-dark .text-heading { color: #FFFFFF; }
+        .theme-dark .text-sub { color: #94A3B8; }
+        .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.85); border-color: rgba(255, 255, 255, 0.08); }
+        .theme-dark .input-bg { background: #020617; border-color: #1E293B; color: #F1F5F9; }
+        .theme-dark .quote-text { color: #FFFFFF !important; }
+
+        /* Smooth UI Animations & Ambient Glows */
+        .animate-pop { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
+        .animate-pop:hover { transform: translateY(-4px) scale(1.008); }
+        .tab-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        .card-hover { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .card-hover:hover { transform: translateY(-4px); }
+        .glow-blue { box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.4); }
+        .glow-pink { box-shadow: 0 0 25px -5px rgba(244, 114, 182, 0.4); }
+        .glow-indigo { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4); }
+
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
+        }
+        .pulse-glow { animation: pulse-subtle 3s infinite ease-in-out; }
     </style>
 </head>
-<body id="app-body" class="theme-dark min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+<body id="app-body" class="theme-light min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Header Navigation -->
+    <!-- Navigation Header -->
     <header class="border-b nav-bg sticky top-0 z-50 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between py-3">
+        <div class="max-w-7xl mx-auto px-6 h-22 flex items-center justify-between py-3">
             <div class="flex items-center space-x-3">
-                <div class="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-pink-400 animate-pulse shadow-lg"></div>
+                <div class="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-pink-400 animate-pulse shadow-md"></div>
                 <div>
                     <span class="font-extrabold text-2xl tracking-tight text-heading block leading-none">Accountability</span>
-                    <span class="font-cursive font-bold text-xl text-indigo-400 tracking-wide block leading-tight mt-1">Target MAY'27</span>
+                    <span class="font-cursive font-bold text-xl text-indigo-600 tracking-wide block leading-tight mt-1">Target MAY'27</span>
                 </div>
             </div>
             
             <nav class="flex space-x-1.5 sub-panel p-1.5 rounded-2xl">
-                <button onclick="switchTab('focus')" id="tab-focus" class="px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo">Focus Room</button>
-                <button onclick="switchTab('tasks')" id="tab-tasks" class="px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Daily Deck</button>
-                <button onclick="switchTab('analytics')" id="tab-analytics" class="px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Analytics & Logs</button>
-                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Syllabus</button>
+                <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo">Focus Room</button>
+                <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Daily Deck</button>
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Analytics & Logs</button>
+                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Syllabus</button>
             </nav>
 
             <div class="flex items-center space-x-4">
@@ -90,19 +99,19 @@
                 </div>
 
                 <div class="flex items-center space-x-2 text-xs font-bold">
-                    <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-400 flex items-center gap-1.5 shadow-sm">
+                    <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1.5 shadow-sm">
                         <span>• Nishant:</span>
                         <span id="streak-nishant">0 Days</span>
                     </div>
-                    <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-400 flex items-center gap-1.5 shadow-sm">
+                    <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-500 flex items-center gap-1.5 shadow-sm">
                         <span>• Naqeeba:</span>
                         <span id="streak-naqeeba">0 Days</span>
                     </div>
                 </div>
 
                 <button onclick="toggleTheme()" class="px-3.5 py-2 sub-panel rounded-xl text-xs font-bold text-sub hover:text-heading flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
-                    <span id="theme-icon">🌙</span>
-                    <span id="theme-text">Dark Mode</span>
+                    <span id="theme-icon">☀️</span>
+                    <span id="theme-text">Light Mode</span>
                 </button>
             </div>
         </div>
@@ -116,8 +125,9 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 <div class="space-y-6">
-                    <!-- Session Timer -->
-                    <div class="panel p-6 rounded-3xl text-center relative overflow-hidden card-hover">
+                    
+                    <!-- Timer Card -->
+                    <div class="panel p-6 rounded-3xl text-center relative overflow-hidden animate-pop">
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Active Focus Timer</span>
                             <select id="timer-user-select" class="input-bg text-xs font-bold rounded-xl px-2.5 py-1 focus:outline-none shadow-sm">
@@ -126,7 +136,7 @@
                             </select>
                         </div>
 
-                        <div id="timer-display" class="text-6xl font-black text-heading font-mono my-5 tracking-tighter">00:00:00</div>
+                        <div id="timer-display" class="text-6xl font-black text-heading font-mono my-5 tracking-tighter pulse-glow">00:00:00</div>
                         
                         <div class="flex justify-center gap-3">
                             <button onclick="toggleActiveTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md glow-indigo cursor-pointer hover:scale-105 active:scale-95">Start Session</button>
@@ -134,11 +144,11 @@
                         </div>
                     </div>
 
-                    <!-- Individual Completed Hours -->
-                    <div class="panel p-5 rounded-3xl space-y-4 card-hover">
+                    <!-- Individual Daily Completed Hours -->
+                    <div class="panel p-5 rounded-3xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Individual Hours Today</h3>
-                            <button onclick="toggleInlineForm('form-edit-goal')" class="text-xs text-indigo-400 font-semibold hover:underline">Target Goal</button>
+                            <button onclick="toggleInlineForm('form-edit-goal')" class="text-xs text-indigo-500 font-semibold hover:underline">Target Goal</button>
                         </div>
 
                         <div id="form-edit-goal" class="hidden sub-panel p-3 rounded-2xl space-y-2">
@@ -152,18 +162,19 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div class="sub-panel p-3.5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
                                 <span class="text-[10px] text-sub font-bold uppercase block">• Nishant Today</span>
-                                <span id="hours-nishant-today" class="text-xl font-extrabold text-blue-400 font-mono">0.0 hrs</span>
+                                <span id="hours-nishant-today" class="text-xl font-extrabold text-blue-600 font-mono">0.0 hrs</span>
                             </div>
                             <div class="sub-panel p-3.5 rounded-2xl border-l-4 border-pink-400 shadow-sm">
                                 <span class="text-[10px] text-sub font-bold uppercase block">• Naqeeba Today</span>
-                                <span id="hours-naqeeba-today" class="text-xl font-extrabold text-pink-400 font-mono">0.0 hrs</span>
+                                <span id="hours-naqeeba-today" class="text-xl font-extrabold text-pink-500 font-mono">0.0 hrs</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Live Status & Break Center -->
-                    <div class="panel p-5 rounded-3xl space-y-3 card-hover">
+                    <!-- Live Synchronized Status & Break Monitor -->
+                    <div class="panel p-5 rounded-3xl space-y-3 animate-pop">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status & Break Center</h3>
+                        
                         <div class="space-y-3">
                             <div class="sub-panel p-3.5 rounded-2xl border-l-4 border-blue-500 space-y-2 shadow-sm">
                                 <div class="flex items-center justify-between">
@@ -174,7 +185,7 @@
                                         <option value="Away">⚪ Away</option>
                                     </select>
                                 </div>
-                                <div id="break-timer-nishant" class="text-[11px] font-mono font-semibold text-amber-400 hidden">
+                                <div id="break-timer-nishant" class="text-[11px] font-mono font-semibold text-amber-500 hidden">
                                     On break for: <span id="break-clock-nishant">00:00</span>
                                 </div>
                             </div>
@@ -188,7 +199,7 @@
                                         <option value="Away">⚪ Away</option>
                                     </select>
                                 </div>
-                                <div id="break-timer-naqeeba" class="text-[11px] font-mono font-semibold text-amber-400 hidden">
+                                <div id="break-timer-naqeeba" class="text-[11px] font-mono font-semibold text-amber-500 hidden">
                                     On break for: <span id="break-clock-naqeeba">00:00</span>
                                 </div>
                             </div>
@@ -199,7 +210,7 @@
 
                 <!-- Right Workspace -->
                 <div class="lg:col-span-2 space-y-6">
-                    <div class="panel rounded-3xl p-6 flex flex-col justify-between min-h-[200px] card-hover">
+                    <div class="panel rounded-3xl p-6 flex flex-col justify-between min-h-[200px] animate-pop">
                         <div class="flex items-center justify-between border-b border-slate-700/20 pb-3 mb-4">
                             <div class="flex items-center space-x-2">
                                 <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -222,7 +233,7 @@
                         </div>
                     </div>
 
-                    <div class="panel rounded-3xl p-6 space-y-4 card-hover">
+                    <div class="panel rounded-3xl p-6 space-y-4 animate-pop">
                         <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                             <div>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Desk Showcase & Gallery</h3>
@@ -258,7 +269,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-xl font-bold tracking-tight text-heading">Daily Commitments</h2>
-                            <p class="text-sm font-corsiva font-semibold text-indigo-300 mt-1 leading-snug">
+                            <p class="text-sm font-corsiva font-semibold quote-text mt-1 leading-snug">
                                 Naqeeba u know what the only thing standing between u and everything you ever wanted is trying one more time ... go get out girl !!
                             </p>
                         </div>
@@ -284,9 +295,9 @@
                 </div>
 
                 <div class="space-y-4">
-                    <div class="panel p-5 rounded-3xl space-y-4 card-hover">
+                    <div class="panel p-5 rounded-3xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-rose-400">beta galti to kr di</h3>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-rose-500">beta galti to kr di</h3>
                             <button onclick="toggleInlineForm('form-add-penalty')" class="text-xs font-semibold text-sub hover:text-heading">+ Log</button>
                         </div>
 
@@ -315,11 +326,11 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <div class="lg:col-span-2 panel rounded-3xl p-6 space-y-4 card-hover">
+                <div class="lg:col-span-2 panel rounded-3xl p-6 space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Weekly Hour Comparison & Consistency Graph</h3>
                         <div class="flex items-center space-x-4 text-xs font-bold">
-                            <span class="text-blue-400">• Nishant</span>
+                            <span class="text-blue-500">• Nishant</span>
                             <span class="text-pink-400">• Naqeeba</span>
                         </div>
                     </div>
@@ -329,7 +340,7 @@
                     </div>
                 </div>
 
-                <div class="panel p-5 rounded-3xl space-y-4 card-hover">
+                <div class="panel p-5 rounded-3xl space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Attendance & Notes Calendar</h3>
                         <select id="calendar-view-mode" onchange="changeCalendarViewMode()" class="input-bg text-xs font-bold rounded-xl px-2 py-1">
@@ -348,8 +359,8 @@
                             </div>
                         </div>
 
-                        <button onclick="toggleInlineForm('form-calendar-note')" class="w-full py-2 bg-indigo-600/10 border border-indigo-500/30 text-indigo-400 rounded-2xl text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">
-                            + Add Note to Date
+                        <button onclick="toggleInlineForm('form-calendar-note')" class="w-full py-2 bg-indigo-600/10 border border-indigo-500/30 text-indigo-500 rounded-2xl text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">
+                            + Add Google-Style Note to Date
                         </button>
                     </div>
 
@@ -365,7 +376,7 @@
                     </div>
 
                     <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-sub mb-1">
-                        <span class="text-rose-400">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                        <span class="text-rose-500">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
                     </div>
                     
                     <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs"></div>
@@ -418,18 +429,18 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
-                <div class="panel p-5 rounded-3xl space-y-3 card-hover">
+                <div class="panel p-5 rounded-3xl space-y-3 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📝 Shared Resources & Notepad</h3>
-                        <button onclick="saveNotepad()" class="text-xs font-bold text-indigo-400 hover:underline">Save Notes</button>
+                        <button onclick="saveNotepad()" class="text-xs font-bold text-indigo-500 hover:underline">Save Notes</button>
                     </div>
                     <textarea id="resource-notepad" placeholder="Write shared notes, links, formula shortcuts, or exam schedules here..." class="w-full h-40 input-bg border rounded-2xl p-3.5 text-xs focus:outline-none font-mono leading-relaxed shadow-sm"></textarea>
                 </div>
 
-                <div class="panel p-5 rounded-3xl space-y-3 card-hover">
+                <div class="panel p-5 rounded-3xl space-y-3 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📊 Working Resource URL Sheet</h3>
-                        <button onclick="addResourceRowPrompt()" class="text-xs font-bold text-indigo-400 hover:underline">+ Add Link Row</button>
+                        <button onclick="addResourceRowPrompt()" class="text-xs font-bold text-indigo-500 hover:underline">+ Add Link Row</button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -453,12 +464,16 @@
         Accountability Hub &bull; Nishant & Naqeeba
     </footer>
 
-    <!-- SCRIPT ENGINE -->
+    <!-- ENGINE SCRIPT -->
     <script>
-        const STORAGE_KEY = "DUOSTUDY_UI_CACHE_V3";
+        const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR";
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const STORAGE_KEY = "DUOSTUDY_PERSISTENT_STATE";
 
         const DEFAULT_STATE = {
-            theme: 'dark',
+            theme: 'light',
             targetHours: 4.0,
             hoursNishantToday: 0.0,
             hoursNaqeebaToday: 0.0,
@@ -486,11 +501,38 @@
 
         function getState() { return localState; }
 
-        function saveStateLocally(newState) {
+        function saveStateToCloud(newState) {
             localState = newState;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
             renderAll();
+
+            db.from('app_state')
+                .upsert({ id: 'global', data: newState, updated_at: new Date() })
+                .then(({ error }) => { if (error) console.log("Cloud sync note:", error.message); });
         }
+
+        async function fetchCloudState() {
+            try {
+                const { data } = await db.from('app_state').select('data').eq('id', 'global').single();
+                if (data && data.data && Object.keys(data.data).length > 0) {
+                    localState = data.data;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
+                    renderAll();
+                }
+            } catch (err) {
+                console.log("Operating in local mode");
+            }
+        }
+
+        db.channel('public:app_state')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, payload => {
+                if (payload.new && payload.new.data) {
+                    localState = payload.new.data;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
+                    renderAll();
+                }
+            })
+            .subscribe();
 
         function toggleInlineForm(formId) {
             const el = document.getElementById(formId);
@@ -515,16 +557,16 @@
         function toggleTheme() {
             const state = getState();
             state.theme = state.theme === 'light' ? 'dark' : 'light';
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function switchTab(tabId) {
             ['focus', 'tasks', 'analytics', 'syllabus'].forEach(id => {
                 document.getElementById(`view-${id}`).classList.add('hidden');
-                document.getElementById(`tab-${id}`).className = "px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading";
+                document.getElementById(`tab-${id}`).className = "tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading";
             });
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).className = "px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo";
+            document.getElementById(`tab-${tabId}`).className = "tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo";
             if (tabId === 'analytics') renderChart();
         }
 
@@ -597,7 +639,7 @@
                 state.activeTimerSession.running = true;
                 state.activeTimerSession.startTime = Date.now();
             }
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function stopAndCompleteSession() {
@@ -612,7 +654,7 @@
             if (totalSeconds < 60) {
                 alert("Session too short to log (minimum 1 minute).");
                 state.activeTimerSession = { user: 'nishant', running: false, startTime: null, accumulatedSeconds: 0 };
-                saveStateLocally(state);
+                saveStateToCloud(state);
                 return;
             }
 
@@ -626,7 +668,7 @@
             }
 
             state.activeTimerSession = { user: user, running: false, startTime: null, accumulatedSeconds: 0 };
-            saveStateLocally(state);
+            saveStateToCloud(state);
             alert(`🎉 ${user === 'nishant' ? 'Nishant' : 'Naqeeba'} completed a focus session of ${completedHours} hours!`);
         }
 
@@ -642,7 +684,7 @@
             } else {
                 state.breakStartTimes[userKey] = null;
             }
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function saveTargetHoursInline() {
@@ -650,7 +692,7 @@
             if (!val || isNaN(val)) return;
             const state = getState();
             state.targetHours = parseFloat(parseFloat(val).toFixed(1));
-            saveStateLocally(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-edit-goal');
         }
 
@@ -659,7 +701,7 @@
             if (!link) return;
             const state = getState();
             state.meetLink = link;
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function launchMeetCall() {
@@ -678,7 +720,7 @@
                 const state = getState();
                 if (!state.photos) state.photos = [];
                 state.photos.unshift({ id: Date.now().toString(), caption: caption, url: e.target.result });
-                saveStateLocally(state);
+                saveStateToCloud(state);
                 toggleInlineForm('form-add-photo');
                 document.getElementById('input-photo-caption').value = '';
                 fileInput.value = '';
@@ -689,7 +731,7 @@
         function deletePhoto(id) {
             const state = getState();
             state.photos = (state.photos || []).filter(p => p.id !== id);
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function saveTaskInline() {
@@ -699,7 +741,7 @@
             const state = getState();
             if (!state.tasks) state.tasks = [];
             state.tasks.unshift({ id: Date.now().toString(), name: owner, title: title, completed: false });
-            saveStateLocally(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-add-task');
             document.getElementById('input-task-title').value = '';
         }
@@ -708,13 +750,13 @@
             const state = getState();
             const t = (state.tasks || []).find(x => x.id === id);
             if (t) t.completed = !t.completed;
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function deleteTask(id) {
             const state = getState();
             state.tasks = (state.tasks || []).filter(x => x.id !== id);
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function savePenaltyInline() {
@@ -723,7 +765,7 @@
             const state = getState();
             if (!state.penalties) state.penalties = [];
             state.penalties.unshift({ id: Date.now().toString(), text: text, paid: false });
-            saveStateLocally(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-add-penalty');
             document.getElementById('input-penalty-text').value = '';
         }
@@ -732,19 +774,19 @@
             const state = getState();
             const p = (state.penalties || []).find(x => x.id === id);
             if (p) p.paid = !p.paid;
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function setCalendarMarkMode(mode) {
             const state = getState();
             state.calendarMarkMode = mode;
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function changeCalendarViewMode() {
             const state = getState();
             state.calendarViewMode = document.getElementById('calendar-view-mode').value;
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function toggleCalendarDay(day) {
@@ -764,7 +806,7 @@
                 if (idx > -1) marks.splice(idx, 1);
                 else marks.push(day);
             }
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function saveCalendarNoteInline() {
@@ -775,7 +817,7 @@
             const state = getState();
             if (!state.calendarNotes) state.calendarNotes = {};
             state.calendarNotes[day] = text;
-            saveStateLocally(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-calendar-note');
             document.getElementById('input-note-day').value = '';
             document.getElementById('input-note-text').value = '';
@@ -831,7 +873,7 @@
             const state = getState();
             if (!state.syllabus) state.syllabus = [];
             state.syllabus.push({ id: Date.now().toString(), subject: subject, topic: topic, owner: owner, status: 'Not Started' });
-            saveStateLocally(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-add-syllabus');
             document.getElementById('input-syllabus-subject').value = '';
             document.getElementById('input-syllabus-topic').value = '';
@@ -845,20 +887,20 @@
                 else if (s.status === 'In Progress') s.status = 'Completed';
                 else s.status = 'Not Started';
             }
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function deleteSyllabusTopic(id) {
             const state = getState();
             state.syllabus = (state.syllabus || []).filter(x => x.id !== id);
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function saveNotepad() {
             const text = document.getElementById('resource-notepad').value;
             const state = getState();
             state.notepad = text;
-            saveStateLocally(state);
+            saveStateToCloud(state);
             alert("Notepad saved!");
         }
 
@@ -871,18 +913,18 @@
             const state = getState();
             if (!state.resources) state.resources = [];
             state.resources.push({ id: Date.now().toString(), title: title, url: url });
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function deleteResourceRow(id) {
             const state = getState();
             state.resources = (state.resources || []).filter(r => r.id !== id);
-            saveStateLocally(state);
+            saveStateToCloud(state);
         }
 
         function renderAll() {
             const state = getState();
-            applyTheme(state.theme || 'dark');
+            applyTheme(state.theme || 'light');
 
             document.getElementById('hours-nishant-today').innerText = `${state.hoursNishantToday || 0.0} hrs`;
             document.getElementById('hours-naqeeba-today').innerText = `${state.hoursNaqeebaToday || 0.0} hrs`;
@@ -922,11 +964,11 @@
                 photoGallery.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-sub sub-panel rounded-2xl">No photos uploaded. Click "+ Add Photo" above.</div>`;
             } else {
                 photoGallery.innerHTML = state.photos.map(p => `
-                    <div class="sub-panel rounded-2xl overflow-hidden group relative card-hover shadow-sm">
+                    <div class="sub-panel rounded-2xl overflow-hidden group relative animate-pop shadow-sm">
                         <img src="${p.url}" alt="${p.caption}" class="w-full h-32 object-cover">
                         <div class="p-2.5 flex justify-between items-center">
                             <span class="text-xs font-semibold text-heading truncate">${p.caption}</span>
-                            <button onclick="deletePhoto('${p.id}')" class="text-sub hover:text-rose-400 text-xs px-1">✕</button>
+                            <button onclick="deletePhoto('${p.id}')" class="text-sub hover:text-rose-500 text-xs px-1">✕</button>
                         </div>
                     </div>
                 `).join('');
@@ -937,14 +979,14 @@
                 tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-sub panel rounded-2xl">No tasks set. Click "+ Add Task" above.</div>`;
             } else {
                 tasksContainer.innerHTML = state.tasks.map(t => `
-                    <div class="panel p-3.5 rounded-2xl flex items-center justify-between hover:border-slate-400 transition-all card-hover shadow-sm">
+                    <div class="panel p-3.5 rounded-2xl flex items-center justify-between hover:border-slate-400 transition-all animate-pop shadow-sm">
                         <div class="flex items-center space-x-3">
                             <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask('${t.id}')" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
                             <span class="text-xs ${t.completed ? 'line-through text-sub' : 'text-heading'} font-medium">${t.title}</span>
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="text-[10px] px-2 py-0.5 rounded-lg sub-panel text-sub font-mono font-semibold">• ${t.name}</span>
-                            <button onclick="deleteTask('${t.id}')" class="text-sub hover:text-rose-400 text-xs px-1">✕</button>
+                            <button onclick="deleteTask('${t.id}')" class="text-sub hover:text-rose-500 text-xs px-1">✕</button>
                         </div>
                     </div>
                 `).join('');
@@ -956,8 +998,8 @@
             } else {
                 penaltiesContainer.innerHTML = state.penalties.map(p => `
                     <div class="sub-panel p-2.5 rounded-2xl flex items-center justify-between">
-                        <span class="text-xs ${p.paid ? 'line-through text-sub' : 'text-rose-400 font-medium'}">${p.text}</span>
-                        <button onclick="togglePenalty('${p.id}')" class="text-[10px] px-2 py-0.5 rounded-lg font-semibold ${p.paid ? 'sub-panel text-sub' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
+                        <span class="text-xs ${p.paid ? 'line-through text-sub' : 'text-rose-500 font-medium'}">${p.text}</span>
+                        <button onclick="togglePenalty('${p.id}')" class="text-[10px] px-2 py-0.5 rounded-lg font-semibold ${p.paid ? 'sub-panel text-sub' : 'bg-rose-500/20 text-rose-500 border border-rose-500/30'}">
                             ${p.paid ? 'Resolved' : 'Settle'}
                         </button>
                     </div>
@@ -976,11 +1018,11 @@
                 const note = state.calendarNotes ? state.calendarNotes[i] : null;
                 
                 let bgClass = 'sub-panel text-sub';
-                if (isHoliday) bgClass = 'bg-rose-600 text-white font-bold';
+                if (isHoliday) bgClass = 'bg-rose-500 text-white font-bold';
                 else if (isNaqeeba && isNishant) bgClass = 'bg-gradient-to-r from-pink-400 to-blue-500 text-white font-bold';
-                else if (isNaqeeba) bgClass = 'bg-pink-400 text-slate-950 font-bold';
+                else if (isNaqeeba) bgClass = 'bg-pink-300 text-pink-950 font-bold';
                 else if (isNishant) bgClass = 'bg-blue-500 text-white font-bold';
-                else if (isSunday) bgClass = 'border-rose-400/50 text-rose-400 font-bold sub-panel';
+                else if (isSunday) bgClass = 'border-rose-400/50 text-rose-500 font-bold sub-panel';
 
                 calHTML += `
                     <button onclick="toggleCalendarDay(${i})" class="p-1.5 rounded-2xl border text-xs cursor-pointer transition-all relative group ${bgClass}">
@@ -997,20 +1039,20 @@
             } else {
                 tbody.innerHTML = state.syllabus.map(s => `
                     <tr class="border-b border-slate-700/20 hover:bg-indigo-500/5">
-                        <td class="p-4 font-semibold text-indigo-400">${s.subject}</td>
+                        <td class="p-4 font-semibold text-indigo-500">${s.subject}</td>
                         <td class="p-4 text-heading font-medium">${s.topic}</td>
                         <td class="p-4 text-sub font-mono">${s.owner}</td>
                         <td class="p-4">
                             <button onclick="cycleSyllabusStatus('${s.id}')" class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide ${
-                                s.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                s.status === 'In Progress' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                s.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' :
+                                s.status === 'In Progress' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
                                 'sub-panel text-sub'
                             }">
                                 ${s.status} ↻
                             </button>
                         </td>
                         <td class="p-4 text-right">
-                            <button onclick="deleteSyllabusTopic('${s.id}')" class="text-sub hover:text-rose-400 text-xs">Delete</button>
+                            <button onclick="deleteSyllabusTopic('${s.id}')" class="text-sub hover:text-rose-500 text-xs">Delete</button>
                         </td>
                     </tr>
                 `).join('');
@@ -1026,10 +1068,10 @@
                     const completed = subTopics.filter(s => s.status === 'Completed').length;
                     const pct = Math.round((completed / subTopics.length) * 100);
                     return `
-                        <div class="panel p-4 rounded-2xl space-y-2 card-hover shadow-sm">
+                        <div class="panel p-4 rounded-2xl space-y-2 animate-pop shadow-sm">
                             <div class="flex justify-between text-xs font-bold">
                                 <span class="text-heading">${sub}</span>
-                                <span class="text-indigo-400 font-mono">${pct}%</span>
+                                <span class="text-indigo-500 font-mono">${pct}%</span>
                             </div>
                             <div class="w-full sub-panel h-2 rounded-full overflow-hidden">
                                 <div class="bg-indigo-600 h-full transition-all duration-500" style="width: ${pct}%"></div>
@@ -1047,10 +1089,10 @@
                     <tr class="border-b border-slate-700/20">
                         <td class="p-2 font-semibold text-heading">${r.title}</td>
                         <td class="p-2">
-                            <a href="${r.url}" target="_blank" class="text-indigo-400 font-mono underline hover:text-indigo-300 truncate block max-w-xs">${r.url}</a>
+                            <a href="${r.url}" target="_blank" class="text-indigo-500 font-mono underline hover:text-indigo-400 truncate block max-w-xs">${r.url}</a>
                         </td>
                         <td class="p-2 text-right">
-                            <button onclick="deleteResourceRow('${r.id}')" class="text-sub hover:text-rose-400 text-xs">Delete</button>
+                            <button onclick="deleteResourceRow('${r.id}')" class="text-sub hover:text-rose-500 text-xs">Delete</button>
                         </td>
                     </tr>
                 `).join('');
@@ -1058,6 +1100,7 @@
         }
 
         renderAll();
+        fetchCloudState();
     </script>
 </body>
 </html>
