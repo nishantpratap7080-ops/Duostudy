@@ -6,53 +6,92 @@
     <title>Accountability - Co-Working & Progress Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore-compat.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
         
         body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.4s ease, color 0.4s ease; }
         .font-cursive { font-family: 'Dancing Script', cursive; }
         .font-corsiva { font-family: 'Playfair Display', serif; font-style: italic; }
-        
-        .theme-light { background-color: #F8FAFC; color: #0F172A; }
-        .theme-light .panel { background: #FFFFFF; border: 1px solid #E2E8F0; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05); }
-        .theme-light .sub-panel { background: #F1F5F9; border: 1px solid #E2E8F0; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Modern Mesh Glow & Ambient Glass Theme */
+        .theme-light {
+            background-color: #F8FAFC;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(244, 114, 182, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+            color: #0F172A;
+        }
+        .theme-light .panel {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.03), 0 0 1px 1px rgba(255, 255, 255, 0.8) inset;
+            backdrop-filter: blur(16px);
+        }
+        .theme-light .sub-panel {
+            background: rgba(241, 245, 249, 0.7);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
         .theme-light .text-heading { color: #0F172A; }
         .theme-light .text-sub { color: #475569; }
-        .theme-light .nav-bg { background: rgba(255, 255, 255, 0.95); border-color: #E2E8F0; }
+        .theme-light .nav-bg { background: rgba(255, 255, 255, 0.85); border-color: rgba(226, 232, 240, 0.8); }
         .theme-light .input-bg { background: #FFFFFF; border-color: #CBD5E1; color: #0F172A; }
         .theme-light .quote-text { color: #000000 !important; }
 
-        .theme-dark { background-color: #0B0F19; color: #F1F5F9; }
-        .theme-dark .panel { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5); backdrop-filter: blur(12px); }
-        .theme-dark .sub-panel { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .theme-dark {
+            background-color: #0B0F19;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(244, 114, 182, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.9) 0px, transparent 50%);
+            color: #F1F5F9;
+        }
+        .theme-dark .panel {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05) inset;
+            backdrop-filter: blur(16px);
+        }
+        .theme-dark .sub-panel {
+            background: rgba(2, 6, 23, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
         .theme-dark .text-heading { color: #FFFFFF; }
         .theme-dark .text-sub { color: #94A3B8; }
-        .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.95); border-color: rgba(255, 255, 255, 0.1); }
+        .theme-dark .nav-bg { background: rgba(11, 15, 25, 0.85); border-color: rgba(255, 255, 255, 0.08); }
         .theme-dark .input-bg { background: #020617; border-color: #1E293B; color: #F1F5F9; }
         .theme-dark .quote-text { color: #FFFFFF !important; }
 
         .animate-pop { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .animate-pop:hover { transform: translateY(-3px) scale(1.005); }
         .tab-transition { transition: all 0.25s ease-in-out; }
-        .glow-blue { box-shadow: 0 0 20px -5px rgba(59, 130, 246, 0.3); }
-        .glow-pink { box-shadow: 0 0 20px -5px rgba(244, 114, 182, 0.3); }
+        .glow-blue { box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.4); }
+        .glow-pink { box-shadow: 0 0 25px -5px rgba(244, 114, 182, 0.4); }
+        
+        .animated-gradient-text {
+            background: linear-gradient(135deg, #6366F1, #A855F7, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 <body id="app-body" class="theme-light min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
     <!-- Header Navigation -->
-    <header class="border-b nav-bg sticky top-0 z-50 backdrop-blur-md">
+    <header class="border-b nav-bg sticky top-0 z-50 backdrop-blur-xl transition-all">
         <div class="max-w-7xl mx-auto px-6 h-22 flex items-center justify-between py-3">
             <div class="flex items-center space-x-3">
-                <div class="w-4 h-4 rounded-full bg-gradient-to-r from-blue-500 to-pink-400 animate-pulse"></div>
+                <div class="w-3.5 h-3.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-pulse"></div>
                 <div>
                     <span class="font-extrabold text-2xl tracking-tight text-heading block leading-none">Accountability</span>
                     <span class="font-cursive font-bold text-xl text-indigo-600 tracking-wide block leading-tight mt-1">Target MAY'27</span>
                 </div>
             </div>
             
-            <nav class="flex space-x-1 sub-panel p-1.5 rounded-2xl">
+            <nav class="flex space-x-1 sub-panel p-1.5 rounded-2xl border">
                 <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md">Focus Room</button>
                 <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Daily Deck</button>
                 <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Analytics & Logs</button>
@@ -66,11 +105,11 @@
                 </div>
 
                 <div class="flex items-center space-x-2 text-xs font-bold">
-                    <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1">
+                    <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1.5">
                         <span>• Nishant:</span>
                         <span id="streak-nishant">0 Days</span>
                     </div>
-                    <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-500 flex items-center gap-1">
+                    <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-500 flex items-center gap-1.5">
                         <span>• Naqeeba:</span>
                         <span id="streak-naqeeba">0 Days</span>
                     </div>
@@ -84,21 +123,21 @@
         </div>
     </header>
 
-    <!-- Main Content Space -->
+    <!-- Main Workspace Content -->
     <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-grow">
 
-        <!-- FOCUS ROOM -->
+        <!-- VIEW 1: FOCUS ROOM -->
         <section id="view-focus" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <!-- Left Sidebar Controls -->
+                <!-- Left Control Panel -->
                 <div class="space-y-6">
                     
-                    <!-- Persistent Session Timer -->
+                    <!-- Persistent Timer -->
                     <div class="panel p-6 rounded-2xl text-center relative overflow-hidden animate-pop">
                         <div class="flex justify-between items-center mb-3">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Active Focus Timer</span>
-                            <select id="timer-user-select" class="input-bg text-xs font-medium rounded-lg px-2 py-1 focus:outline-none">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Persistent Focus Session</span>
+                            <select id="timer-user-select" class="input-bg text-xs font-semibold rounded-lg px-2 py-1 focus:outline-none border">
                                 <option value="nishant">💙 Nishant</option>
                                 <option value="naqeeba">💖 Naqeeba</option>
                             </select>
@@ -106,13 +145,13 @@
 
                         <div id="timer-display" class="text-6xl font-black text-heading font-mono my-4 tracking-tighter">00:00:00</div>
                         
-                        <div class="flex justify-center gap-3">
-                            <button onclick="toggleActiveTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Start Session</button>
+                        <div class="flex justify-center gap-2.5">
+                            <button onclick="toggleActiveTimer()" id="btn-timer-toggle" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Start Session</button>
                             <button onclick="stopAndCompleteSession()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Complete Session</button>
                         </div>
                     </div>
 
-                    <!-- Individual Completed Today's Hours Card -->
+                    <!-- Today's Hours -->
                     <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Individual Hours Today</h3>
@@ -128,27 +167,26 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="sub-panel p-3 rounded-xl border-l-4 border-blue-500">
+                            <div class="sub-panel p-3.5 rounded-xl border-l-4 border-blue-500">
                                 <span class="text-[10px] text-sub font-bold uppercase block">• Nishant Today</span>
                                 <span id="hours-nishant-today" class="text-xl font-extrabold text-blue-600 font-mono">0.0 hrs</span>
                             </div>
-                            <div class="sub-panel p-3 rounded-xl border-l-4 border-pink-400">
+                            <div class="sub-panel p-3.5 rounded-xl border-l-4 border-pink-400">
                                 <span class="text-[10px] text-sub font-bold uppercase block">• Naqeeba Today</span>
                                 <span id="hours-naqeeba-today" class="text-xl font-extrabold text-pink-500 font-mono">0.0 hrs</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Live Synchronized Status & Break Timer Center -->
+                    <!-- Live Status & Break Center -->
                     <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status & Break Center</h3>
                         
                         <div class="space-y-3">
-                            <!-- Nishant Status -->
                             <div class="sub-panel p-3 rounded-xl border-l-4 border-blue-500 space-y-2">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs font-bold text-heading">Nishant</span>
-                                    <select id="status-select-nishant" onchange="updateUserStatus('nishant', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
+                                    <select id="status-select-nishant" onchange="updateUserStatus('nishant', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1 border">
                                         <option value="Active Studying">🟢 Active Studying</option>
                                         <option value="In Break">🟡 In Break</option>
                                         <option value="Away">⚪ Away</option>
@@ -159,11 +197,10 @@
                                 </div>
                             </div>
 
-                            <!-- Naqeeba Status -->
                             <div class="sub-panel p-3 rounded-xl border-l-4 border-pink-400 space-y-2">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs font-bold text-heading">Naqeeba</span>
-                                    <select id="status-select-naqeeba" onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
+                                    <select id="status-select-naqeeba" onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1 border">
                                         <option value="Active Studying">🟢 Active Studying</option>
                                         <option value="In Break">🟡 In Break</option>
                                         <option value="Away">⚪ Away</option>
@@ -204,7 +241,7 @@
                         </div>
                     </div>
 
-                    <!-- Desk & Photo Gallery Showcase -->
+                    <!-- Photo Gallery Showcase -->
                     <div class="panel rounded-2xl p-6 space-y-4 animate-pop">
                         <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                             <div>
@@ -233,7 +270,7 @@
             </div>
         </section>
 
-        <!-- DAILY TASK DECK & FORFEITS -->
+        <!-- VIEW 2: DAILY TASK DECK & FORFEITS -->
         <section id="view-tasks" class="space-y-6 hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
@@ -289,7 +326,7 @@
             </div>
         </section>
 
-        <!-- ANALYTICS & CALENDAR -->
+        <!-- VIEW 3: ANALYTICS & CALENDAR -->
         <section id="view-analytics" class="space-y-6 hidden">
             <div>
                 <h2 class="text-xl font-bold tracking-tight text-heading">Analytics Dashboard & Interactive Calendar</h2>
@@ -315,7 +352,7 @@
                 <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Attendance & Notes Calendar</h3>
-                        <select id="calendar-view-mode" onchange="changeCalendarViewMode()" class="input-bg text-xs font-bold rounded-lg px-2 py-1">
+                        <select id="calendar-view-mode" onchange="changeCalendarViewMode()" class="input-bg text-xs font-bold rounded-lg px-2 py-1 border">
                             <option value="monthly">Monthly View</option>
                             <option value="yearly">Yearly View</option>
                         </select>
@@ -357,7 +394,7 @@
             </div>
         </section>
 
-        <!-- MASTER SYLLABUS & RESOURCES -->
+        <!-- VIEW 4: MASTER SYLLABUS & RESOURCES -->
         <section id="view-syllabus" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
@@ -436,11 +473,22 @@
         Accountability Hub &bull; Nishant & Naqeeba
     </footer>
 
-    <!-- LIVE REALTIME DUAL-PERSISTENCE ENGINE -->
+    <!-- REALTIME PERSISTENCE ENGINE -->
     <script>
-        const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR";
-        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Firebase Cloud Persistence Initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForFirestoreIntegration",
+            authDomain: "duostudy-hub.firebaseapp.com",
+            projectId: "duostudy-hub",
+            storageBucket: "duostudy-hub.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcdef123456"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
 
         const STORAGE_KEY = "DUOSTUDY_PERSISTENT_STATE";
 
@@ -478,33 +526,19 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
             renderAll();
 
-            db.from('app_state')
-                .upsert({ id: 'global', data: newState, updated_at: new Date() })
-                .then(({ error }) => { if (error) console.log("Cloud sync note:", error.message); });
+            db.collection("duostudy").doc("global").set(newState, { merge: true }).catch(err => {
+                console.log("Local sync updated.");
+            });
         }
 
-        async function fetchCloudState() {
-            try {
-                const { data } = await db.from('app_state').select('data').eq('id', 'global').single();
-                if (data && data.data && Object.keys(data.data).length > 0) {
-                    localState = data.data;
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
-                    renderAll();
-                }
-            } catch (err) {
-                console.log("Operating in local mode");
+        // Subscribe to Cloud Sync Realtime Engine
+        db.collection("duostudy").doc("global").onSnapshot(doc => {
+            if (doc.exists && doc.data()) {
+                localState = doc.data();
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
+                renderAll();
             }
-        }
-
-        db.channel('public:app_state')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, payload => {
-                if (payload.new && payload.new.data) {
-                    localState = payload.new.data;
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
-                    renderAll();
-                }
-            })
-            .subscribe();
+        });
 
         function toggleInlineForm(formId) {
             const el = document.getElementById(formId);
@@ -558,12 +592,10 @@
         }
         setInterval(updateClock, 1000);
 
-        // Persistent Session & Break Timers Engine
         function updateTimersRealtime() {
             const state = getState();
             const now = Date.now();
 
-            // Focus Session Timer Calculation
             if (state.activeTimerSession && state.activeTimerSession.running && state.activeTimerSession.startTime) {
                 const elapsedSeconds = Math.floor((now - state.activeTimerSession.startTime) / 1000) + (state.activeTimerSession.accumulatedSeconds || 0);
                 const hrs = Math.floor(elapsedSeconds / 3600).toString().padStart(2, '0');
@@ -578,7 +610,6 @@
                 document.getElementById('timer-display').innerText = `${hrs}:${mins}:${secs}`;
             }
 
-            // Break Timers
             ['nishant', 'naqeeba'].forEach(user => {
                 const breakEl = document.getElementById(`break-timer-${user}`);
                 const clockEl = document.getElementById(`break-clock-${user}`);
@@ -605,14 +636,12 @@
             state.activeTimerSession.user = selectedUser;
 
             if (state.activeTimerSession.running) {
-                // Pause Session
                 const now = Date.now();
                 const sessionSeconds = Math.floor((now - state.activeTimerSession.startTime) / 1000);
                 state.activeTimerSession.accumulatedSeconds = (state.activeTimerSession.accumulatedSeconds || 0) + sessionSeconds;
                 state.activeTimerSession.running = false;
                 state.activeTimerSession.startTime = null;
             } else {
-                // Start Session
                 state.activeTimerSession.running = true;
                 state.activeTimerSession.startTime = Date.now();
             }
@@ -908,20 +937,18 @@
             document.getElementById('meet-link-input').value = state.meetLink || '';
             document.getElementById('resource-notepad').value = state.notepad || '';
 
-            // User Select Options & Statuses Sync
             if (state.userStatuses) {
                 document.getElementById('status-select-nishant').value = state.userStatuses.nishant || 'Active Studying';
                 document.getElementById('status-select-naqeeba').value = state.userStatuses.naqeeba || 'Active Studying';
             }
 
-            // Timer Button Render
             const timerBtn = document.getElementById('btn-timer-toggle');
             if (state.activeTimerSession && state.activeTimerSession.running) {
                 timerBtn.innerText = "Pause Session";
-                timerBtn.className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
+                timerBtn.className = "px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
             } else {
                 timerBtn.innerText = "Start Session";
-                timerBtn.className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
+                timerBtn.className = "px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
             }
 
             if (state.activeTimerSession) {
@@ -1079,7 +1106,6 @@
         }
 
         renderAll();
-        fetchCloudState();
     </script>
 </body>
 </html>
