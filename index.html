@@ -3,107 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DuoStudy - Minimal Interactive Co-Working Hub</title>
+    <title>DuoStudy - Light Workspace Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src='https://8x8.vc/v1/external_api.js'></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glow-indigo {
-            box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.25);
+        .light-panel {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body class="bg-[#0B0F19] text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900">
 
-    <!-- Top Navigation Header -->
-    <header class="border-b border-slate-800/80 bg-[#0F172A]/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-3.5 h-3.5 rounded-full bg-indigo-500 animate-pulse"></div>
-                <span class="font-extrabold text-xl tracking-tight text-white">DuoStudy</span>
+                <div class="w-3.5 h-3.5 rounded-full bg-indigo-600 animate-pulse"></div>
+                <span class="font-bold text-xl tracking-tight text-slate-900">DuoStudy</span>
             </div>
             
-            <nav class="flex space-x-1 bg-slate-900/90 border border-slate-800 p-1 rounded-xl">
-                <button onclick="switchTab('focus')" id="tab-focus" class="px-5 py-2 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md">Focus Room</button>
-                <button onclick="switchTab('tasks')" id="tab-tasks" class="px-5 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white">Daily Deck</button>
-                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="px-5 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white">Syllabus</button>
+            <nav class="flex space-x-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <button onclick="switchTab('focus')" id="tab-focus" class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all bg-white text-indigo-600 shadow-sm border border-slate-200">Focus Room</button>
+                <button onclick="switchTab('tasks')" id="tab-tasks" class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">Daily Deck</button>
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">Analytics & Logs</button>
+                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">Syllabus</button>
             </nav>
 
-            <div class="flex items-center space-x-3 text-xs bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-xl">
-                <span class="text-slate-400">Streak:</span>
-                <span id="streak-counter" class="font-bold text-amber-400">🔥 1 Day</span>
+            <div class="flex items-center space-x-4">
+                <div class="text-right hidden md:block">
+                    <div id="realtime-clock" class="text-xs font-bold font-mono text-slate-800">12:00:00 PM</div>
+                    <div id="realtime-date" class="text-[10px] text-slate-500 font-medium">Sunday, Sep 20</div>
+                </div>
+                <div class="flex items-center space-x-1.5 text-xs bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl text-amber-800 font-semibold">
+                    <span>🔥 Streak:</span>
+                    <span id="streak-counter">1 Day</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Workspace Container -->
-    <main class="max-w-6xl mx-auto px-6 py-8 w-full flex-grow">
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-grow">
 
-        <!-- VIEW 1: FOCUS ROOM (EMBEDDED VIDEO & TIMER) -->
+        <!-- VIEW 1: FOCUS ROOM -->
         <section id="view-focus" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <!-- Left: Synced Pomodoro & Hours Logger (1 Col) -->
+                <!-- Left Column: Controls & Analytics Overview -->
                 <div class="space-y-6">
-                    <div class="glass-panel p-6 rounded-2xl text-center glow-indigo relative overflow-hidden">
-                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-2 block">Deep Work Session</span>
-                        <div id="timer-display" class="text-6xl font-black text-white font-mono my-4 tracking-tighter">50:00</div>
+                    
+                    <!-- Timer & Mode Switcher -->
+                    <div class="light-panel p-6 rounded-2xl text-center relative overflow-hidden">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Timer Mode</span>
+                            <select id="timer-mode-select" onchange="changeTimerMode()" class="bg-slate-100 border border-slate-200 text-xs text-slate-700 rounded-lg px-2 py-1 font-medium focus:outline-none">
+                                <option value="50">50m Focus</option>
+                                <option value="25">25m Pomodoro</option>
+                                <option value="90">90m Deep Work</option>
+                                <option value="stopwatch">Stopwatch</option>
+                            </select>
+                        </div>
+
+                        <div id="timer-display" class="text-6xl font-black text-slate-900 font-mono my-4 tracking-tighter">50:00</div>
                         
                         <div class="flex justify-center gap-3">
-                            <button onclick="toggleTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-lg shadow-indigo-600/30">Start Focus</button>
-                            <button onclick="resetTimer()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs transition-all border border-slate-700">Reset</button>
+                            <button onclick="toggleTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-all shadow-sm">Start Session</button>
+                            <button onclick="resetTimer()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-all border border-slate-200">Reset</button>
                         </div>
                     </div>
 
-                    <!-- Study Hour Metrics Card -->
-                    <div class="glass-panel p-5 rounded-2xl space-y-4">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Study Hour Tracker</h3>
+                    <!-- Target Hours & Editable Goal -->
+                    <div class="light-panel p-5 rounded-2xl space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Daily Target Goal</h3>
+                            <button onclick="editTargetHoursPrompt()" class="text-xs text-indigo-600 font-semibold hover:underline">Edit Goal</button>
+                        </div>
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl">
-                                <span class="text-[10px] text-slate-500 font-medium uppercase block">Today's Total</span>
-                                <span id="hours-today" class="text-lg font-bold text-emerald-400 font-mono">0.0 hrs</span>
+                            <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl">
+                                <span class="text-[10px] text-slate-500 font-semibold uppercase block">Hours Completed</span>
+                                <span id="hours-today" class="text-xl font-extrabold text-emerald-600 font-mono">0.0 hrs</span>
                             </div>
-                            <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl">
-                                <span class="text-[10px] text-slate-500 font-medium uppercase block">Target Goal</span>
-                                <span class="text-lg font-bold text-slate-300 font-mono">4.0 hrs</span>
+                            <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl">
+                                <span class="text-[10px] text-slate-500 font-semibold uppercase block">Target Goal</span>
+                                <span id="hours-target" class="text-xl font-extrabold text-slate-800 font-mono">4.0 hrs</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Live Presence Card -->
-                    <div class="glass-panel p-5 rounded-2xl space-y-3">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Co-Presence Indicator</h3>
-                        <div class="flex items-center justify-between bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
-                            <div class="flex items-center space-x-2.5">
-                                <div id="presence-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
-                                <span class="text-xs font-semibold text-slate-200" id="presence-text">Active in Room</span>
+                    <!-- User Live Status Panel -->
+                    <div class="light-panel p-5 rounded-2xl space-y-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Live Status Center</h3>
+                        
+                        <div class="space-y-2">
+                            <!-- User 1 Status -->
+                            <div class="flex items-center justify-between bg-slate-50 border border-slate-200 p-3 rounded-xl">
+                                <span class="text-xs font-bold text-slate-800">You (Nishant)</span>
+                                <select onchange="updateUserStatus('user1', this.value)" class="bg-white border border-slate-300 text-xs font-semibold rounded-lg px-2.5 py-1 text-slate-700">
+                                    <option value="Active Studying">🟢 Active Studying</option>
+                                    <option value="In Break">🟡 In Break</option>
+                                    <option value="Away">⚪ Away</option>
+                                </select>
                             </div>
-                            <span class="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">Synced</span>
+
+                            <!-- User 2 Status -->
+                            <div class="flex items-center justify-between bg-slate-50 border border-slate-200 p-3 rounded-xl">
+                                <span class="text-xs font-bold text-slate-800">Partner</span>
+                                <select onchange="updateUserStatus('user2', this.value)" class="bg-white border border-slate-300 text-xs font-semibold rounded-lg px-2.5 py-1 text-slate-700">
+                                    <option value="Active Studying">🟢 Active Studying</option>
+                                    <option value="In Break">🟡 In Break</option>
+                                    <option value="Away">⚪ Away</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Embedded Jitsi WebRTC Video Frame (2 Cols) -->
-                <div class="lg:col-span-2 glass-panel rounded-2xl p-4 flex flex-col justify-between min-h-[460px]">
+                <!-- Right Column: Embedded WebRTC Video Room -->
+                <div class="lg:col-span-2 light-panel rounded-2xl p-4 flex flex-col justify-between min-h-[500px]">
                     <div class="flex justify-between items-center mb-3">
                         <div class="flex items-center space-x-2">
-                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Live Video & Screen Share Room</h3>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Embedded Video & Co-Working Room</h3>
                         </div>
-                        <button onclick="launchVideoRoom()" class="px-3 py-1 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 text-indigo-300 text-xs font-semibold rounded-lg transition-all">Reload Stream</button>
+                        <button onclick="launchVideoRoom()" class="px-3 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-semibold rounded-lg transition-all">Reload Stream</button>
                     </div>
 
-                    <!-- Embedded Frame Container -->
-                    <div id="jitsi-container" class="w-full h-full min-h-[400px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+                    <div id="jitsi-container" class="w-full h-full min-h-[440px] bg-slate-100 rounded-xl overflow-hidden border border-slate-200 flex items-center justify-center">
                         <div class="text-center space-y-3 p-6">
-                            <p class="text-slate-400 text-sm">Click below to start your embedded video & screen-share room inside this page.</p>
-                            <button onclick="launchVideoRoom()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-lg shadow-indigo-600/30">Connect Native Video Room</button>
+                            <p class="text-slate-600 text-sm">Connect your live camera & screen sharing room directly inside the dashboard.</p>
+                            <button onclick="launchVideoRoom()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-all shadow-sm">Join Video Room</button>
                         </div>
                     </div>
                 </div>
@@ -111,18 +142,17 @@
             </div>
         </section>
 
-        <!-- VIEW 2: DAILY TASK DECK & FORFEIT LEDGER -->
+        <!-- VIEW 2: DAILY TASK DECK & FORFEITS -->
         <section id="view-tasks" class="space-y-6 hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <!-- Main Task List (2 Cols) -->
                 <div class="lg:col-span-2 space-y-4">
                     <div class="flex justify-between items-center">
                         <div>
-                            <h2 class="text-xl font-bold tracking-tight text-white">Daily Commitments</h2>
-                            <p class="text-slate-400 text-xs">Set daily deliverables and check them off live.</p>
+                            <h2 class="text-xl font-bold tracking-tight text-slate-900">Daily Commitments</h2>
+                            <p class="text-slate-500 text-xs">Set goals for today and check off items as you finish.</p>
                         </div>
-                        <button onclick="addTaskPrompt()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/20">+ Add Task</button>
+                        <button onclick="addTaskPrompt()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Task</button>
                     </div>
 
                     <div id="tasks-container" class="space-y-2.5">
@@ -130,14 +160,13 @@
                     </div>
                 </div>
 
-                <!-- Forfeit Ledger & Penalties (1 Col) -->
                 <div class="space-y-4">
-                    <div class="glass-panel p-5 rounded-2xl space-y-4">
+                    <div class="light-panel p-5 rounded-2xl space-y-4">
                         <div class="flex justify-between items-center">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-rose-400">Forfeit & Penalty Ledger</h3>
-                            <button onclick="addPenaltyPrompt()" class="text-xs text-slate-400 hover:text-white">+ Log</button>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-rose-600">Forfeit & Penalty Ledger</h3>
+                            <button onclick="addPenaltyPrompt()" class="text-xs font-semibold text-slate-600 hover:text-slate-900">+ Log</button>
                         </div>
-                        <p class="text-slate-400 text-xs">Missed study thresholds or incomplete days get recorded here.</p>
+                        <p class="text-slate-500 text-xs">Missed daily goals or study hour targets get recorded here.</p>
                         <div id="penalties-container" class="space-y-2">
                             <!-- Loaded dynamically -->
                         </div>
@@ -147,26 +176,67 @@
             </div>
         </section>
 
-        <!-- VIEW 3: MASTER SYLLABUS TRACKER -->
+        <!-- VIEW 3: ANALYTICS & SESSION LOGS -->
+        <section id="view-analytics" class="space-y-6 hidden">
+            <div>
+                <h2 class="text-xl font-bold tracking-tight text-slate-900">Study Analytics & Session History</h2>
+                <p class="text-slate-500 text-xs">Review individual study sessions, room join logs, and monthly calendar streaks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Session Logs Table (2 Cols) -->
+                <div class="lg:col-span-2 light-panel rounded-2xl p-5 space-y-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Logged Co-Working Sessions</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase bg-slate-50">
+                                    <th class="p-3">User</th>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Start / End</th>
+                                    <th class="p-3">Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody id="session-logs-body" class="divide-y divide-slate-100 text-xs text-slate-700">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Calendar Widget (1 Col) -->
+                <div class="light-panel p-5 rounded-2xl space-y-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Activity Calendar</h3>
+                    <div class="grid grid-cols-7 gap-1.5 text-center text-xs font-semibold text-slate-400 mb-2">
+                        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                    </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- VIEW 4: MASTER SYLLABUS -->
         <section id="view-syllabus" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-xl font-bold tracking-tight text-white">Master Syllabus Board</h2>
-                    <p class="text-slate-400 text-xs">Manage topics, assign study owners, and track completion progress.</p>
+                    <h2 class="text-xl font-bold tracking-tight text-slate-900">Master Syllabus Board</h2>
+                    <p class="text-slate-500 text-xs">Manage modules, assign topics, and track subject progress.</p>
                 </div>
-                <button onclick="addSyllabusPrompt()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/20">+ Add Subject Topic</button>
+                <button onclick="addSyllabusPrompt()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Topic</button>
             </div>
 
-            <!-- Subject Progress Bars -->
             <div id="syllabus-progress-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Dynamically populated progress indicators -->
+                <!-- Loaded dynamically -->
             </div>
 
-            <!-- Syllabus Table -->
-            <div class="glass-panel rounded-2xl overflow-hidden border border-slate-800">
+            <div class="light-panel rounded-2xl overflow-hidden">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-800/80 text-[11px] font-bold text-slate-400 uppercase bg-slate-900/60">
+                        <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase bg-slate-50">
                             <th class="p-4">Subject</th>
                             <th class="p-4">Topic / Chapter</th>
                             <th class="p-4">Assigned To</th>
@@ -174,7 +244,7 @@
                             <th class="p-4 text-right">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="syllabus-table-body" class="divide-y divide-slate-800/60 text-xs">
+                    <tbody id="syllabus-table-body" class="divide-y divide-slate-100 text-xs text-slate-700">
                         <!-- Loaded dynamically -->
                     </tbody>
                 </table>
@@ -184,82 +254,117 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-900 py-4 text-center text-xs text-slate-600">
-        DuoStudy &bull; Live Co-Working & Accountability Engine
+    <footer class="border-t border-slate-200 py-4 text-center text-xs text-slate-500 bg-white">
+        DuoStudy Light Hub &bull; Co-Working & Accountability
     </footer>
 
-    <!-- Interactive App Logic -->
+    <!-- Application Script Engine -->
     <script>
-        // --- CENTRALIZED STATE ENGINE ---
+        // Default Local State
         const DEFAULT_STATE = {
+            targetHours: 4.0,
+            hoursToday: 0.0,
+            streak: 1,
+            userStatuses: { user1: 'Active Studying', user2: 'Active Studying' },
             tasks: [
-                { id: '1', name: 'Nishant', title: 'Complete 3 Pomodoro Focus Blocks', completed: false },
-                { id: '2', name: 'Partner', title: 'Review Operating Systems Module 1', completed: false }
+                { id: '1', name: 'Nishant', title: 'Complete 2 Focus Sessions', completed: false },
+                { id: '2', name: 'Partner', title: 'Finish OS Module Notes', completed: false }
+            ],
+            sessionLogs: [
+                { id: '1', user: 'Nishant', date: '2026-09-20', times: '10:00 AM - 10:50 AM', duration: '50 mins' },
+                { id: '2', user: 'Partner', date: '2026-09-20', times: '11:15 AM - 12:05 PM', duration: '50 mins' }
+            ],
+            penalties: [
+                { id: '1', text: 'Missed 4-hr mark (Buy Coffee)', paid: false }
             ],
             syllabus: [
                 { id: '1', subject: 'Computer Science', topic: 'Data Structures & Algorithms', owner: 'Nishant', status: 'In Progress' },
-                { id: '2', subject: 'Computer Science', topic: 'Database Systems & SQL', owner: 'Partner', status: 'Not Started' },
-                { id: '3', subject: 'Mathematics', topic: 'Linear Algebra & Matrices', owner: 'Nishant', status: 'Completed' }
-            ],
-            penalties: [
-                { id: '1', text: 'Missed 4-hr threshold (Buy Coffee)', paid: false }
-            ],
-            hoursToday: 0.0,
-            streak: 1
+                { id: '2', subject: 'Computer Science', topic: 'Operating Systems & IPC', owner: 'Partner', status: 'Not Started' },
+                { id: '3', subject: 'Mathematics', topic: 'Linear Algebra & Calculus', owner: 'Nishant', status: 'Completed' }
+            ]
         };
 
         function getState() {
-            const saved = localStorage.getItem('DUOSTUDY_STATE');
+            const saved = localStorage.getItem('DUOSTUDY_LIGHT_STATE');
             return saved ? JSON.parse(saved) : DEFAULT_STATE;
         }
 
         function saveState(state) {
-            localStorage.setItem('DUOSTUDY_STATE', JSON.stringify(state));
+            localStorage.setItem('DUOSTUDY_LIGHT_STATE', JSON.stringify(state));
             renderAll();
         }
 
-        // --- NAVIGATION CONTROLLER ---
+        // Tab Navigation
         function switchTab(tabId) {
-            ['focus', 'tasks', 'syllabus'].forEach(id => {
+            ['focus', 'tasks', 'analytics', 'syllabus'].forEach(id => {
                 document.getElementById(`view-${id}`).classList.add('hidden');
-                document.getElementById(`tab-${id}`).className = "px-5 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white";
+                document.getElementById(`tab-${id}`).className = "px-4 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900";
             });
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).className = "px-5 py-2 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
+            document.getElementById(`tab-${tabId}`).className = "px-4 py-1.5 text-xs font-semibold rounded-lg transition-all bg-white text-indigo-600 shadow-sm border border-slate-200";
         }
 
-        // --- POMODORO & HOUR LOGGER ---
+        // Realtime Clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('realtime-clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('realtime-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Timer & Session Logic
         let timerSeconds = 50 * 60;
         let timerInterval = null;
         let isRunning = false;
+        let activeTimerMode = "50";
+
+        function changeTimerMode() {
+            const mode = document.getElementById('timer-mode-select').value;
+            activeTimerMode = mode;
+            resetTimer();
+        }
 
         function updateTimerDisplay() {
-            const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-            const secs = (timerSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+            if (activeTimerMode === 'stopwatch') {
+                const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+                const secs = (timerSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+            } else {
+                const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+                const secs = (timerSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+            }
         }
 
         function toggleTimer() {
             if (isRunning) {
                 clearInterval(timerInterval);
                 isRunning = false;
-                document.getElementById('btn-timer-toggle').innerText = "Start Focus";
-                document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-lg shadow-indigo-600/30";
+                document.getElementById('btn-timer-toggle').innerText = "Start Session";
+                document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-all shadow-sm";
             } else {
                 isRunning = true;
                 document.getElementById('btn-timer-toggle').innerText = "Pause Session";
-                document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-lg shadow-amber-600/30";
+                document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl text-xs transition-all shadow-sm";
+                
+                const startTime = new Date();
                 
                 timerInterval = setInterval(() => {
-                    if (timerSeconds > 0) {
-                        timerSeconds--;
+                    if (activeTimerMode === 'stopwatch') {
+                        timerSeconds++;
                         updateTimerDisplay();
                     } else {
-                        clearInterval(timerInterval);
-                        isRunning = false;
-                        alert("🎉 Focus block completed! Adding 0.83 hours to your session logger.");
-                        logStudyHours(0.83);
-                        resetTimer();
+                        if (timerSeconds > 0) {
+                            timerSeconds--;
+                            updateTimerDisplay();
+                        } else {
+                            clearInterval(timerInterval);
+                            isRunning = false;
+                            const addedHours = parseFloat((parseInt(activeTimerMode) / 60).toFixed(2));
+                            logCompletedSession("Nishant", startTime, new Date(), `${activeTimerMode} mins`, addedHours);
+                            resetTimer();
+                        }
                     }
                 }, 1000);
             }
@@ -268,43 +373,56 @@
         function resetTimer() {
             if (timerInterval) clearInterval(timerInterval);
             isRunning = false;
-            timerSeconds = 50 * 60;
-            document.getElementById('btn-timer-toggle').innerText = "Start Focus";
-            document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-lg shadow-indigo-600/30";
+            document.getElementById('btn-timer-toggle').innerText = "Start Session";
+            document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-all shadow-sm";
+            
+            if (activeTimerMode === 'stopwatch') {
+                timerSeconds = 0;
+            } else {
+                timerSeconds = parseInt(activeTimerMode) * 60;
+            }
             updateTimerDisplay();
         }
 
-        function logStudyHours(amount) {
+        function logCompletedSession(user, startTime, endTime, durationStr, hoursAmount) {
             const state = getState();
-            state.hoursToday = parseFloat((state.hoursToday + amount).toFixed(2));
+            state.hoursToday = parseFloat((state.hoursToday + hoursAmount).toFixed(2));
+            state.sessionLogs.unshift({
+                id: Date.now().toString(),
+                user: user,
+                date: new Date().toISOString().split('T')[0],
+                times: `${startTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${endTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`,
+                duration: durationStr
+            });
+            saveState(state);
+            alert(`🎉 Session logged! Added ${hoursAmount} hours to your total.`);
+        }
+
+        function editTargetHoursPrompt() {
+            const newTarget = prompt("Enter new daily target study hours (e.g., 5.0):");
+            if (!newTarget || isNaN(newTarget)) return;
+            const state = getState();
+            state.targetHours = parseFloat(parseFloat(newTarget).toFixed(1));
             saveState(state);
         }
 
-        // --- EMBEDDED JITSI WEBRTC VIDEO ROOM ---
-        let jitsiApi = null;
-        function launchVideoRoom() {
-            const container = document.getElementById('jitsi-container');
-            container.innerHTML = "";
-            
-            const domain = "8x8.vc";
-            const options = {
-                roomName: "vpaas-magic-cookie-4089c6d3ff3d40aeb090d8a5779ec4ff/DuoStudyAccountabilityRoomPrivate123",
-                width: '100%',
-                height: '100%',
-                parentNode: container,
-                configOverwrite: { startWithAudioMuted: true, prejoinPageEnabled: false },
-                interfaceConfigOverwrite: { SHOW_JITSI_WATERMARK: false }
-            };
-            jitsiApi = new JitsiMeetExternalAPI(domain, options);
+        function updateUserStatus(userKey, newStatus) {
+            const state = getState();
+            state.userStatuses[userKey] = newStatus;
+            saveState(state);
         }
 
-        // --- DAILY TASK MODULE ---
-        function addTaskPrompt() {
-            const name = prompt("Owner Name (e.g., Nishant or Partner):");
-            if (!name) return;
-            const title = prompt("Enter task title / deliverable:");
-            if (!title) return;
+        function launchVideoRoom() {
+            const container = document.getElementById('jitsi-container');
+            container.innerHTML = `<iframe src="https://meet.jit.si/DuoStudyLight_PrivateRoom2026#config.prejoinPageEnabled=false" allow="camera; microphone; display-capture; autoplay; clipboard-write" style="width: 100%; height: 100%; min-height: 440px; border: 0; border-radius: 12px;"></iframe>`;
+        }
 
+        // Daily Tasks & Forfeits
+        function addTaskPrompt() {
+            const name = prompt("Owner Name:");
+            if (!name) return;
+            const title = prompt("Task title:");
+            if (!title) return;
             const state = getState();
             state.tasks.unshift({ id: Date.now().toString(), name: name, title: title, completed: false });
             saveState(state);
@@ -312,22 +430,20 @@
 
         function toggleTask(id) {
             const state = getState();
-            const task = state.tasks.find(t => t.id === id);
-            if (task) task.completed = !task.completed;
+            const t = state.tasks.find(x => x.id === id);
+            if (t) t.completed = !t.completed;
             saveState(state);
         }
 
         function deleteTask(id) {
             const state = getState();
-            state.tasks = state.tasks.filter(t => t.id !== id);
+            state.tasks = state.tasks.filter(x => x.id !== id);
             saveState(state);
         }
 
-        // --- FORFEIT & PENALTY MODULE ---
         function addPenaltyPrompt() {
-            const text = prompt("Enter forfeit / penalty description (e.g., Missed 4-hr mark - Buy Coffee):");
+            const text = prompt("Penalty / Forfeit description:");
             if (!text) return;
-
             const state = getState();
             state.penalties.unshift({ id: Date.now().toString(), text: text, paid: false });
             saveState(state);
@@ -335,20 +451,19 @@
 
         function togglePenalty(id) {
             const state = getState();
-            const penalty = state.penalties.find(p => p.id === id);
-            if (penalty) penalty.paid = !penalty.paid;
+            const p = state.penalties.find(x => x.id === id);
+            if (p) p.paid = !p.paid;
             saveState(state);
         }
 
-        // --- SYLLABUS MODULE ---
+        // Syllabus
         function addSyllabusPrompt() {
-            const subject = prompt("Subject Name (e.g., Computer Science, Mathematics):");
+            const subject = prompt("Subject Name:");
             if (!subject) return;
-            const topic = prompt("Topic or Chapter Name:");
+            const topic = prompt("Topic / Chapter:");
             if (!topic) return;
             const owner = prompt("Assigned Owner:");
             if (!owner) return;
-
             const state = getState();
             state.syllabus.push({ id: Date.now().toString(), subject: subject, topic: topic, owner: owner, status: 'Not Started' });
             saveState(state);
@@ -356,90 +471,119 @@
 
         function cycleSyllabusStatus(id) {
             const state = getState();
-            const item = state.syllabus.find(s => s.id === id);
-            if (item) {
-                if (item.status === 'Not Started') item.status = 'In Progress';
-                else if (item.status === 'In Progress') item.status = 'Completed';
-                else item.status = 'Not Started';
+            const s = state.syllabus.find(x => x.id === id);
+            if (s) {
+                if (s.status === 'Not Started') s.status = 'In Progress';
+                else if (s.status === 'In Progress') s.status = 'Completed';
+                else s.status = 'Not Started';
             }
             saveState(state);
         }
 
         function deleteSyllabusTopic(id) {
             const state = getState();
-            state.syllabus = state.syllabus.filter(s => s.id !== id);
+            state.syllabus = state.syllabus.filter(x => x.id !== id);
             saveState(state);
         }
 
-        // --- RENDER CONTROLLER ---
+        // Render Functions
         function renderAll() {
             const state = getState();
 
-            // Render Hours & Streaks
+            // Hours & Target
             document.getElementById('hours-today').innerText = `${state.hoursToday} hrs`;
-            document.getElementById('streak-counter').innerText = `🔥 ${state.streak} Day${state.streak > 1 ? 's' : ''}`;
+            document.getElementById('hours-target').innerText = `${state.targetHours} hrs`;
+            document.getElementById('streak-counter').innerText = `${state.streak} Day${state.streak > 1 ? 's' : ''}`;
 
-            // Render Tasks
+            // Tasks
             const tasksContainer = document.getElementById('tasks-container');
             if (state.tasks.length === 0) {
-                tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-500 glass-panel rounded-xl">No commitments set for today. Click "+ Add Task" above.</div>`;
+                tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 light-panel rounded-xl">No tasks set. Click "+ Add Task" above.</div>`;
             } else {
                 tasksContainer.innerHTML = state.tasks.map(t => `
-                    <div class="glass-panel p-3.5 rounded-xl flex items-center justify-between border border-slate-800 hover:border-slate-700 transition-all">
+                    <div class="light-panel p-3.5 rounded-xl flex items-center justify-between hover:border-slate-300 transition-all">
                         <div class="flex items-center space-x-3">
                             <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask('${t.id}')" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
-                            <span class="text-xs ${t.completed ? 'line-through text-slate-500' : 'text-slate-200'} font-medium">${t.title}</span>
+                            <span class="text-xs ${t.completed ? 'line-through text-slate-400' : 'text-slate-800'} font-medium">${t.title}</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">${t.name}</span>
-                            <button onclick="deleteTask('${t.id}')" class="text-slate-600 hover:text-rose-400 text-xs px-1">✕</button>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono font-semibold">${t.name}</span>
+                            <button onclick="deleteTask('${t.id}')" class="text-slate-400 hover:text-rose-600 text-xs px-1">✕</button>
                         </div>
                     </div>
                 `).join('');
             }
 
-            // Render Penalties
+            // Penalties
             const penaltiesContainer = document.getElementById('penalties-container');
             if (state.penalties.length === 0) {
-                penaltiesContainer.innerHTML = `<div class="text-xs text-slate-500 text-center py-2">No active forfeits logged.</div>`;
+                penaltiesContainer.innerHTML = `<div class="text-xs text-slate-400 text-center py-2">No active forfeits logged.</div>`;
             } else {
                 penaltiesContainer.innerHTML = state.penalties.map(p => `
-                    <div class="bg-slate-950/60 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between">
-                        <span class="text-xs ${p.paid ? 'line-through text-slate-500' : 'text-rose-300'}">${p.text}</span>
-                        <button onclick="togglePenalty('${p.id}')" class="text-[10px] px-2 py-0.5 rounded font-semibold ${p.paid ? 'bg-slate-800 text-slate-400' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
+                    <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-xl flex items-center justify-between">
+                        <span class="text-xs ${p.paid ? 'line-through text-slate-400' : 'text-rose-700 font-medium'}">${p.text}</span>
+                        <button onclick="togglePenalty('${p.id}')" class="text-[10px] px-2 py-0.5 rounded font-semibold ${p.paid ? 'bg-slate-200 text-slate-600' : 'bg-rose-100 text-rose-700 border border-rose-200'}">
                             ${p.paid ? 'Resolved' : 'Settle'}
                         </button>
                     </div>
                 `).join('');
             }
 
-            // Render Syllabus
+            // Session Logs
+            const logsBody = document.getElementById('session-logs-body');
+            if (state.sessionLogs.length === 0) {
+                logsBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No session logs recorded yet.</td></tr>`;
+            } else {
+                logsBody.innerHTML = state.sessionLogs.map(l => `
+                    <tr class="border-b border-slate-100">
+                        <td class="p-3 font-semibold text-slate-800">${l.user}</td>
+                        <td class="p-3 font-mono text-slate-600">${l.date}</td>
+                        <td class="p-3 text-slate-600">${l.times}</td>
+                        <td class="p-3 font-mono text-indigo-600 font-bold">${l.duration}</td>
+                    </tr>
+                `).join('');
+            }
+
+            // Calendar Days
+            const calGrid = document.getElementById('calendar-grid');
+            let calHTML = '';
+            for (let i = 1; i <= 30; i++) {
+                const isActive = (i === 20); // Example active date marker
+                calHTML += `
+                    <div class="p-2 rounded-lg border ${isActive ? 'bg-indigo-600 text-white font-bold border-indigo-600' : 'bg-slate-50 border-slate-200 text-slate-600'}">
+                        ${i}
+                    </div>
+                `;
+            }
+            calGrid.innerHTML = calHTML;
+
+            // Syllabus
             const tbody = document.getElementById('syllabus-table-body');
             if (state.syllabus.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">No syllabus topics added yet.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No syllabus topics added yet.</td></tr>`;
             } else {
                 tbody.innerHTML = state.syllabus.map(s => `
-                    <tr class="border-b border-slate-800/60 hover:bg-slate-900/30">
-                        <td class="p-4 font-semibold text-indigo-300">${s.subject}</td>
-                        <td class="p-4 text-slate-200">${s.topic}</td>
-                        <td class="p-4 text-slate-400 font-mono">${s.owner}</td>
+                    <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                        <td class="p-4 font-semibold text-indigo-700">${s.subject}</td>
+                        <td class="p-4 text-slate-800 font-medium">${s.topic}</td>
+                        <td class="p-4 text-slate-500 font-mono">${s.owner}</td>
                         <td class="p-4">
                             <button onclick="cycleSyllabusStatus('${s.id}')" class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide ${
-                                s.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                s.status === 'In Progress' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                'bg-slate-800 text-slate-400 border border-slate-700'
+                                s.status === 'Completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
+                                s.status === 'In Progress' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                                'bg-slate-100 text-slate-600 border border-slate-200'
                             }">
                                 ${s.status} ↻
                             </button>
                         </td>
                         <td class="p-4 text-right">
-                            <button onclick="deleteSyllabusTopic('${s.id}')" class="text-slate-600 hover:text-rose-400 text-xs">Delete</button>
+                            <button onclick="deleteSyllabusTopic('${s.id}')" class="text-slate-400 hover:text-rose-600 text-xs">Delete</button>
                         </td>
                     </tr>
                 `).join('');
             }
 
-            // Render Subject Progress
+            // Progress Cards
             const progressCards = document.getElementById('syllabus-progress-cards');
             const subjects = [...new Set(state.syllabus.map(s => s.subject))];
             
@@ -451,13 +595,13 @@
                     const completed = subTopics.filter(s => s.status === 'Completed').length;
                     const pct = Math.round((completed / subTopics.length) * 100);
                     return `
-                        <div class="glass-panel p-4 rounded-xl space-y-2">
+                        <div class="light-panel p-4 rounded-xl space-y-2">
                             <div class="flex justify-between text-xs font-bold">
-                                <span class="text-white">${sub}</span>
-                                <span class="text-indigo-400 font-mono">${pct}%</span>
+                                <span class="text-slate-900">${sub}</span>
+                                <span class="text-indigo-600 font-mono">${pct}%</span>
                             </div>
-                            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
-                                <div class="bg-indigo-500 h-full transition-all duration-500" style="width: ${pct}%"></div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
+                                <div class="bg-indigo-600 h-full transition-all duration-500" style="width: ${pct}%"></div>
                             </div>
                         </div>
                     `;
