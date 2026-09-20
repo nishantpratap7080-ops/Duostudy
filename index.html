@@ -54,7 +54,7 @@
         .theme-dark .input-bg { background: #020617; border-color: #1E293B; color: #F1F5F9; }
         .theme-dark .quote-text { color: #FFFFFF !important; }
 
-        /* Premium Micro-Animations & Glow Effects */
+        /* Micro-Animations & Glow Effects */
         .animate-pop { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .animate-pop:hover { transform: translateY(-3px) scale(1.005); }
         .tab-transition { transition: all 0.25s ease-in-out; }
@@ -83,14 +83,20 @@
             </nav>
 
             <div class="flex items-center space-x-4">
-                <!-- Dual Separate Streaks -->
+                <!-- Live Date & 12-Hour Clock -->
+                <div class="text-right hidden md:block">
+                    <div id="realtime-clock" class="text-xs font-bold font-mono text-heading">12:00:00 PM</div>
+                    <div id="realtime-date" class="text-[10px] text-sub font-medium">Sunday, Sep 20</div>
+                </div>
+
+                <!-- Dual Separate Streaks (Bullet Points) -->
                 <div class="flex items-center space-x-2 text-xs font-bold">
                     <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1">
-                        <span>💙 Nishant:</span>
+                        <span>• Nishant:</span>
                         <span id="streak-nishant">0 Days</span>
                     </div>
                     <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-500 flex items-center gap-1">
-                        <span>💖 Naqeeba:</span>
+                        <span>• Naqeeba:</span>
                         <span id="streak-naqeeba">0 Days</span>
                     </div>
                 </div>
@@ -128,8 +134,8 @@
                         <div id="timer-display" class="text-6xl font-black text-heading font-mono my-4 tracking-tighter">50:00</div>
                         
                         <div class="flex justify-center gap-3">
-                            <button onclick="toggleTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md">Start Session</button>
-                            <button onclick="resetTimer()" class="px-5 py-2.5 sub-panel text-sub font-semibold rounded-xl text-xs transition-all hover:text-heading">Reset</button>
+                            <button onclick="toggleTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Start Session</button>
+                            <button onclick="resetTimer()" class="px-5 py-2.5 sub-panel text-sub font-semibold rounded-xl text-xs transition-all hover:text-heading cursor-pointer">Reset</button>
                         </div>
                     </div>
 
@@ -305,7 +311,7 @@
             </div>
         </section>
 
-        <!-- VIEW 3: PROFESSIONAL ANALYTICS & INTERACTIVE CALENDAR -->
+        <!-- VIEW 3: ANALYTICS & INTERACTIVE CALENDAR -->
         <section id="view-analytics" class="space-y-6 hidden">
             <div>
                 <h2 class="text-xl font-bold tracking-tight text-heading">Analytics Dashboard & Interactive Calendar</h2>
@@ -314,13 +320,13 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <!-- Professional Chart Module -->
+                <!-- Chart Module -->
                 <div class="lg:col-span-2 panel rounded-2xl p-5 space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Weekly Hour Comparison & Consistency Graph</h3>
                         <div class="flex items-center space-x-4 text-xs font-bold">
-                            <span class="text-blue-500">💙 Nishant</span>
-                            <span class="text-pink-400">💖 Naqeeba</span>
+                            <span class="text-blue-500">• Nishant</span>
+                            <span class="text-pink-400">• Naqeeba</span>
                         </div>
                     </div>
                     
@@ -329,7 +335,7 @@
                     </div>
                 </div>
 
-                <!-- Interactive Calendar Widget -->
+                <!-- Calendar Widget -->
                 <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Attendance & Notes Calendar</h3>
@@ -339,14 +345,14 @@
                         </select>
                     </div>
 
-                    <!-- User Attendance Selector & Actions -->
+                    <!-- Attendance Selector -->
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-bold text-sub">Select Marking Mode:</span>
                             <div class="flex gap-1.5">
-                                <button onclick="setCalendarMarkMode('naqeeba')" id="btn-mode-naqeeba" class="px-2.5 py-1 bg-pink-300 text-pink-900 rounded-lg text-xs font-bold">💖 Naqeeba</button>
-                                <button onclick="setCalendarMarkMode('nishant')" id="btn-mode-nishant" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">💙 Nishant</button>
-                                <button onclick="setCalendarMarkMode('holiday')" id="btn-mode-holiday" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">🔴 Holiday</button>
+                                <button onclick="setCalendarMarkMode('naqeeba')" id="btn-mode-naqeeba" class="px-2.5 py-1 bg-pink-300 text-pink-900 rounded-lg text-xs font-bold">• Naqeeba</button>
+                                <button onclick="setCalendarMarkMode('nishant')" id="btn-mode-nishant" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">• Nishant</button>
+                                <button onclick="setCalendarMarkMode('holiday')" id="btn-mode-holiday" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">• Holiday</button>
                             </div>
                         </div>
 
@@ -355,7 +361,6 @@
                         </button>
                     </div>
 
-                    <!-- Inline Calendar Note Form -->
                     <div id="form-calendar-note" class="hidden sub-panel p-3 rounded-xl space-y-2">
                         <div class="grid grid-cols-2 gap-2">
                             <input type="number" min="1" max="31" id="input-note-day" placeholder="Day (1-31)" class="input-bg border rounded-lg p-1.5 text-xs">
@@ -367,7 +372,6 @@
                         </div>
                     </div>
 
-                    <!-- Calendar Grid Header -->
                     <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-sub mb-1">
                         <span class="text-rose-500">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
                     </div>
@@ -471,7 +475,6 @@
 
     <!-- Application Script Engine -->
     <script>
-        // Broadcast Channel for Syncing Changes Live Across Users/Tabs
         const syncChannel = new BroadcastChannel('DUOSTUDY_LIVE_SYNC');
 
         const DEFAULT_STATE = {
@@ -564,16 +567,25 @@
             if (tabId === 'analytics') renderChart();
         }
 
-        // Realtime Clock
+        // 12-Hour Clock Engine with AM/PM
         function updateClock() {
             const now = new Date();
-            document.getElementById('realtime-clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 becomes 12
+            const hoursStr = hours.toString().padStart(2, '0');
+
+            document.getElementById('realtime-clock').innerText = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('realtime-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Timer Logic
+        // Fixed Pomodoro & Stopwatch Timer Logic
         let timerSeconds = 50 * 60;
         let timerInterval = null;
         let isRunning = false;
@@ -591,15 +603,16 @@
         }
 
         function toggleTimer() {
+            const btn = document.getElementById('btn-timer-toggle');
             if (isRunning) {
                 clearInterval(timerInterval);
                 isRunning = false;
-                document.getElementById('btn-timer-toggle').innerText = "Start Session";
-                document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md";
+                btn.innerText = "Start Session";
+                btn.className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
             } else {
                 isRunning = true;
-                document.getElementById('btn-timer-toggle').innerText = "Pause Session";
-                document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md";
+                btn.innerText = "Pause Session";
+                btn.className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
                 
                 timerInterval = setInterval(() => {
                     if (activeTimerMode === 'stopwatch') {
@@ -627,8 +640,9 @@
         function resetTimer() {
             if (timerInterval) clearInterval(timerInterval);
             isRunning = false;
-            document.getElementById('btn-timer-toggle').innerText = "Start Session";
-            document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md";
+            const btn = document.getElementById('btn-timer-toggle');
+            btn.innerText = "Start Session";
+            btn.className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
             timerSeconds = activeTimerMode === 'stopwatch' ? 0 : parseInt(activeTimerMode) * 60;
             updateTimerDisplay();
         }
@@ -662,7 +676,7 @@
             if (link) window.open(link, '_blank');
         }
 
-        // Gallery Image Upload
+        // Gallery Upload
         function savePhotoFromGallery() {
             const caption = document.getElementById('input-photo-caption').value.trim();
             const fileInput = document.getElementById('input-photo-file');
@@ -771,7 +785,7 @@
             document.getElementById('input-note-text').value = '';
         }
 
-        // Professional Dual Dataset Analytics Chart
+        // Analytics Chart
         let myChart = null;
         function renderChart() {
             const ctx = document.getElementById('studyChart');
@@ -879,11 +893,11 @@
             document.getElementById('meet-link-input').value = state.meetLink || '';
             document.getElementById('resource-notepad').value = state.notepad || '';
 
-            // Separate Streaks Calculation
+            // Bullet Streaks
             document.getElementById('streak-nishant').innerText = `${state.calendarMarks.nishant.length} Days`;
             document.getElementById('streak-naqeeba').innerText = `${state.calendarMarks.naqeeba.length} Days`;
 
-            // Active Mode Buttons Styling
+            // Active Mode Buttons
             const activeMode = state.calendarMarkMode || 'naqeeba';
             document.getElementById('btn-mode-naqeeba').className = activeMode === 'naqeeba' ? "px-2.5 py-1 bg-pink-400 text-white rounded-lg text-xs font-bold glow-pink" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
             document.getElementById('btn-mode-nishant').className = activeMode === 'nishant' ? "px-2.5 py-1 bg-blue-500 text-white rounded-lg text-xs font-bold glow-blue" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
@@ -917,7 +931,7 @@
                             <span class="text-xs ${t.completed ? 'line-through text-sub' : 'text-heading'} font-medium">${t.title}</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="text-[10px] px-2 py-0.5 rounded sub-panel text-sub font-mono font-semibold">${t.name}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded sub-panel text-sub font-mono font-semibold">• ${t.name}</span>
                             <button onclick="deleteTask('${t.id}')" class="text-sub hover:text-rose-500 text-xs px-1">✕</button>
                         </div>
                     </div>
@@ -939,11 +953,10 @@
                 `).join('');
             }
 
-            // Calendar Grid Render
+            // Calendar
             const calGrid = document.getElementById('calendar-grid');
             let calHTML = '';
             const isYearly = state.calendarViewMode === 'yearly';
-            const totalDays = isYearly ? 365 : 31;
 
             for (let i = 1; i <= (isYearly ? 35 : 31); i++) {
                 const isNaqeeba = state.calendarMarks.naqeeba.includes(i);
