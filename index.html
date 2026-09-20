@@ -9,71 +9,101 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.4s ease, color 0.4s ease; }
         .font-cursive { font-family: 'Dancing Script', cursive; }
         .font-corsiva { font-family: 'Playfair Display', serif; font-style: italic; }
         
-        .theme-dark { background-color: #0B0F19; color: #F1F5F9; }
-        .theme-dark .panel { background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5); }
-        .theme-dark .sub-panel { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); }
+        /* Light Theme (Default) */
+        .theme-light {
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+        .theme-light .panel {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+        .theme-light .sub-panel {
+            background: #F1F5F9;
+            border: 1px solid #E2E8F0;
+        }
+        .theme-light .text-heading { color: #0F172A; }
+        .theme-light .text-sub { color: #475569; }
+        .theme-light .nav-bg { background: rgba(255, 255, 255, 0.95); border-color: #E2E8F0; }
+        .theme-light .input-bg { background: #FFFFFF; border-color: #CBD5E1; color: #0F172A; }
+        .theme-light .quote-text { color: #000000 !important; }
+
+        /* Dark Theme */
+        .theme-dark {
+            background-color: #0B0F19;
+            color: #F1F5F9;
+        }
+        .theme-dark .panel {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+        }
+        .theme-dark .sub-panel {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
         .theme-dark .text-heading { color: #FFFFFF; }
         .theme-dark .text-sub { color: #94A3B8; }
-        .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.9); border-color: rgba(255, 255, 255, 0.1); }
+        .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.95); border-color: rgba(255, 255, 255, 0.1); }
         .theme-dark .input-bg { background: #020617; border-color: #1E293B; color: #F1F5F9; }
+        .theme-dark .quote-text { color: #FFFFFF !important; }
 
-        .theme-light { background-color: #F8FAFC; color: #1E293B; }
-        .theme-light .panel { background: #FFFFFF; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); }
-        .theme-light .sub-panel { background: #F1F5F9; border: 1px solid #E2E8F0; }
-        .theme-light .text-heading { color: #0F172A; }
-        .theme-light .text-sub { color: #64748B; }
-        .theme-light .nav-bg { background: #FFFFFF; border-color: #E2E8F0; }
-        .theme-light .input-bg { background: #F8FAFC; border-color: #CBD5E1; color: #0F172A; }
-
-        .animate-pop { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .animate-pop:hover { transform: scale(1.01); }
+        /* Premium Micro-Animations & Glow Effects */
+        .animate-pop { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .animate-pop:hover { transform: translateY(-3px) scale(1.005); }
         .tab-transition { transition: all 0.25s ease-in-out; }
+        .glow-blue { box-shadow: 0 0 20px -5px rgba(59, 130, 246, 0.3); }
+        .glow-pink { box-shadow: 0 0 20px -5px rgba(244, 114, 182, 0.3); }
     </style>
 </head>
-<body id="app-body" class="theme-dark min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+<body id="app-body" class="theme-light min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Navigation Bar -->
+    <!-- Premium Navigation Bar -->
     <header class="border-b nav-bg sticky top-0 z-50 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-6 h-22 flex items-center justify-between py-3">
             <div class="flex items-center space-x-3">
-                <div class="w-3.5 h-3.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                <div class="w-4 h-4 rounded-full bg-gradient-to-r from-blue-500 to-pink-400 animate-pulse"></div>
                 <div>
-                    <span class="font-extrabold text-xl tracking-tight text-heading block leading-none">Accountability</span>
-                    <span class="font-cursive font-bold text-lg text-indigo-400 tracking-wide block leading-tight mt-1">TARGET - MAY'26</span>
+                    <span class="font-extrabold text-2xl tracking-tight text-heading block leading-none">Accountability</span>
+                    <span class="font-cursive font-bold text-xl text-indigo-600 tracking-wide block leading-tight mt-1">Target MAY'27</span>
                 </div>
             </div>
             
-            <nav class="flex space-x-1 sub-panel p-1 rounded-xl">
-                <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-4 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-sm">Focus Room</button>
-                <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-transition px-4 py-1.5 text-xs font-semibold rounded-lg text-sub hover:text-heading">Daily Deck</button>
-                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-transition px-4 py-1.5 text-xs font-semibold rounded-lg text-sub hover:text-heading">Analytics & Logs</button>
-                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="tab-transition px-4 py-1.5 text-xs font-semibold rounded-lg text-sub hover:text-heading">Syllabus</button>
+            <nav class="flex space-x-1 sub-panel p-1.5 rounded-2xl">
+                <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md">Focus Room</button>
+                <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Daily Deck</button>
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Analytics & Logs</button>
+                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Syllabus</button>
             </nav>
 
             <div class="flex items-center space-x-4">
-                <button onclick="toggleTheme()" class="px-3 py-1.5 sub-panel rounded-xl text-xs font-bold text-sub hover:text-heading flex items-center gap-1.5 transition-all">
-                    <span id="theme-icon">🌙</span>
-                    <span id="theme-text">Dark Mode</span>
+                <!-- Dual Separate Streaks -->
+                <div class="flex items-center space-x-2 text-xs font-bold">
+                    <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1">
+                        <span>💙 Nishant:</span>
+                        <span id="streak-nishant">0 Days</span>
+                    </div>
+                    <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-500 flex items-center gap-1">
+                        <span>💖 Naqeeba:</span>
+                        <span id="streak-naqeeba">0 Days</span>
+                    </div>
+                </div>
+
+                <button onclick="toggleTheme()" class="px-3 py-2 sub-panel rounded-xl text-xs font-bold text-sub hover:text-heading flex items-center gap-1.5 transition-all">
+                    <span id="theme-icon">☀️</span>
+                    <span id="theme-text">Light Mode</span>
                 </button>
-
-                <div class="text-right hidden md:block">
-                    <div id="realtime-clock" class="text-xs font-bold font-mono text-heading">12:00:00 PM</div>
-                    <div id="realtime-date" class="text-[10px] text-sub font-medium">Sunday, Sep 20</div>
-                </div>
-
-                <div class="flex items-center space-x-1.5 text-xs bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-xl text-amber-500 font-bold">
-                    <span>🔥 Streak:</span>
-                    <span id="streak-counter">1 Day</span>
-                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Workspace Container -->
+    <!-- Main Workspace -->
     <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-grow">
 
         <!-- VIEW 1: FOCUS ROOM -->
@@ -130,7 +160,7 @@
                         </div>
                     </div>
 
-                    <!-- Live Status Panel -->
+                    <!-- Live Status Center -->
                     <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status Center</h3>
                         
@@ -144,7 +174,7 @@
                                 </select>
                             </div>
 
-                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-pink-500">
+                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-pink-300">
                                 <span class="text-xs font-bold text-heading">Naqeeba</span>
                                 <select onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
                                     <option value="Active Studying">🟢 Active Studying</option>
@@ -160,8 +190,8 @@
                 <div class="lg:col-span-2 space-y-6">
                     
                     <!-- Call Launcher -->
-                    <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[240px] animate-pop">
-                        <div class="flex items-center justify-between border-b border-slate-700/30 pb-3 mb-4">
+                    <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[220px] animate-pop">
+                        <div class="flex items-center justify-between border-b border-slate-700/20 pb-3 mb-4">
                             <div class="flex items-center space-x-2">
                                 <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Co-Working Call Bridge</h3>
@@ -170,12 +200,8 @@
                         </div>
 
                         <div class="space-y-4 max-w-lg mx-auto text-center py-2">
-                            <p class="text-xs text-sub leading-relaxed">
-                                Paste your Google Meet or Discord link below. Launch the meeting in a side tab while keeping your timer active here.
-                            </p>
-
                             <div class="space-y-2">
-                                <input type="text" id="meet-link-input" placeholder="https://meet.google.com/abc-xyz-123" class="w-full input-bg border rounded-xl px-4 py-2 text-xs focus:outline-none font-mono">
+                                <input type="text" id="meet-link-input" placeholder="https://meet.google.com/abc-xyz-123" class="w-full input-bg border rounded-xl px-4 py-2.5 text-xs focus:outline-none font-mono">
                                 <div class="flex gap-2">
                                     <button onclick="saveMeetLink()" class="w-1/3 py-2 sub-panel text-heading font-semibold rounded-xl text-xs transition-all">Save Link</button>
                                     <button onclick="launchMeetCall()" class="w-2/3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
@@ -187,21 +213,20 @@
                         </div>
                     </div>
 
-                    <!-- Photo Showcase Section -->
+                    <!-- Photo Gallery Showcase -->
                     <div class="panel rounded-2xl p-6 space-y-4 animate-pop">
-                        <div class="flex justify-between items-center border-b border-slate-700/30 pb-3">
+                        <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                             <div>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Study Desk & Photo Showcase</h3>
-                                <p class="text-sub text-xs">Share desk setups, gallery uploads, or study notes.</p>
+                                <p class="text-sub text-xs">Share gallery uploads or study notes directly across all active screens.</p>
                             </div>
                             <button onclick="toggleInlineForm('form-add-photo')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Photo</button>
                         </div>
 
-                        <!-- Gallery Upload Form -->
                         <div id="form-add-photo" class="hidden sub-panel p-4 rounded-xl space-y-3">
                             <h4 class="text-xs font-bold text-heading">Upload Image from Gallery</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <input type="text" id="input-photo-caption" placeholder="Photo Title / Caption" class="input-bg border rounded-lg p-2 text-xs">
+                                <input type="text" id="input-photo-caption" placeholder="Photo Caption / Title" class="input-bg border rounded-lg p-2 text-xs">
                                 <input type="file" id="input-photo-file" accept="image/*" class="input-bg border rounded-lg p-1 text-xs">
                             </div>
                             <div class="flex gap-2">
@@ -228,7 +253,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-xl font-bold tracking-tight text-heading">Daily Commitments</h2>
-                            <p class="text-sm font-corsiva font-semibold text-pink-400 mt-1 leading-snug">
+                            <p class="text-sm font-corsiva font-semibold quote-text mt-1 leading-snug">
                                 Naqeeba u know what the only thing standing between u and everything you ever wanted is trying one more time ... go get out girl !!
                             </p>
                         </div>
@@ -280,45 +305,73 @@
             </div>
         </section>
 
-        <!-- VIEW 3: ANALYTICS & VISUAL GRAPH ENGINE -->
+        <!-- VIEW 3: PROFESSIONAL ANALYTICS & INTERACTIVE CALENDAR -->
         <section id="view-analytics" class="space-y-6 hidden">
             <div>
-                <h2 class="text-xl font-bold tracking-tight text-heading">Study Analytics & Consistency Engine</h2>
-                <p class="text-sub text-xs">Track daily hours visually and manage individual streaks on the calendar.</p>
+                <h2 class="text-xl font-bold tracking-tight text-heading">Analytics Dashboard & Interactive Calendar</h2>
+                <p class="text-sub text-xs">Track study hours, declare holidays, and manage individual calendar notes.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <!-- Visual Graph Module (2 Cols) -->
+                <!-- Professional Chart Module -->
                 <div class="lg:col-span-2 panel rounded-2xl p-5 space-y-4 animate-pop">
-                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-3">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Study Hours & Progress Graph</h3>
-                        <span class="text-xs font-mono text-emerald-400 font-bold">Daily Tracking</span>
+                    <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Weekly Hour Comparison & Consistency Graph</h3>
+                        <div class="flex items-center space-x-4 text-xs font-bold">
+                            <span class="text-blue-500">💙 Nishant</span>
+                            <span class="text-pink-400">💖 Naqeeba</span>
+                        </div>
                     </div>
                     
-                    <div class="w-full h-64">
+                    <div class="w-full h-72">
                         <canvas id="studyChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Manual Individual Streak Calendar (1 Col) -->
+                <!-- Interactive Calendar Widget -->
                 <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
-                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-3">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Individual Attendance Calendar</h3>
+                    <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Attendance & Notes Calendar</h3>
+                        <select id="calendar-view-mode" onchange="changeCalendarViewMode()" class="input-bg text-xs font-bold rounded-lg px-2 py-1">
+                            <option value="monthly">Monthly View</option>
+                            <option value="yearly">Yearly View</option>
+                        </select>
                     </div>
 
-                    <div class="flex items-center justify-around py-1">
-                        <button onclick="setCalendarMode('naqeeba')" class="px-3 py-1 bg-pink-500/20 text-pink-400 border border-pink-500/40 rounded-lg text-xs font-bold hover:bg-pink-500 hover:text-white transition-all">
-                            💖 Naqeeba (Pink)
-                        </button>
-                        <button onclick="setCalendarMode('nishant')" class="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/40 rounded-lg text-xs font-bold hover:bg-blue-500 hover:text-white transition-all">
-                            💙 Nishant (Blue)
+                    <!-- User Attendance Selector & Actions -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-sub">Select Marking Mode:</span>
+                            <div class="flex gap-1.5">
+                                <button onclick="setCalendarMarkMode('naqeeba')" id="btn-mode-naqeeba" class="px-2.5 py-1 bg-pink-300 text-pink-900 rounded-lg text-xs font-bold">💖 Naqeeba</button>
+                                <button onclick="setCalendarMarkMode('nishant')" id="btn-mode-nishant" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">💙 Nishant</button>
+                                <button onclick="setCalendarMarkMode('holiday')" id="btn-mode-holiday" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">🔴 Holiday</button>
+                            </div>
+                        </div>
+
+                        <button onclick="toggleInlineForm('form-calendar-note')" class="w-full py-1.5 bg-indigo-600/10 border border-indigo-500/30 text-indigo-500 rounded-xl text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">
+                            + Add Google-Style Note to Date
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-7 gap-1.5 text-center text-xs font-semibold text-sub mb-1">
-                        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                    <!-- Inline Calendar Note Form -->
+                    <div id="form-calendar-note" class="hidden sub-panel p-3 rounded-xl space-y-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" min="1" max="31" id="input-note-day" placeholder="Day (1-31)" class="input-bg border rounded-lg p-1.5 text-xs">
+                            <input type="text" id="input-note-text" placeholder="Note (e.g., Exam / Revision)" class="input-bg border rounded-lg p-1.5 text-xs">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="saveCalendarNoteInline()" class="w-1/2 py-1 bg-indigo-600 text-white font-bold rounded text-xs">Save Note</button>
+                            <button onclick="toggleInlineForm('form-calendar-note')" class="w-1/2 py-1 sub-panel text-sub rounded text-xs">Cancel</button>
+                        </div>
                     </div>
+
+                    <!-- Calendar Grid Header -->
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-sub mb-1">
+                        <span class="text-rose-500">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                    </div>
+                    
                     <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs">
                         <!-- Loaded dynamically -->
                     </div>
@@ -360,7 +413,7 @@
             <div class="panel rounded-2xl overflow-hidden">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-700/30 text-[11px] font-bold text-sub uppercase">
+                        <tr class="border-b border-slate-700/20 text-[11px] font-bold text-sub uppercase">
                             <th class="p-4">Subject</th>
                             <th class="p-4">Topic / Chapter</th>
                             <th class="p-4">Assigned To</th>
@@ -377,26 +430,24 @@
             <!-- RESOURCES & NOTEPAD MODULE -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
                 
-                <!-- Notepad Section -->
                 <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
-                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-2">
+                    <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📝 Shared Resources & Notepad</h3>
-                        <button onclick="saveNotepad()" class="text-xs font-bold text-indigo-400 hover:underline">Save Notes</button>
+                        <button onclick="saveNotepad()" class="text-xs font-bold text-indigo-500 hover:underline">Save Notes</button>
                     </div>
                     <textarea id="resource-notepad" placeholder="Write shared notes, links, formula shortcuts, or exam schedules here..." class="w-full h-40 input-bg border rounded-xl p-3 text-xs focus:outline-none font-mono leading-relaxed"></textarea>
                 </div>
 
-                <!-- Excel-style Resource Link Sheet -->
                 <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
-                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-2">
+                    <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📊 Working Resource URL Sheet</h3>
-                        <button onclick="addResourceRowPrompt()" class="text-xs font-bold text-indigo-400 hover:underline">+ Add Link Row</button>
+                        <button onclick="addResourceRowPrompt()" class="text-xs font-bold text-indigo-500 hover:underline">+ Add Link Row</button>
                     </div>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-slate-700/30 text-[10px] font-bold text-sub uppercase">
+                                <tr class="border-b border-slate-700/20 text-[10px] font-bold text-sub uppercase">
                                     <th class="p-2">Title</th>
                                     <th class="p-2">Working URL Link</th>
                                     <th class="p-2 text-right">Action</th>
@@ -420,13 +471,15 @@
 
     <!-- Application Script Engine -->
     <script>
+        // Broadcast Channel for Syncing Changes Live Across Users/Tabs
+        const syncChannel = new BroadcastChannel('DUOSTUDY_LIVE_SYNC');
+
         const DEFAULT_STATE = {
-            theme: 'dark',
+            theme: 'light',
             targetHours: 4.0,
             hoursToday: 0.0,
-            streak: 1,
-            meetLink: 'https://meet.google.com/',
-            activeCalendarUser: 'naqeeba',
+            calendarMarkMode: 'naqeeba',
+            calendarViewMode: 'monthly',
             userStatuses: { nishant: 'Active Studying', naqeeba: 'Active Studying' },
             photos: [
                 { id: '1', caption: 'Nishant Desk Setup', url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop&q=60' }
@@ -435,10 +488,13 @@
                 { id: '1', name: 'Nishant', title: 'Complete 2 Focus Sessions', completed: false },
                 { id: '2', name: 'Naqeeba', title: 'Finish OS Module Notes', completed: false }
             ],
-            graphData: [2.5, 4.0, 3.5, 5.0, 4.5, 3.0, 4.2],
             calendarMarks: {
                 naqeeba: [2, 5, 8, 12, 15, 20],
-                nishant: [3, 6, 9, 14, 18, 20]
+                nishant: [3, 6, 9, 14, 18, 20],
+                holidays: [1, 26]
+            },
+            calendarNotes: {
+                20: 'Revision Session'
             },
             penalties: [
                 { id: '1', text: 'Missed 4-hr mark (Buy Coffee)', paid: false }
@@ -447,29 +503,35 @@
                 { id: '1', subject: 'Computer Science', topic: 'Data Structures & Algorithms', owner: 'Nishant', status: 'In Progress' },
                 { id: '2', subject: 'Computer Science', topic: 'Operating Systems & IPC', owner: 'Naqeeba', status: 'Not Started' }
             ],
-            notepad: 'Nishant & Naqeeba Shared Notepad:\n- Review Module 1 by Thursday\n- https://github.com/nishantpratap7080-ops/Duostudy',
+            notepad: 'Nishant & Naqeeba Shared Notepad:\n- Target Exam: May 2027\n- Daily Minimum Goal: 4 Hours',
             resources: [
-                { id: '1', title: 'OS Documentation', url: 'https://docs.kernel.org' },
-                { id: '2', title: 'DSA Sheet', url: 'https://leetcode.com' }
+                { id: '1', title: 'OS Documentation', url: 'https://docs.kernel.org' }
             ]
         };
 
         function getState() {
-            const saved = localStorage.getItem('ACCOUNTABILITY_HUB_REFINED_STATE');
+            const saved = localStorage.getItem('ACCOUNTABILITY_HUB_V2_STATE');
             return saved ? JSON.parse(saved) : DEFAULT_STATE;
         }
 
-        function saveState(state) {
-            localStorage.setItem('ACCOUNTABILITY_HUB_REFINED_STATE', JSON.stringify(state));
+        function saveState(state, broadcast = true) {
+            localStorage.setItem('ACCOUNTABILITY_HUB_V2_STATE', JSON.stringify(state));
+            if (broadcast) syncChannel.postMessage({ type: 'STATE_UPDATE' });
             renderAll();
         }
+
+        syncChannel.onmessage = (event) => {
+            if (event.data && event.data.type === 'STATE_UPDATE') {
+                renderAll();
+            }
+        };
 
         function toggleInlineForm(formId) {
             const el = document.getElementById(formId);
             if (el) el.classList.toggle('hidden');
         }
 
-        // Theme Engine
+        // Theme Controller
         function applyTheme(theme) {
             const body = document.getElementById('app-body');
             const icon = document.getElementById('theme-icon');
@@ -495,10 +557,10 @@
         function switchTab(tabId) {
             ['focus', 'tasks', 'analytics', 'syllabus'].forEach(id => {
                 document.getElementById(`view-${id}`).classList.add('hidden');
-                document.getElementById(`tab-${id}`).className = "tab-transition px-4 py-1.5 text-xs font-semibold rounded-lg text-sub hover:text-heading";
+                document.getElementById(`tab-${id}`).className = "tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading";
             });
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).className = "tab-transition px-4 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-sm";
+            document.getElementById(`tab-${tabId}`).className = "tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md";
             if (tabId === 'analytics') renderChart();
         }
 
@@ -600,7 +662,7 @@
             if (link) window.open(link, '_blank');
         }
 
-        // Direct Gallery Image Upload
+        // Gallery Image Upload
         function savePhotoFromGallery() {
             const caption = document.getElementById('input-photo-caption').value.trim();
             const fileInput = document.getElementById('input-photo-file');
@@ -666,49 +728,84 @@
             saveState(state);
         }
 
-        // Calendar Individual Streak Toggles
-        function setCalendarMode(user) {
+        // Calendar Engine
+        function setCalendarMarkMode(mode) {
             const state = getState();
-            state.activeCalendarUser = user;
+            state.calendarMarkMode = mode;
+            saveState(state);
+        }
+
+        function changeCalendarViewMode() {
+            const state = getState();
+            state.calendarViewMode = document.getElementById('calendar-view-mode').value;
             saveState(state);
         }
 
         function toggleCalendarDay(day) {
             const state = getState();
-            const user = state.activeCalendarUser || 'naqeeba';
-            const marks = state.calendarMarks[user];
-            const idx = marks.indexOf(day);
-            if (idx > -1) marks.splice(idx, 1);
-            else marks.push(day);
+            const mode = state.calendarMarkMode || 'naqeeba';
+
+            if (mode === 'holiday') {
+                const idx = state.calendarMarks.holidays.indexOf(day);
+                if (idx > -1) state.calendarMarks.holidays.splice(idx, 1);
+                else state.calendarMarks.holidays.push(day);
+            } else {
+                const marks = state.calendarMarks[mode];
+                const idx = marks.indexOf(day);
+                if (idx > -1) marks.splice(idx, 1);
+                else marks.push(day);
+            }
             saveState(state);
         }
 
-        // Analytics Visual Chart
+        function saveCalendarNoteInline() {
+            const day = parseInt(document.getElementById('input-note-day').value);
+            const text = document.getElementById('input-note-text').value.trim();
+            if (!day || !text) return;
+
+            const state = getState();
+            state.calendarNotes[day] = text;
+            saveState(state);
+            toggleInlineForm('form-calendar-note');
+            document.getElementById('input-note-day').value = '';
+            document.getElementById('input-note-text').value = '';
+        }
+
+        // Professional Dual Dataset Analytics Chart
         let myChart = null;
         function renderChart() {
             const ctx = document.getElementById('studyChart');
             if (!ctx) return;
-            const state = getState();
 
             if (myChart) myChart.destroy();
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'Study Hours Logged',
-                        data: state.graphData,
-                        backgroundColor: 'rgba(99, 102, 241, 0.7)',
-                        borderColor: '#6366F1',
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }]
+                    datasets: [
+                        {
+                            label: 'Nishant (Hours)',
+                            data: [3.5, 4.0, 5.0, 4.2, 3.8, 6.0, 4.5],
+                            backgroundColor: 'rgba(59, 130, 246, 0.85)',
+                            borderColor: '#3B82F6',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Naqeeba (Hours)',
+                            data: [4.0, 4.5, 3.8, 5.2, 4.0, 5.5, 5.0],
+                            backgroundColor: 'rgba(244, 114, 182, 0.85)',
+                            borderColor: '#F472B6',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(150, 150, 150, 0.1)' } },
                         x: { grid: { display: false } }
                     }
                 }
@@ -779,9 +876,18 @@
 
             document.getElementById('hours-today').innerText = `${state.hoursToday} hrs`;
             document.getElementById('hours-target').innerText = `${state.targetHours} hrs`;
-            document.getElementById('streak-counter').innerText = `${state.streak} Day${state.streak > 1 ? 's' : ''}`;
             document.getElementById('meet-link-input').value = state.meetLink || '';
             document.getElementById('resource-notepad').value = state.notepad || '';
+
+            // Separate Streaks Calculation
+            document.getElementById('streak-nishant').innerText = `${state.calendarMarks.nishant.length} Days`;
+            document.getElementById('streak-naqeeba').innerText = `${state.calendarMarks.naqeeba.length} Days`;
+
+            // Active Mode Buttons Styling
+            const activeMode = state.calendarMarkMode || 'naqeeba';
+            document.getElementById('btn-mode-naqeeba').className = activeMode === 'naqeeba' ? "px-2.5 py-1 bg-pink-400 text-white rounded-lg text-xs font-bold glow-pink" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
+            document.getElementById('btn-mode-nishant').className = activeMode === 'nishant' ? "px-2.5 py-1 bg-blue-500 text-white rounded-lg text-xs font-bold glow-blue" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
+            document.getElementById('btn-mode-holiday').className = activeMode === 'holiday' ? "px-2.5 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
 
             // Gallery
             const photoGallery = document.getElementById('photo-gallery');
@@ -805,7 +911,7 @@
                 tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-sub panel rounded-xl">No tasks set. Click "+ Add Task" above.</div>`;
             } else {
                 tasksContainer.innerHTML = state.tasks.map(t => `
-                    <div class="panel p-3.5 rounded-xl flex items-center justify-between hover:border-slate-500 transition-all animate-pop">
+                    <div class="panel p-3.5 rounded-xl flex items-center justify-between hover:border-slate-400 transition-all animate-pop">
                         <div class="flex items-center space-x-3">
                             <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask('${t.id}')" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
                             <span class="text-xs ${t.completed ? 'line-through text-sub' : 'text-heading'} font-medium">${t.title}</span>
@@ -833,28 +939,36 @@
                 `).join('');
             }
 
-            // Individual Streak Calendar Grid
+            // Calendar Grid Render
             const calGrid = document.getElementById('calendar-grid');
             let calHTML = '';
-            const activeUser = state.activeCalendarUser || 'naqeeba';
-            for (let i = 1; i <= 30; i++) {
+            const isYearly = state.calendarViewMode === 'yearly';
+            const totalDays = isYearly ? 365 : 31;
+
+            for (let i = 1; i <= (isYearly ? 35 : 31); i++) {
                 const isNaqeeba = state.calendarMarks.naqeeba.includes(i);
                 const isNishant = state.calendarMarks.nishant.includes(i);
+                const isHoliday = state.calendarMarks.holidays.includes(i);
+                const isSunday = (i % 7 === 1);
+                const note = state.calendarNotes[i];
                 
                 let bgClass = 'sub-panel text-sub';
-                if (isNaqeeba && isNishant) bgClass = 'bg-gradient-to-r from-pink-500 to-blue-500 text-white font-bold';
-                else if (isNaqeeba) bgClass = 'bg-pink-500 text-white font-bold';
+                if (isHoliday) bgClass = 'bg-rose-500 text-white font-bold';
+                else if (isNaqeeba && isNishant) bgClass = 'bg-gradient-to-r from-pink-400 to-blue-500 text-white font-bold';
+                else if (isNaqeeba) bgClass = 'bg-pink-300 text-pink-950 font-bold';
                 else if (isNishant) bgClass = 'bg-blue-500 text-white font-bold';
+                else if (isSunday) bgClass = 'border-rose-400/50 text-rose-500 font-bold sub-panel';
 
                 calHTML += `
-                    <button onclick="toggleCalendarDay(${i})" class="p-2 rounded-lg border text-xs cursor-pointer transition-all ${bgClass}">
-                        ${i}
+                    <button onclick="toggleCalendarDay(${i})" class="p-1.5 rounded-xl border text-xs cursor-pointer transition-all relative group ${bgClass}">
+                        <span>${i}</span>
+                        ${note ? `<span class="block text-[8px] truncate font-mono text-amber-300">${note}</span>` : ''}
                     </button>
                 `;
             }
             calGrid.innerHTML = calHTML;
 
-            // Syllabus Progress Cards & Table
+            // Syllabus
             const tbody = document.getElementById('syllabus-table-body');
             if (state.syllabus.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-sub">No syllabus topics added yet.</td></tr>`;
@@ -903,7 +1017,7 @@
                 }).join('');
             }
 
-            // Resource Excel Sheet Table
+            // Resources
             const resourceBody = document.getElementById('resource-table-body');
             if (state.resources.length === 0) {
                 resourceBody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-sub">No resource links added.</td></tr>`;
@@ -912,7 +1026,7 @@
                     <tr class="border-b border-slate-700/20">
                         <td class="p-2 font-semibold text-heading">${r.title}</td>
                         <td class="p-2">
-                            <a href="${r.url}" target="_blank" class="text-indigo-400 font-mono underline hover:text-indigo-300 truncate block max-w-xs">${r.url}</a>
+                            <a href="${r.url}" target="_blank" class="text-indigo-500 font-mono underline hover:text-indigo-400 truncate block max-w-xs">${r.url}</a>
                         </td>
                         <td class="p-2 text-right">
                             <button onclick="deleteResourceRow('${r.id}')" class="text-sub hover:text-rose-500 text-xs">Delete</button>
