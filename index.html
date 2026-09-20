@@ -91,7 +91,6 @@
         <section id="view-focus" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="space-y-6">
-                    <!-- Timer -->
                     <div class="panel p-6 rounded-2xl text-center relative overflow-hidden animate-pop">
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Timer Mode</span>
@@ -109,7 +108,6 @@
                         </div>
                     </div>
 
-                    <!-- Target Goals -->
                     <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Daily Target Goal</h3>
@@ -134,7 +132,6 @@
                         </div>
                     </div>
 
-                    <!-- Live Status Center -->
                     <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status Center</h3>
                         <div class="space-y-2">
@@ -158,7 +155,6 @@
                     </div>
                 </div>
 
-                <!-- Right Column -->
                 <div class="lg:col-span-2 space-y-6">
                     <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[220px] animate-pop">
                         <div class="flex items-center justify-between border-b border-slate-700/20 pb-3 mb-4">
@@ -182,7 +178,6 @@
                         </div>
                     </div>
 
-                    <!-- Photo Gallery Showcase -->
                     <div class="panel rounded-2xl p-6 space-y-4 animate-pop">
                         <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                             <div>
@@ -365,7 +360,6 @@
                 </table>
             </div>
 
-            <!-- RESOURCES & NOTEPAD MODULE -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
                 <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
@@ -402,12 +396,13 @@
         Accountability Hub &bull; Nishant & Naqeeba
     </footer>
 
-    <!-- SUPABASE CLOUD LIVE REALTIME ENGINE -->
+    <!-- DUAL-PERSISTENCE ENGINE (LOCAL + SUPABASE REALTIME) -->
     <script>
-        // Initialize Supabase Client
         const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR"; // <--- Paste your sb_publishable_... key here
+        const SUPABASE_ANON_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE"; // Insert your key if available
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const STORAGE_KEY = "DUOSTUDY_PERSISTENT_STATE";
 
         const DEFAULT_STATE = {
             theme: 'light',
@@ -416,69 +411,66 @@
             calendarMarkMode: 'naqeeba',
             calendarViewMode: 'monthly',
             userStatuses: { nishant: 'Active Studying', naqeeba: 'Active Studying' },
-            photos: [
-                { id: '1', caption: 'Nishant Desk Setup', url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop&q=60' }
-            ],
-            tasks: [
-                { id: '1', name: 'Nishant', title: 'Complete 2 Focus Sessions', completed: false },
-                { id: '2', name: 'Naqeeba', title: 'Finish OS Module Notes', completed: false }
-            ],
-            calendarMarks: {
-                naqeeba: [2, 5, 8, 12, 15, 20],
-                nishant: [3, 6, 9, 14, 18, 20],
-                holidays: [1, 26]
-            },
-            calendarNotes: { 20: 'Revision Session' },
-            penalties: [{ id: '1', text: 'Missed 4-hr mark (Buy Coffee)', paid: false }],
-            syllabus: [
-                { id: '1', subject: 'Computer Science', topic: 'Data Structures & Algorithms', owner: 'Nishant', status: 'In Progress' },
-                { id: '2', subject: 'Computer Science', topic: 'Operating Systems & IPC', owner: 'Naqeeba', status: 'Not Started' }
-            ],
-            notepad: 'Nishant & Naqeeba Shared Notepad:\n- Target Exam: May 2027\n- Daily Minimum Goal: 4 Hours',
-            resources: [{ id: '1', title: 'OS Documentation', url: 'https://docs.kernel.org' }]
+            photos: [],
+            tasks: [],
+            calendarMarks: { naqeeba: [], nishant: [], holidays: [] },
+            calendarNotes: {},
+            penalties: [],
+            syllabus: [],
+            notepad: 'Nishant & Naqeeba Shared Notepad:\n- Target Exam: May 2027',
+            resources: []
         };
 
-        let localState = DEFAULT_STATE;
-
-        // Fetch Cloud State from Supabase
-        async function fetchCloudState() {
-            try {
-                const { data, error } = await db.from('app_state').select('data').eq('id', 'global').single();
-                if (data && data.data && Object.keys(data.data).length > 0) {
-                    localState = data.data;
-                } else {
-                    saveStateToCloud(DEFAULT_STATE);
-                }
-            } catch (err) {
-                console.error("Cloud fetch fallback:", err);
-            }
-            renderAll();
+        // Load local state first so page refreshes NEVER erase data
+        function getInitialState() {
+            const local = localStorage.getItem(STORAGE_KEY);
+            return local ? JSON.parse(local) : DEFAULT_STATE;
         }
 
-        // Save State to Supabase Live
-        async function saveStateToCloud(newState) {
-            localState = newState;
-            renderAll();
-            try {
-                await db.from('app_state').upsert({ id: 'global', data: newState, updated_at: new Date() });
-            } catch (err) {
-                console.error("Cloud save failed:", err);
-            }
-        }
-
-        // Subscribe to Live Realtime Changes across all devices
-        db.channel('public:app_state')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, payload => {
-                if (payload.new && payload.new.data) {
-                    localState = payload.new.data;
-                    renderAll();
-                }
-            })
-            .subscribe();
+        let localState = getInitialState();
 
         function getState() {
             return localState;
         }
+
+        // Save locally immediately AND attempt background cloud push
+        function saveStateToCloud(newState) {
+            localState = newState;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+            renderAll();
+
+            // Background Supabase Sync
+            db.from('app_state')
+                .upsert({ id: 'global', data: newState, updated_at: new Date() })
+                .then(({ error }) => {
+                    if (error) console.log("Cloud sync note:", error.message);
+                });
+        }
+
+        // Fetch Cloud State and merge on load
+        async function fetchCloudState() {
+            try {
+                const { data } = await db.from('app_state').select('data').eq('id', 'global').single();
+                if (data && data.data && Object.keys(data.data).length > 0) {
+                    localState = data.data;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
+                    renderAll();
+                }
+            } catch (err) {
+                console.log("Operating in offline/local storage mode");
+            }
+        }
+
+        // Realtime sync across open tabs/devices
+        db.channel('public:app_state')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, payload => {
+                if (payload.new && payload.new.data) {
+                    localState = payload.new.data;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
+                    renderAll();
+                }
+            })
+            .subscribe();
 
         function toggleInlineForm(formId) {
             const el = document.getElementById(formId);
@@ -602,6 +594,7 @@
 
         function updateUserStatus(userKey, newStatus) {
             const state = getState();
+            if (!state.userStatuses) state.userStatuses = {};
             state.userStatuses[userKey] = newStatus;
             saveStateToCloud(state);
         }
@@ -628,6 +621,7 @@
             const reader = new FileReader();
             reader.onload = function (e) {
                 const state = getState();
+                if (!state.photos) state.photos = [];
                 state.photos.unshift({ id: Date.now().toString(), caption: caption, url: e.target.result });
                 saveStateToCloud(state);
                 toggleInlineForm('form-add-photo');
@@ -639,7 +633,7 @@
 
         function deletePhoto(id) {
             const state = getState();
-            state.photos = state.photos.filter(p => p.id !== id);
+            state.photos = (state.photos || []).filter(p => p.id !== id);
             saveStateToCloud(state);
         }
 
@@ -648,6 +642,7 @@
             const title = document.getElementById('input-task-title').value.trim();
             if (!title) return;
             const state = getState();
+            if (!state.tasks) state.tasks = [];
             state.tasks.unshift({ id: Date.now().toString(), name: owner, title: title, completed: false });
             saveStateToCloud(state);
             toggleInlineForm('form-add-task');
@@ -656,14 +651,14 @@
 
         function toggleTask(id) {
             const state = getState();
-            const t = state.tasks.find(x => x.id === id);
+            const t = (state.tasks || []).find(x => x.id === id);
             if (t) t.completed = !t.completed;
             saveStateToCloud(state);
         }
 
         function deleteTask(id) {
             const state = getState();
-            state.tasks = state.tasks.filter(x => x.id !== id);
+            state.tasks = (state.tasks || []).filter(x => x.id !== id);
             saveStateToCloud(state);
         }
 
@@ -671,6 +666,7 @@
             const text = document.getElementById('input-penalty-text').value.trim();
             if (!text) return;
             const state = getState();
+            if (!state.penalties) state.penalties = [];
             state.penalties.unshift({ id: Date.now().toString(), text: text, paid: false });
             saveStateToCloud(state);
             toggleInlineForm('form-add-penalty');
@@ -679,7 +675,7 @@
 
         function togglePenalty(id) {
             const state = getState();
-            const p = state.penalties.find(x => x.id === id);
+            const p = (state.penalties || []).find(x => x.id === id);
             if (p) p.paid = !p.paid;
             saveStateToCloud(state);
         }
@@ -698,13 +694,16 @@
 
         function toggleCalendarDay(day) {
             const state = getState();
+            if (!state.calendarMarks) state.calendarMarks = { naqeeba: [], nishant: [], holidays: [] };
             const mode = state.calendarMarkMode || 'naqeeba';
 
             if (mode === 'holiday') {
+                if (!state.calendarMarks.holidays) state.calendarMarks.holidays = [];
                 const idx = state.calendarMarks.holidays.indexOf(day);
                 if (idx > -1) state.calendarMarks.holidays.splice(idx, 1);
                 else state.calendarMarks.holidays.push(day);
             } else {
+                if (!state.calendarMarks[mode]) state.calendarMarks[mode] = [];
                 const marks = state.calendarMarks[mode];
                 const idx = marks.indexOf(day);
                 if (idx > -1) marks.splice(idx, 1);
@@ -719,6 +718,7 @@
             if (!day || !text) return;
 
             const state = getState();
+            if (!state.calendarNotes) state.calendarNotes = {};
             state.calendarNotes[day] = text;
             saveStateToCloud(state);
             toggleInlineForm('form-calendar-note');
@@ -773,6 +773,7 @@
             if (!subject || !topic) return;
 
             const state = getState();
+            if (!state.syllabus) state.syllabus = [];
             state.syllabus.push({ id: Date.now().toString(), subject: subject, topic: topic, owner: owner, status: 'Not Started' });
             saveStateToCloud(state);
             toggleInlineForm('form-add-syllabus');
@@ -782,7 +783,7 @@
 
         function cycleSyllabusStatus(id) {
             const state = getState();
-            const s = state.syllabus.find(x => x.id === id);
+            const s = (state.syllabus || []).find(x => x.id === id);
             if (s) {
                 if (s.status === 'Not Started') s.status = 'In Progress';
                 else if (s.status === 'In Progress') s.status = 'Completed';
@@ -793,7 +794,7 @@
 
         function deleteSyllabusTopic(id) {
             const state = getState();
-            state.syllabus = state.syllabus.filter(x => x.id !== id);
+            state.syllabus = (state.syllabus || []).filter(x => x.id !== id);
             saveStateToCloud(state);
         }
 
@@ -812,27 +813,30 @@
             if (!url) return;
 
             const state = getState();
+            if (!state.resources) state.resources = [];
             state.resources.push({ id: Date.now().toString(), title: title, url: url });
             saveStateToCloud(state);
         }
 
         function deleteResourceRow(id) {
             const state = getState();
-            state.resources = state.resources.filter(r => r.id !== id);
+            state.resources = (state.resources || []).filter(r => r.id !== id);
             saveStateToCloud(state);
         }
 
         function renderAll() {
             const state = getState();
-            applyTheme(state.theme);
+            applyTheme(state.theme || 'light');
 
-            document.getElementById('hours-today').innerText = `${state.hoursToday} hrs`;
-            document.getElementById('hours-target').innerText = `${state.targetHours} hrs`;
+            document.getElementById('hours-today').innerText = `${state.hoursToday || 0} hrs`;
+            document.getElementById('hours-target').innerText = `${state.targetHours || 4} hrs`;
             document.getElementById('meet-link-input').value = state.meetLink || '';
             document.getElementById('resource-notepad').value = state.notepad || '';
 
-            document.getElementById('streak-nishant').innerText = `${state.calendarMarks.nishant ? state.calendarMarks.nishant.length : 0} Days`;
-            document.getElementById('streak-naqeeba').innerText = `${state.calendarMarks.naqeeba ? state.calendarMarks.naqeeba.length : 0} Days`;
+            const nishantCount = (state.calendarMarks && state.calendarMarks.nishant) ? state.calendarMarks.nishant.length : 0;
+            const naqeebaCount = (state.calendarMarks && state.calendarMarks.naqeeba) ? state.calendarMarks.naqeeba.length : 0;
+            document.getElementById('streak-nishant').innerText = `${nishantCount} Days`;
+            document.getElementById('streak-naqeeba').innerText = `${naqeebaCount} Days`;
 
             const activeMode = state.calendarMarkMode || 'naqeeba';
             document.getElementById('btn-mode-naqeeba').className = activeMode === 'naqeeba' ? "px-2.5 py-1 bg-pink-400 text-white rounded-lg text-xs font-bold glow-pink" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
@@ -979,7 +983,7 @@
             }
         }
 
-        // Initialize Cloud Realtime Engine
+        renderAll();
         fetchCloudState();
     </script>
 </body>
