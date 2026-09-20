@@ -124,11 +124,13 @@
     </footer>
 
     <!-- Frontend Controller Script -->
+    <!-- Frontend Controller Script -->
     <script>
         // Initialize Supabase Client
         const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR";
+        const SUPABASE_ANON_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE"; // Ensure your publishable key is here
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // Tab Switcher logic
         function switchTab(tabId) {
             ['focus', 'tasks', 'syllabus'].forEach(id => {
@@ -137,6 +139,9 @@
             });
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
             document.getElementById(`tab-${tabId}`).className = "px-4 py-1.5 text-sm font-medium rounded-lg transition-all bg-indigo-600 text-white shadow-sm";
+            
+            if (tabId === 'tasks') fetchTasks();
+            if (tabId === 'syllabus') fetchSyllabus();
         }
 
         // Pomodoro Timer Logic
@@ -189,6 +194,77 @@
                 alert("Please enter a valid Google Meet link first!");
             }
         }
+
+        // --- LIVE SUPABASE DATABASE FUNCTIONS ---
+
+        // Fetch Daily Tasks
+        async function fetchTasks() {
+            const container = document.getElementById('tasks-container');
+            container.innerHTML = `<div class="p-4 text-slate-500 text-sm text-center">Loading tasks from database...</div>`;
+            
+            const { data, error } = await supabase.from('daily_tasks').select('*').order('created_at', { ascending: false });
+            
+            if (error) {
+                container.innerHTML = `<div class="p-4 text-rose-400 text-sm text-center">Error loading tasks. Ensure RLS policies or tables are ready.</div>`;
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div class="p-4 text-slate-500 text-sm text-center">No tasks for today yet. Add one below!</div>`;
+                return;
+            }
+
+            container.innerHTML = data.map(task => `
+                <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <input type="checkbox" ${task.is_completed ? 'checked' : ''} onchange="toggleTask('${task.id}', ${!task.is_completed})" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                        <span class="text-sm ${task.is_completed ? 'line-through text-slate-500' : 'text-slate-200'}">${task.task_title}</span>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded bg-slate-800 text-slate-400 font-mono">${task.user_name}</span>
+                </div>
+            `).join('');
+        }
+
+        // Add a New Task
+        async function openTaskModal() {
+            const userName = prompt("Enter your name (e.g., Nishant or Partner):");
+            if (!userName) return;
+            const taskTitle = prompt("Enter your daily goal / deliverable:");
+            if (!taskTitle) return;
+
+            await supabase.from('daily_tasks').insert([{ user_name: userName, task_title: taskTitle, is_completed: false }]);
+            fetchTasks();
+        }
+
+        // Toggle Task Completion
+        async function toggleTask(taskId, newStatus) {
+            await supabase.from('daily_tasks').update({ is_completed: newStatus }).eq('id', taskId);
+            fetchTasks();
+        }
+
+        // Fetch Syllabus Topics
+        async function fetchSyllabus() {
+            const tbody = document.getElementById('syllabus-table-body');
+            tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">Loading syllabus...</td></tr>`;
+
+            const { data, error } = await supabase.from('syllabus').select('*');
+
+            if (error || !data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">No syllabus topics added yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+                <tr class="border-b border-slate-800/60">
+                    <td class="p-4 font-medium text-slate-200">${item.subject}</td>
+                    <td class="p-4 text-slate-300">${item.topic_name}</td>
+                    <td class="p-4 text-slate-400">${item.assigned_to}</td>
+                    <td class="p-4">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${item.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">
+                            ${item.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
     </script>
-</body>
-</html>
