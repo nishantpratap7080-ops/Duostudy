@@ -41,7 +41,7 @@
 </head>
 <body id="app-body" class="theme-light min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Premium Navigation Bar -->
+    <!-- Header Navigation -->
     <header class="border-b nav-bg sticky top-0 z-50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 h-22 flex items-center justify-between py-3">
             <div class="flex items-center space-x-3">
@@ -84,35 +84,41 @@
         </div>
     </header>
 
-    <!-- Main Workspace -->
+    <!-- Main Content Space -->
     <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-grow">
 
-        <!-- VIEW 1: FOCUS ROOM -->
+        <!-- FOCUS ROOM -->
         <section id="view-focus" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left Sidebar Controls -->
                 <div class="space-y-6">
+                    
+                    <!-- Persistent Session Timer -->
                     <div class="panel p-6 rounded-2xl text-center relative overflow-hidden animate-pop">
                         <div class="flex justify-between items-center mb-3">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Timer Mode</span>
-                            <select id="timer-mode-select" onchange="changeTimerMode()" class="input-bg text-xs font-medium rounded-lg px-2 py-1 focus:outline-none">
-                                <option value="50">50m Focus</option>
-                                <option value="25">25m Pomodoro</option>
-                                <option value="90">90m Deep Work</option>
-                                <option value="stopwatch">Stopwatch</option>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Active Focus Timer</span>
+                            <select id="timer-user-select" class="input-bg text-xs font-medium rounded-lg px-2 py-1 focus:outline-none">
+                                <option value="nishant">💙 Nishant</option>
+                                <option value="naqeeba">💖 Naqeeba</option>
                             </select>
                         </div>
-                        <div id="timer-display" class="text-6xl font-black text-heading font-mono my-4 tracking-tighter">50:00</div>
+
+                        <div id="timer-display" class="text-6xl font-black text-heading font-mono my-4 tracking-tighter">00:00:00</div>
+                        
                         <div class="flex justify-center gap-3">
-                            <button onclick="toggleTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Start Session</button>
-                            <button onclick="resetTimer()" class="px-5 py-2.5 sub-panel text-sub font-semibold rounded-xl text-xs transition-all hover:text-heading cursor-pointer">Reset</button>
+                            <button onclick="toggleActiveTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Start Session</button>
+                            <button onclick="stopAndCompleteSession()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Complete Session</button>
                         </div>
                     </div>
 
+                    <!-- Individual Completed Today's Hours Card -->
                     <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Daily Target Goal</h3>
-                            <button onclick="toggleInlineForm('form-edit-goal')" class="text-xs text-indigo-500 font-semibold hover:underline">Edit Goal</button>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Individual Hours Today</h3>
+                            <button onclick="toggleInlineForm('form-edit-goal')" class="text-xs text-indigo-500 font-semibold hover:underline">Target Goal</button>
                         </div>
+
                         <div id="form-edit-goal" class="hidden sub-panel p-3 rounded-xl space-y-2">
                             <input type="number" step="0.5" id="input-target-hours" placeholder="Target hours (e.g., 5.0)" class="w-full input-bg border rounded-lg p-2 text-xs">
                             <div class="flex gap-2">
@@ -120,43 +126,62 @@
                                 <button onclick="toggleInlineForm('form-edit-goal')" class="w-1/2 py-1 sub-panel text-sub rounded text-xs">Cancel</button>
                             </div>
                         </div>
+
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="sub-panel p-3 rounded-xl">
-                                <span class="text-[10px] text-sub font-semibold uppercase block">Completed</span>
-                                <span id="hours-today" class="text-xl font-extrabold text-emerald-500 font-mono">0.0 hrs</span>
+                            <div class="sub-panel p-3 rounded-xl border-l-4 border-blue-500">
+                                <span class="text-[10px] text-sub font-bold uppercase block">• Nishant Today</span>
+                                <span id="hours-nishant-today" class="text-xl font-extrabold text-blue-600 font-mono">0.0 hrs</span>
                             </div>
-                            <div class="sub-panel p-3 rounded-xl">
-                                <span class="text-[10px] text-sub font-semibold uppercase block">Target Goal</span>
-                                <span id="hours-target" class="text-xl font-extrabold text-heading font-mono">4.0 hrs</span>
+                            <div class="sub-panel p-3 rounded-xl border-l-4 border-pink-400">
+                                <span class="text-[10px] text-sub font-bold uppercase block">• Naqeeba Today</span>
+                                <span id="hours-naqeeba-today" class="text-xl font-extrabold text-pink-500 font-mono">0.0 hrs</span>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Live Synchronized Status & Break Timer Center -->
                     <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status Center</h3>
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-blue-500">
-                                <span class="text-xs font-bold text-heading">Nishant</span>
-                                <select onchange="updateUserStatus('nishant', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
-                                    <option value="Active Studying">🟢 Active Studying</option>
-                                    <option value="In Break">🟡 In Break</option>
-                                    <option value="Away">⚪ Away</option>
-                                </select>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status & Break Center</h3>
+                        
+                        <div class="space-y-3">
+                            <!-- Nishant Status -->
+                            <div class="sub-panel p-3 rounded-xl border-l-4 border-blue-500 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold text-heading">Nishant</span>
+                                    <select id="status-select-nishant" onchange="updateUserStatus('nishant', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
+                                        <option value="Active Studying">🟢 Active Studying</option>
+                                        <option value="In Break">🟡 In Break</option>
+                                        <option value="Away">⚪ Away</option>
+                                    </select>
+                                </div>
+                                <div id="break-timer-nishant" class="text-[11px] font-mono font-semibold text-amber-500 hidden">
+                                    On break for: <span id="break-clock-nishant">00:00</span>
+                                </div>
                             </div>
-                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-pink-300">
-                                <span class="text-xs font-bold text-heading">Naqeeba</span>
-                                <select onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
-                                    <option value="Active Studying">🟢 Active Studying</option>
-                                    <option value="In Break">🟡 In Break</option>
-                                    <option value="Away">⚪ Away</option>
-                                </select>
+
+                            <!-- Naqeeba Status -->
+                            <div class="sub-panel p-3 rounded-xl border-l-4 border-pink-400 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold text-heading">Naqeeba</span>
+                                    <select id="status-select-naqeeba" onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
+                                        <option value="Active Studying">🟢 Active Studying</option>
+                                        <option value="In Break">🟡 In Break</option>
+                                        <option value="Away">⚪ Away</option>
+                                    </select>
+                                </div>
+                                <div id="break-timer-naqeeba" class="text-[11px] font-mono font-semibold text-amber-500 hidden">
+                                    On break for: <span id="break-clock-naqeeba">00:00</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
+                <!-- Right Workspace -->
                 <div class="lg:col-span-2 space-y-6">
-                    <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[220px] animate-pop">
+                    <!-- Call Launcher -->
+                    <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[200px] animate-pop">
                         <div class="flex items-center justify-between border-b border-slate-700/20 pb-3 mb-4">
                             <div class="flex items-center space-x-2">
                                 <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -164,7 +189,8 @@
                             </div>
                             <span class="text-xs text-sub font-medium">Google Meet / Discord</span>
                         </div>
-                        <div class="space-y-4 max-w-lg mx-auto text-center py-2">
+
+                        <div class="space-y-4 max-w-lg mx-auto text-center py-2 w-full">
                             <div class="space-y-2">
                                 <input type="text" id="meet-link-input" placeholder="https://meet.google.com/abc-xyz-123" class="w-full input-bg border rounded-xl px-4 py-2.5 text-xs focus:outline-none font-mono">
                                 <div class="flex gap-2">
@@ -178,14 +204,16 @@
                         </div>
                     </div>
 
+                    <!-- Desk & Photo Gallery Showcase -->
                     <div class="panel rounded-2xl p-6 space-y-4 animate-pop">
                         <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                             <div>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Study Desk & Photo Showcase</h3>
-                                <p class="text-sub text-xs">Share gallery uploads or study notes directly across all active devices.</p>
+                                <p class="text-sub text-xs">Share gallery uploads or study notes directly across all active screens.</p>
                             </div>
                             <button onclick="toggleInlineForm('form-add-photo')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Photo</button>
                         </div>
+
                         <div id="form-add-photo" class="hidden sub-panel p-4 rounded-xl space-y-3">
                             <h4 class="text-xs font-bold text-heading">Upload Image from Gallery</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -197,15 +225,18 @@
                                 <button onclick="toggleInlineForm('form-add-photo')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
                             </div>
                         </div>
+
                         <div id="photo-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <!-- VIEW 2: DAILY TASK DECK & FORFEITS -->
+        <!-- DAILY TASK DECK & FORFEITS -->
         <section id="view-tasks" class="space-y-6 hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
                 <div class="lg:col-span-2 space-y-4">
                     <div class="flex justify-between items-start">
                         <div>
@@ -231,6 +262,7 @@
                             <button onclick="toggleInlineForm('form-add-task')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
                         </div>
                     </div>
+
                     <div id="tasks-container" class="space-y-2.5"></div>
                 </div>
 
@@ -240,6 +272,7 @@
                             <h3 class="text-xs font-bold uppercase tracking-wider text-rose-500">beta galti to kr di</h3>
                             <button onclick="toggleInlineForm('form-add-penalty')" class="text-xs font-semibold text-sub hover:text-heading">+ Log</button>
                         </div>
+
                         <div id="form-add-penalty" class="hidden sub-panel p-3 rounded-xl space-y-2">
                             <input type="text" id="input-penalty-text" placeholder="Penalty Description (e.g., Buy Coffee)" class="w-full input-bg border rounded-lg p-2 text-xs">
                             <div class="flex gap-2">
@@ -247,14 +280,16 @@
                                 <button onclick="toggleInlineForm('form-add-penalty')" class="w-1/2 py-1.5 sub-panel text-sub rounded text-xs">Cancel</button>
                             </div>
                         </div>
+
                         <p class="text-sub text-xs">Missed daily goals or study hour targets get recorded here.</p>
                         <div id="penalties-container" class="space-y-2"></div>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <!-- VIEW 3: ANALYTICS & INTERACTIVE CALENDAR -->
+        <!-- ANALYTICS & CALENDAR -->
         <section id="view-analytics" class="space-y-6 hidden">
             <div>
                 <h2 class="text-xl font-bold tracking-tight text-heading">Analytics Dashboard & Interactive Calendar</h2>
@@ -262,6 +297,7 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
                 <div class="lg:col-span-2 panel rounded-2xl p-5 space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Weekly Hour Comparison & Consistency Graph</h3>
@@ -270,6 +306,7 @@
                             <span class="text-pink-400">• Naqeeba</span>
                         </div>
                     </div>
+                    
                     <div class="w-full h-72">
                         <canvas id="studyChart"></canvas>
                     </div>
@@ -293,6 +330,7 @@
                                 <button onclick="setCalendarMarkMode('holiday')" id="btn-mode-holiday" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">• Holiday</button>
                             </div>
                         </div>
+
                         <button onclick="toggleInlineForm('form-calendar-note')" class="w-full py-1.5 bg-indigo-600/10 border border-indigo-500/30 text-indigo-500 rounded-xl text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">
                             + Add Google-Style Note to Date
                         </button>
@@ -312,12 +350,14 @@
                     <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-sub mb-1">
                         <span class="text-rose-500">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
                     </div>
+                    
                     <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs"></div>
                 </div>
+
             </div>
         </section>
 
-        <!-- VIEW 4: MASTER SYLLABUS & RESOURCES ENGINE -->
+        <!-- MASTER SYLLABUS & RESOURCES -->
         <section id="view-syllabus" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
@@ -396,10 +436,10 @@
         Accountability Hub &bull; Nishant & Naqeeba
     </footer>
 
-    <!-- DUAL-PERSISTENCE ENGINE (LOCAL + SUPABASE REALTIME) -->
+    <!-- LIVE REALTIME DUAL-PERSISTENCE ENGINE -->
     <script>
         const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR"; // Insert your key if available
+        const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR";
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const STORAGE_KEY = "DUOSTUDY_PERSISTENT_STATE";
@@ -407,10 +447,13 @@
         const DEFAULT_STATE = {
             theme: 'light',
             targetHours: 4.0,
-            hoursToday: 0.0,
+            hoursNishantToday: 0.0,
+            hoursNaqeebaToday: 0.0,
             calendarMarkMode: 'naqeeba',
             calendarViewMode: 'monthly',
             userStatuses: { nishant: 'Active Studying', naqeeba: 'Active Studying' },
+            breakStartTimes: { nishant: null, naqeeba: null },
+            activeTimerSession: { user: 'nishant', running: false, startTime: null, accumulatedSeconds: 0 },
             photos: [],
             tasks: [],
             calendarMarks: { naqeeba: [], nishant: [], holidays: [] },
@@ -421,7 +464,6 @@
             resources: []
         };
 
-        // Load local state first so page refreshes NEVER erase data
         function getInitialState() {
             const local = localStorage.getItem(STORAGE_KEY);
             return local ? JSON.parse(local) : DEFAULT_STATE;
@@ -429,25 +471,18 @@
 
         let localState = getInitialState();
 
-        function getState() {
-            return localState;
-        }
+        function getState() { return localState; }
 
-        // Save locally immediately AND attempt background cloud push
         function saveStateToCloud(newState) {
             localState = newState;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
             renderAll();
 
-            // Background Supabase Sync
             db.from('app_state')
                 .upsert({ id: 'global', data: newState, updated_at: new Date() })
-                .then(({ error }) => {
-                    if (error) console.log("Cloud sync note:", error.message);
-                });
+                .then(({ error }) => { if (error) console.log("Cloud sync note:", error.message); });
         }
 
-        // Fetch Cloud State and merge on load
         async function fetchCloudState() {
             try {
                 const { data } = await db.from('app_state').select('data').eq('id', 'global').single();
@@ -457,11 +492,10 @@
                     renderAll();
                 }
             } catch (err) {
-                console.log("Operating in offline/local storage mode");
+                console.log("Operating in local mode");
             }
         }
 
-        // Realtime sync across open tabs/devices
         db.channel('public:app_state')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, payload => {
                 if (payload.new && payload.new.data) {
@@ -519,68 +553,115 @@
             const hoursStr = hours.toString().padStart(2, '0');
             document.getElementById('realtime-clock').innerText = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('realtime-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+
+            updateTimersRealtime();
         }
         setInterval(updateClock, 1000);
-        updateClock();
 
-        let timerSeconds = 50 * 60;
-        let timerInterval = null;
-        let isRunning = false;
-        let activeTimerMode = "50";
+        // Persistent Session & Break Timers Engine
+        function updateTimersRealtime() {
+            const state = getState();
+            const now = Date.now();
 
-        function changeTimerMode() {
-            activeTimerMode = document.getElementById('timer-mode-select').value;
-            resetTimer();
-        }
-
-        function updateTimerDisplay() {
-            const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-            const secs = (timerSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
-        }
-
-        function toggleTimer() {
-            const btn = document.getElementById('btn-timer-toggle');
-            if (isRunning) {
-                clearInterval(timerInterval);
-                isRunning = false;
-                btn.innerText = "Start Session";
-                btn.className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
-            } else {
-                isRunning = true;
-                btn.innerText = "Pause Session";
-                btn.className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
-                timerInterval = setInterval(() => {
-                    if (activeTimerMode === 'stopwatch') {
-                        timerSeconds++;
-                        updateTimerDisplay();
-                    } else {
-                        if (timerSeconds > 0) {
-                            timerSeconds--;
-                            updateTimerDisplay();
-                        } else {
-                            clearInterval(timerInterval);
-                            isRunning = false;
-                            const added = parseFloat((parseInt(activeTimerMode) / 60).toFixed(2));
-                            const state = getState();
-                            state.hoursToday = parseFloat((state.hoursToday + added).toFixed(2));
-                            saveStateToCloud(state);
-                            alert(`🎉 Session logged! Added ${added} hours.`);
-                            resetTimer();
-                        }
-                    }
-                }, 1000);
+            // Focus Session Timer Calculation
+            if (state.activeTimerSession && state.activeTimerSession.running && state.activeTimerSession.startTime) {
+                const elapsedSeconds = Math.floor((now - state.activeTimerSession.startTime) / 1000) + (state.activeTimerSession.accumulatedSeconds || 0);
+                const hrs = Math.floor(elapsedSeconds / 3600).toString().padStart(2, '0');
+                const mins = Math.floor((elapsedSeconds % 3600) / 60).toString().padStart(2, '0');
+                const secs = (elapsedSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${hrs}:${mins}:${secs}`;
+            } else if (state.activeTimerSession) {
+                const elapsedSeconds = state.activeTimerSession.accumulatedSeconds || 0;
+                const hrs = Math.floor(elapsedSeconds / 3600).toString().padStart(2, '0');
+                const mins = Math.floor((elapsedSeconds % 3600) / 60).toString().padStart(2, '0');
+                const secs = (elapsedSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${hrs}:${mins}:${secs}`;
             }
+
+            // Break Timers
+            ['nishant', 'naqeeba'].forEach(user => {
+                const breakEl = document.getElementById(`break-timer-${user}`);
+                const clockEl = document.getElementById(`break-clock-${user}`);
+                
+                if (state.userStatuses && state.userStatuses[user] === 'In Break' && state.breakStartTimes && state.breakStartTimes[user]) {
+                    breakEl.classList.remove('hidden');
+                    const breakElapsedSecs = Math.floor((now - state.breakStartTimes[user]) / 1000);
+                    const bMins = Math.floor(breakElapsedSecs / 60).toString().padStart(2, '0');
+                    const bSecs = (breakElapsedSecs % 60).toString().padStart(2, '0');
+                    clockEl.innerText = `${bMins}:${bSecs}`;
+                } else {
+                    breakEl.classList.add('hidden');
+                }
+            });
         }
 
-        function resetTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            isRunning = false;
-            const btn = document.getElementById('btn-timer-toggle');
-            btn.innerText = "Start Session";
-            btn.className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
-            timerSeconds = activeTimerMode === 'stopwatch' ? 0 : parseInt(activeTimerMode) * 60;
-            updateTimerDisplay();
+        function toggleActiveTimer() {
+            const state = getState();
+            if (!state.activeTimerSession) {
+                state.activeTimerSession = { user: 'nishant', running: false, startTime: null, accumulatedSeconds: 0 };
+            }
+
+            const selectedUser = document.getElementById('timer-user-select').value;
+            state.activeTimerSession.user = selectedUser;
+
+            if (state.activeTimerSession.running) {
+                // Pause Session
+                const now = Date.now();
+                const sessionSeconds = Math.floor((now - state.activeTimerSession.startTime) / 1000);
+                state.activeTimerSession.accumulatedSeconds = (state.activeTimerSession.accumulatedSeconds || 0) + sessionSeconds;
+                state.activeTimerSession.running = false;
+                state.activeTimerSession.startTime = null;
+            } else {
+                // Start Session
+                state.activeTimerSession.running = true;
+                state.activeTimerSession.startTime = Date.now();
+            }
+            saveStateToCloud(state);
+        }
+
+        function stopAndCompleteSession() {
+            const state = getState();
+            if (!state.activeTimerSession) return;
+
+            let totalSeconds = state.activeTimerSession.accumulatedSeconds || 0;
+            if (state.activeTimerSession.running && state.activeTimerSession.startTime) {
+                totalSeconds += Math.floor((Date.now() - state.activeTimerSession.startTime) / 1000);
+            }
+
+            if (totalSeconds < 60) {
+                alert("Session too short to log (minimum 1 minute).");
+                state.activeTimerSession = { user: 'nishant', running: false, startTime: null, accumulatedSeconds: 0 };
+                saveStateToCloud(state);
+                return;
+            }
+
+            const completedHours = parseFloat((totalSeconds / 3600).toFixed(2));
+            const user = state.activeTimerSession.user;
+
+            if (user === 'nishant') {
+                state.hoursNishantToday = parseFloat(((state.hoursNishantToday || 0) + completedHours).toFixed(2));
+            } else {
+                state.hoursNaqeebaToday = parseFloat(((state.hoursNaqeebaToday || 0) + completedHours).toFixed(2));
+            }
+
+            state.activeTimerSession = { user: user, running: false, startTime: null, accumulatedSeconds: 0 };
+            saveStateToCloud(state);
+            alert(`🎉 ${user === 'nishant' ? 'Nishant' : 'Naqeeba'} completed a focus session of ${completedHours} hours!`);
+        }
+
+        function updateUserStatus(userKey, newStatus) {
+            const state = getState();
+            if (!state.userStatuses) state.userStatuses = {};
+            if (!state.breakStartTimes) state.breakStartTimes = {};
+
+            state.userStatuses[userKey] = newStatus;
+            
+            if (newStatus === 'In Break') {
+                state.breakStartTimes[userKey] = Date.now();
+            } else {
+                state.breakStartTimes[userKey] = null;
+            }
+            saveStateToCloud(state);
         }
 
         function saveTargetHoursInline() {
@@ -590,13 +671,6 @@
             state.targetHours = parseFloat(parseFloat(val).toFixed(1));
             saveStateToCloud(state);
             toggleInlineForm('form-edit-goal');
-        }
-
-        function updateUserStatus(userKey, newStatus) {
-            const state = getState();
-            if (!state.userStatuses) state.userStatuses = {};
-            state.userStatuses[userKey] = newStatus;
-            saveStateToCloud(state);
         }
 
         function saveMeetLink() {
@@ -730,16 +804,17 @@
         function renderChart() {
             const ctx = document.getElementById('studyChart');
             if (!ctx) return;
+            const state = getState();
 
             if (myChart) myChart.destroy();
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun Today'],
                     datasets: [
                         {
                             label: 'Nishant (Hours)',
-                            data: [3.5, 4.0, 5.0, 4.2, 3.8, 6.0, 4.5],
+                            data: [3.5, 4.0, 5.0, 4.2, 3.8, 6.0, state.hoursNishantToday || 0.0],
                             backgroundColor: 'rgba(59, 130, 246, 0.85)',
                             borderColor: '#3B82F6',
                             borderWidth: 2,
@@ -747,7 +822,7 @@
                         },
                         {
                             label: 'Naqeeba (Hours)',
-                            data: [4.0, 4.5, 3.8, 5.2, 4.0, 5.5, 5.0],
+                            data: [4.0, 4.5, 3.8, 5.2, 4.0, 5.5, state.hoursNaqeebaToday || 0.0],
                             backgroundColor: 'rgba(244, 114, 182, 0.85)',
                             borderColor: '#F472B6',
                             borderWidth: 2,
@@ -828,10 +903,30 @@
             const state = getState();
             applyTheme(state.theme || 'light');
 
-            document.getElementById('hours-today').innerText = `${state.hoursToday || 0} hrs`;
-            document.getElementById('hours-target').innerText = `${state.targetHours || 4} hrs`;
+            document.getElementById('hours-nishant-today').innerText = `${state.hoursNishantToday || 0.0} hrs`;
+            document.getElementById('hours-naqeeba-today').innerText = `${state.hoursNaqeebaToday || 0.0} hrs`;
             document.getElementById('meet-link-input').value = state.meetLink || '';
             document.getElementById('resource-notepad').value = state.notepad || '';
+
+            // User Select Options & Statuses Sync
+            if (state.userStatuses) {
+                document.getElementById('status-select-nishant').value = state.userStatuses.nishant || 'Active Studying';
+                document.getElementById('status-select-naqeeba').value = state.userStatuses.naqeeba || 'Active Studying';
+            }
+
+            // Timer Button Render
+            const timerBtn = document.getElementById('btn-timer-toggle');
+            if (state.activeTimerSession && state.activeTimerSession.running) {
+                timerBtn.innerText = "Pause Session";
+                timerBtn.className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
+            } else {
+                timerBtn.innerText = "Start Session";
+                timerBtn.className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
+            }
+
+            if (state.activeTimerSession) {
+                document.getElementById('timer-user-select').value = state.activeTimerSession.user || 'nishant';
+            }
 
             const nishantCount = (state.calendarMarks && state.calendarMarks.nishant) ? state.calendarMarks.nishant.length : 0;
             const naqeebaCount = (state.calendarMarks && state.calendarMarks.naqeeba) ? state.calendarMarks.naqeeba.length : 0;
