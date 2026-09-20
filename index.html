@@ -6,34 +6,28 @@
     <title>Accountability - Co-Working & Progress Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
         body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.4s ease, color 0.4s ease; }
         .font-cursive { font-family: 'Dancing Script', cursive; }
         .font-corsiva { font-family: 'Playfair Display', serif; font-style: italic; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* Modern Mesh Glow & Ambient Glass Theme */
-        .theme-light {
-            background-color: #F8FAFC;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(244, 114, 182, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
-            color: #0F172A;
+        
+        /* Premium Light Theme */
+        .theme-light { 
+            background: radial-gradient(circle at top left, #F1F5F9, #F8FAFC, #EEF2FF);
+            color: #0F172A; 
         }
-        .theme-light .panel {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.03), 0 0 1px 1px rgba(255, 255, 255, 0.8) inset;
+        .theme-light .panel { 
+            background: rgba(255, 255, 255, 0.85); 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05); 
             backdrop-filter: blur(16px);
         }
-        .theme-light .sub-panel {
-            background: rgba(241, 245, 249, 0.7);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+        .theme-light .sub-panel { 
+            background: rgba(241, 245, 249, 0.7); 
+            border: 1px solid rgba(226, 232, 240, 0.6); 
         }
         .theme-light .text-heading { color: #0F172A; }
         .theme-light .text-sub { color: #475569; }
@@ -41,58 +35,58 @@
         .theme-light .input-bg { background: #FFFFFF; border-color: #CBD5E1; color: #0F172A; }
         .theme-light .quote-text { color: #000000 !important; }
 
-        .theme-dark {
-            background-color: #0B0F19;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(244, 114, 182, 0.12) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.9) 0px, transparent 50%);
-            color: #F1F5F9;
+        /* Premium Dark Theme */
+        .theme-dark { 
+            background: radial-gradient(circle at top left, #0B0F19, #020617, #090D16);
+            color: #F1F5F9; 
         }
-        .theme-dark .panel {
-            background: rgba(15, 23, 42, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05) inset;
-            backdrop-filter: blur(16px);
+        .theme-dark .panel { 
+            background: rgba(15, 23, 42, 0.75); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(20px);
         }
-        .theme-dark .sub-panel {
-            background: rgba(2, 6, 23, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .theme-dark .sub-panel { 
+            background: rgba(2, 6, 23, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
         }
         .theme-dark .text-heading { color: #FFFFFF; }
         .theme-dark .text-sub { color: #94A3B8; }
-        .theme-dark .nav-bg { background: rgba(11, 15, 25, 0.85); border-color: rgba(255, 255, 255, 0.08); }
+        .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.85); border-color: rgba(255, 255, 255, 0.08); }
         .theme-dark .input-bg { background: #020617; border-color: #1E293B; color: #F1F5F9; }
         .theme-dark .quote-text { color: #FFFFFF !important; }
 
-        .animate-pop { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .animate-pop:hover { transform: translateY(-3px) scale(1.005); }
-        .tab-transition { transition: all 0.25s ease-in-out; }
+        /* Smooth UI Animations & Ambient Glows */
+        .animate-pop { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
+        .animate-pop:hover { transform: translateY(-4px) scale(1.008); }
+        .tab-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
         .glow-blue { box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.4); }
         .glow-pink { box-shadow: 0 0 25px -5px rgba(244, 114, 182, 0.4); }
-        
-        .animated-gradient-text {
-            background: linear-gradient(135deg, #6366F1, #A855F7, #EC4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .glow-indigo { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4); }
+
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
         }
+        .pulse-glow { animation: pulse-subtle 3s infinite ease-in-out; }
     </style>
 </head>
 <body id="app-body" class="theme-light min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Header Navigation -->
-    <header class="border-b nav-bg sticky top-0 z-50 backdrop-blur-xl transition-all">
+    <!-- Navigation Header -->
+    <header class="border-b nav-bg sticky top-0 z-50 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto px-6 h-22 flex items-center justify-between py-3">
             <div class="flex items-center space-x-3">
-                <div class="w-3.5 h-3.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-pulse"></div>
+                <div class="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-pink-400 animate-pulse shadow-md"></div>
                 <div>
                     <span class="font-extrabold text-2xl tracking-tight text-heading block leading-none">Accountability</span>
                     <span class="font-cursive font-bold text-xl text-indigo-600 tracking-wide block leading-tight mt-1">Target MAY'27</span>
                 </div>
             </div>
             
-            <nav class="flex space-x-1 sub-panel p-1.5 rounded-2xl border">
-                <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md">Focus Room</button>
+            <nav class="flex space-x-1.5 sub-panel p-1.5 rounded-2xl">
+                <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo">Focus Room</button>
                 <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Daily Deck</button>
                 <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Analytics & Logs</button>
                 <button onclick="switchTab('syllabus')" id="tab-syllabus" class="tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading">Syllabus</button>
@@ -105,17 +99,17 @@
                 </div>
 
                 <div class="flex items-center space-x-2 text-xs font-bold">
-                    <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1.5">
+                    <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1.5 shadow-sm">
                         <span>• Nishant:</span>
                         <span id="streak-nishant">0 Days</span>
                     </div>
-                    <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-500 flex items-center gap-1.5">
+                    <div class="bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-pink-500 flex items-center gap-1.5 shadow-sm">
                         <span>• Naqeeba:</span>
                         <span id="streak-naqeeba">0 Days</span>
                     </div>
                 </div>
 
-                <button onclick="toggleTheme()" class="px-3 py-2 sub-panel rounded-xl text-xs font-bold text-sub hover:text-heading flex items-center gap-1.5 transition-all">
+                <button onclick="toggleTheme()" class="px-3.5 py-2 sub-panel rounded-xl text-xs font-bold text-sub hover:text-heading flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
                     <span id="theme-icon">☀️</span>
                     <span id="theme-text">Light Mode</span>
                 </button>
@@ -123,70 +117,69 @@
         </div>
     </header>
 
-    <!-- Main Workspace Content -->
+    <!-- Main Workspace -->
     <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-grow">
 
         <!-- VIEW 1: FOCUS ROOM -->
         <section id="view-focus" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <!-- Left Control Panel -->
                 <div class="space-y-6">
                     
-                    <!-- Persistent Timer -->
-                    <div class="panel p-6 rounded-2xl text-center relative overflow-hidden animate-pop">
+                    <!-- Timer Card -->
+                    <div class="panel p-6 rounded-3xl text-center relative overflow-hidden animate-pop">
                         <div class="flex justify-between items-center mb-3">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Persistent Focus Session</span>
-                            <select id="timer-user-select" class="input-bg text-xs font-semibold rounded-lg px-2 py-1 focus:outline-none border">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Active Focus Timer</span>
+                            <select id="timer-user-select" class="input-bg text-xs font-bold rounded-xl px-2.5 py-1 focus:outline-none shadow-sm">
                                 <option value="nishant">💙 Nishant</option>
                                 <option value="naqeeba">💖 Naqeeba</option>
                             </select>
                         </div>
 
-                        <div id="timer-display" class="text-6xl font-black text-heading font-mono my-4 tracking-tighter">00:00:00</div>
+                        <div id="timer-display" class="text-6xl font-black text-heading font-mono my-5 tracking-tighter pulse-glow">00:00:00</div>
                         
-                        <div class="flex justify-center gap-2.5">
-                            <button onclick="toggleActiveTimer()" id="btn-timer-toggle" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Start Session</button>
-                            <button onclick="stopAndCompleteSession()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Complete Session</button>
+                        <div class="flex justify-center gap-3">
+                            <button onclick="toggleActiveTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md glow-indigo cursor-pointer hover:scale-105 active:scale-95">Start Session</button>
+                            <button onclick="stopAndCompleteSession()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95">Complete Session</button>
                         </div>
                     </div>
 
-                    <!-- Today's Hours -->
-                    <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
+                    <!-- Individual Daily Completed Hours -->
+                    <div class="panel p-5 rounded-3xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Individual Hours Today</h3>
                             <button onclick="toggleInlineForm('form-edit-goal')" class="text-xs text-indigo-500 font-semibold hover:underline">Target Goal</button>
                         </div>
 
-                        <div id="form-edit-goal" class="hidden sub-panel p-3 rounded-xl space-y-2">
-                            <input type="number" step="0.5" id="input-target-hours" placeholder="Target hours (e.g., 5.0)" class="w-full input-bg border rounded-lg p-2 text-xs">
+                        <div id="form-edit-goal" class="hidden sub-panel p-3 rounded-2xl space-y-2">
+                            <input type="number" step="0.5" id="input-target-hours" placeholder="Target hours (e.g., 5.0)" class="w-full input-bg border rounded-xl p-2 text-xs">
                             <div class="flex gap-2">
-                                <button onclick="saveTargetHoursInline()" class="w-1/2 py-1 bg-indigo-600 text-white font-bold rounded text-xs">Save Goal</button>
-                                <button onclick="toggleInlineForm('form-edit-goal')" class="w-1/2 py-1 sub-panel text-sub rounded text-xs">Cancel</button>
+                                <button onclick="saveTargetHoursInline()" class="w-1/2 py-1.5 bg-indigo-600 text-white font-bold rounded-xl text-xs">Save Goal</button>
+                                <button onclick="toggleInlineForm('form-edit-goal')" class="w-1/2 py-1.5 sub-panel text-sub rounded-xl text-xs">Cancel</button>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="sub-panel p-3.5 rounded-xl border-l-4 border-blue-500">
+                            <div class="sub-panel p-3.5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
                                 <span class="text-[10px] text-sub font-bold uppercase block">• Nishant Today</span>
                                 <span id="hours-nishant-today" class="text-xl font-extrabold text-blue-600 font-mono">0.0 hrs</span>
                             </div>
-                            <div class="sub-panel p-3.5 rounded-xl border-l-4 border-pink-400">
+                            <div class="sub-panel p-3.5 rounded-2xl border-l-4 border-pink-400 shadow-sm">
                                 <span class="text-[10px] text-sub font-bold uppercase block">• Naqeeba Today</span>
                                 <span id="hours-naqeeba-today" class="text-xl font-extrabold text-pink-500 font-mono">0.0 hrs</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Live Status & Break Center -->
-                    <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
+                    <!-- Live Synchronized Status & Break Monitor -->
+                    <div class="panel p-5 rounded-3xl space-y-3 animate-pop">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status & Break Center</h3>
                         
                         <div class="space-y-3">
-                            <div class="sub-panel p-3 rounded-xl border-l-4 border-blue-500 space-y-2">
+                            <div class="sub-panel p-3.5 rounded-2xl border-l-4 border-blue-500 space-y-2 shadow-sm">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs font-bold text-heading">Nishant</span>
-                                    <select id="status-select-nishant" onchange="updateUserStatus('nishant', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1 border">
+                                    <select id="status-select-nishant" onchange="updateUserStatus('nishant', this.value)" class="input-bg text-xs font-semibold rounded-xl px-2.5 py-1">
                                         <option value="Active Studying">🟢 Active Studying</option>
                                         <option value="In Break">🟡 In Break</option>
                                         <option value="Away">⚪ Away</option>
@@ -197,10 +190,10 @@
                                 </div>
                             </div>
 
-                            <div class="sub-panel p-3 rounded-xl border-l-4 border-pink-400 space-y-2">
+                            <div class="sub-panel p-3.5 rounded-2xl border-l-4 border-pink-400 space-y-2 shadow-sm">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs font-bold text-heading">Naqeeba</span>
-                                    <select id="status-select-naqeeba" onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1 border">
+                                    <select id="status-select-naqeeba" onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-xl px-2.5 py-1">
                                         <option value="Active Studying">🟢 Active Studying</option>
                                         <option value="In Break">🟡 In Break</option>
                                         <option value="Away">⚪ Away</option>
@@ -217,8 +210,7 @@
 
                 <!-- Right Workspace -->
                 <div class="lg:col-span-2 space-y-6">
-                    <!-- Call Launcher -->
-                    <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[200px] animate-pop">
+                    <div class="panel rounded-3xl p-6 flex flex-col justify-between min-h-[200px] animate-pop">
                         <div class="flex items-center justify-between border-b border-slate-700/20 pb-3 mb-4">
                             <div class="flex items-center space-x-2">
                                 <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -229,10 +221,10 @@
 
                         <div class="space-y-4 max-w-lg mx-auto text-center py-2 w-full">
                             <div class="space-y-2">
-                                <input type="text" id="meet-link-input" placeholder="https://meet.google.com/abc-xyz-123" class="w-full input-bg border rounded-xl px-4 py-2.5 text-xs focus:outline-none font-mono">
+                                <input type="text" id="meet-link-input" placeholder="https://meet.google.com/abc-xyz-123" class="w-full input-bg border rounded-2xl px-4 py-3 text-xs focus:outline-none font-mono shadow-sm">
                                 <div class="flex gap-2">
-                                    <button onclick="saveMeetLink()" class="w-1/3 py-2 sub-panel text-heading font-semibold rounded-xl text-xs transition-all">Save Link</button>
-                                    <button onclick="launchMeetCall()" class="w-2/3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                                    <button onclick="saveMeetLink()" class="w-1/3 py-2.5 sub-panel text-heading font-semibold rounded-2xl text-xs transition-all hover:scale-105 active:scale-95">Save Link</button>
+                                    <button onclick="launchMeetCall()" class="w-2/3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-2xl text-xs transition-all shadow-md glow-indigo flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
                                         <span>Launch Call</span>
                                         <span>➔</span>
                                     </button>
@@ -241,25 +233,24 @@
                         </div>
                     </div>
 
-                    <!-- Photo Gallery Showcase -->
-                    <div class="panel rounded-2xl p-6 space-y-4 animate-pop">
+                    <div class="panel rounded-3xl p-6 space-y-4 animate-pop">
                         <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                             <div>
-                                <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Study Desk & Photo Showcase</h3>
-                                <p class="text-sub text-xs">Share gallery uploads or study notes directly across all active screens.</p>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Desk Showcase & Gallery</h3>
+                                <p class="text-sub text-xs">Share gallery uploads or study notes across all active devices.</p>
                             </div>
-                            <button onclick="toggleInlineForm('form-add-photo')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Photo</button>
+                            <button onclick="toggleInlineForm('form-add-photo')" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-2xl transition-all shadow-sm glow-indigo">+ Add Photo</button>
                         </div>
 
-                        <div id="form-add-photo" class="hidden sub-panel p-4 rounded-xl space-y-3">
+                        <div id="form-add-photo" class="hidden sub-panel p-4 rounded-2xl space-y-3">
                             <h4 class="text-xs font-bold text-heading">Upload Image from Gallery</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <input type="text" id="input-photo-caption" placeholder="Photo Caption / Title" class="input-bg border rounded-lg p-2 text-xs">
-                                <input type="file" id="input-photo-file" accept="image/*" class="input-bg border rounded-lg p-1 text-xs">
+                                <input type="text" id="input-photo-caption" placeholder="Photo Caption / Title" class="input-bg border rounded-xl p-2 text-xs">
+                                <input type="file" id="input-photo-file" accept="image/*" class="input-bg border rounded-xl p-1 text-xs">
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="savePhotoFromGallery()" class="px-4 py-1.5 bg-indigo-600 text-white font-bold rounded-lg text-xs">Upload Image</button>
-                                <button onclick="toggleInlineForm('form-add-photo')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
+                                <button onclick="savePhotoFromGallery()" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-xl text-xs">Upload Image</button>
+                                <button onclick="toggleInlineForm('form-add-photo')" class="px-4 py-2 sub-panel text-sub rounded-xl text-xs">Cancel</button>
                             </div>
                         </div>
 
@@ -282,21 +273,21 @@
                                 Naqeeba u know what the only thing standing between u and everything you ever wanted is trying one more time ... go get out girl !!
                             </p>
                         </div>
-                        <button onclick="toggleInlineForm('form-add-task')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Task</button>
+                        <button onclick="toggleInlineForm('form-add-task')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-2xl transition-all shadow-sm glow-indigo">+ Add Task</button>
                     </div>
 
-                    <div id="form-add-task" class="hidden panel p-4 rounded-xl space-y-3">
+                    <div id="form-add-task" class="hidden panel p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-heading">Add Daily Deliverable</h4>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                            <select id="input-task-owner" class="input-bg border rounded-lg p-2 text-xs font-semibold">
+                            <select id="input-task-owner" class="input-bg border rounded-xl p-2 text-xs font-semibold">
                                 <option value="Nishant">Nishant</option>
                                 <option value="Naqeeba">Naqeeba</option>
                             </select>
-                            <input type="text" id="input-task-title" placeholder="Deliverable / Task Title" class="md:col-span-2 input-bg border rounded-lg p-2 text-xs">
+                            <input type="text" id="input-task-title" placeholder="Deliverable / Task Title" class="md:col-span-2 input-bg border rounded-xl p-2 text-xs">
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="saveTaskInline()" class="px-4 py-1.5 bg-indigo-600 text-white font-bold rounded-lg text-xs">Add Commitment</button>
-                            <button onclick="toggleInlineForm('form-add-task')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
+                            <button onclick="saveTaskInline()" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-xl text-xs">Add Commitment</button>
+                            <button onclick="toggleInlineForm('form-add-task')" class="px-4 py-2 sub-panel text-sub rounded-xl text-xs">Cancel</button>
                         </div>
                     </div>
 
@@ -304,17 +295,17 @@
                 </div>
 
                 <div class="space-y-4">
-                    <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
+                    <div class="panel p-5 rounded-3xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-rose-500">beta galti to kr di</h3>
                             <button onclick="toggleInlineForm('form-add-penalty')" class="text-xs font-semibold text-sub hover:text-heading">+ Log</button>
                         </div>
 
-                        <div id="form-add-penalty" class="hidden sub-panel p-3 rounded-xl space-y-2">
-                            <input type="text" id="input-penalty-text" placeholder="Penalty Description (e.g., Buy Coffee)" class="w-full input-bg border rounded-lg p-2 text-xs">
+                        <div id="form-add-penalty" class="hidden sub-panel p-3 rounded-2xl space-y-2">
+                            <input type="text" id="input-penalty-text" placeholder="Penalty Description (e.g., Buy Coffee)" class="w-full input-bg border rounded-xl p-2 text-xs">
                             <div class="flex gap-2">
-                                <button onclick="savePenaltyInline()" class="w-1/2 py-1.5 bg-rose-600 text-white font-bold rounded text-xs">Log Forfeit</button>
-                                <button onclick="toggleInlineForm('form-add-penalty')" class="w-1/2 py-1.5 sub-panel text-sub rounded text-xs">Cancel</button>
+                                <button onclick="savePenaltyInline()" class="w-1/2 py-2 bg-rose-600 text-white font-bold rounded-xl text-xs">Log Forfeit</button>
+                                <button onclick="toggleInlineForm('form-add-penalty')" class="w-1/2 py-2 sub-panel text-sub rounded-xl text-xs">Cancel</button>
                             </div>
                         </div>
 
@@ -335,7 +326,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <div class="lg:col-span-2 panel rounded-2xl p-5 space-y-4 animate-pop">
+                <div class="lg:col-span-2 panel rounded-3xl p-6 space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Weekly Hour Comparison & Consistency Graph</h3>
                         <div class="flex items-center space-x-4 text-xs font-bold">
@@ -349,10 +340,10 @@
                     </div>
                 </div>
 
-                <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
+                <div class="panel p-5 rounded-3xl space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Attendance & Notes Calendar</h3>
-                        <select id="calendar-view-mode" onchange="changeCalendarViewMode()" class="input-bg text-xs font-bold rounded-lg px-2 py-1 border">
+                        <select id="calendar-view-mode" onchange="changeCalendarViewMode()" class="input-bg text-xs font-bold rounded-xl px-2 py-1">
                             <option value="monthly">Monthly View</option>
                             <option value="yearly">Yearly View</option>
                         </select>
@@ -362,25 +353,25 @@
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-bold text-sub">Select Marking Mode:</span>
                             <div class="flex gap-1.5">
-                                <button onclick="setCalendarMarkMode('naqeeba')" id="btn-mode-naqeeba" class="px-2.5 py-1 bg-pink-300 text-pink-900 rounded-lg text-xs font-bold">• Naqeeba</button>
-                                <button onclick="setCalendarMarkMode('nishant')" id="btn-mode-nishant" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">• Nishant</button>
-                                <button onclick="setCalendarMarkMode('holiday')" id="btn-mode-holiday" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">• Holiday</button>
+                                <button onclick="setCalendarMarkMode('naqeeba')" id="btn-mode-naqeeba" class="px-2.5 py-1 bg-pink-300 text-pink-900 rounded-xl text-xs font-bold">• Naqeeba</button>
+                                <button onclick="setCalendarMarkMode('nishant')" id="btn-mode-nishant" class="px-2.5 py-1 sub-panel text-sub rounded-xl text-xs font-bold">• Nishant</button>
+                                <button onclick="setCalendarMarkMode('holiday')" id="btn-mode-holiday" class="px-2.5 py-1 sub-panel text-sub rounded-xl text-xs font-bold">• Holiday</button>
                             </div>
                         </div>
 
-                        <button onclick="toggleInlineForm('form-calendar-note')" class="w-full py-1.5 bg-indigo-600/10 border border-indigo-500/30 text-indigo-500 rounded-xl text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">
+                        <button onclick="toggleInlineForm('form-calendar-note')" class="w-full py-2 bg-indigo-600/10 border border-indigo-500/30 text-indigo-500 rounded-2xl text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">
                             + Add Google-Style Note to Date
                         </button>
                     </div>
 
-                    <div id="form-calendar-note" class="hidden sub-panel p-3 rounded-xl space-y-2">
+                    <div id="form-calendar-note" class="hidden sub-panel p-3 rounded-2xl space-y-2">
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" min="1" max="31" id="input-note-day" placeholder="Day (1-31)" class="input-bg border rounded-lg p-1.5 text-xs">
-                            <input type="text" id="input-note-text" placeholder="Note (e.g., Exam / Revision)" class="input-bg border rounded-lg p-1.5 text-xs">
+                            <input type="number" min="1" max="31" id="input-note-day" placeholder="Day (1-31)" class="input-bg border rounded-xl p-1.5 text-xs">
+                            <input type="text" id="input-note-text" placeholder="Note (e.g., Exam / Revision)" class="input-bg border rounded-xl p-1.5 text-xs">
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="saveCalendarNoteInline()" class="w-1/2 py-1 bg-indigo-600 text-white font-bold rounded text-xs">Save Note</button>
-                            <button onclick="toggleInlineForm('form-calendar-note')" class="w-1/2 py-1 sub-panel text-sub rounded text-xs">Cancel</button>
+                            <button onclick="saveCalendarNoteInline()" class="w-1/2 py-1 bg-indigo-600 text-white font-bold rounded-xl text-xs">Save Note</button>
+                            <button onclick="toggleInlineForm('form-calendar-note')" class="w-1/2 py-1 sub-panel text-sub rounded-xl text-xs">Cancel</button>
                         </div>
                     </div>
 
@@ -401,28 +392,28 @@
                     <h2 class="text-xl font-bold tracking-tight text-heading">Master Syllabus & Resource Center</h2>
                     <p class="text-sub text-xs">Manage modules, assign topics, and maintain working notes and URLs.</p>
                 </div>
-                <button onclick="toggleInlineForm('form-add-syllabus')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Topic</button>
+                <button onclick="toggleInlineForm('form-add-syllabus')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-2xl transition-all shadow-sm glow-indigo">+ Add Topic</button>
             </div>
 
-            <div id="form-add-syllabus" class="hidden panel p-4 rounded-xl space-y-3">
+            <div id="form-add-syllabus" class="hidden panel p-4 rounded-2xl space-y-3">
                 <h4 class="text-xs font-bold text-heading">Add Subject Topic</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    <input type="text" id="input-syllabus-subject" placeholder="Subject (e.g., Computer Science)" class="input-bg border rounded-lg p-2 text-xs">
-                    <input type="text" id="input-syllabus-topic" placeholder="Topic / Chapter Name" class="input-bg border rounded-lg p-2 text-xs">
-                    <select id="input-syllabus-owner" class="input-bg border rounded-lg p-2 text-xs font-semibold">
+                    <input type="text" id="input-syllabus-subject" placeholder="Subject (e.g., Computer Science)" class="input-bg border rounded-xl p-2 text-xs">
+                    <input type="text" id="input-syllabus-topic" placeholder="Topic / Chapter Name" class="input-bg border rounded-xl p-2 text-xs">
+                    <select id="input-syllabus-owner" class="input-bg border rounded-xl p-2 text-xs font-semibold">
                         <option value="Nishant">Nishant</option>
                         <option value="Naqeeba">Naqeeba</option>
                     </select>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="saveSyllabusInline()" class="px-4 py-1.5 bg-indigo-600 text-white font-bold rounded-lg text-xs">Add Topic</button>
-                    <button onclick="toggleInlineForm('form-add-syllabus')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
+                    <button onclick="saveSyllabusInline()" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-xl text-xs">Add Topic</button>
+                    <button onclick="toggleInlineForm('form-add-syllabus')" class="px-4 py-2 sub-panel text-sub rounded-xl text-xs">Cancel</button>
                 </div>
             </div>
 
             <div id="syllabus-progress-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
 
-            <div class="panel rounded-2xl overflow-hidden">
+            <div class="panel rounded-3xl overflow-hidden">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-700/20 text-[11px] font-bold text-sub uppercase">
@@ -438,15 +429,15 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
-                <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
+                <div class="panel p-5 rounded-3xl space-y-3 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📝 Shared Resources & Notepad</h3>
                         <button onclick="saveNotepad()" class="text-xs font-bold text-indigo-500 hover:underline">Save Notes</button>
                     </div>
-                    <textarea id="resource-notepad" placeholder="Write shared notes, links, formula shortcuts, or exam schedules here..." class="w-full h-40 input-bg border rounded-xl p-3 text-xs focus:outline-none font-mono leading-relaxed"></textarea>
+                    <textarea id="resource-notepad" placeholder="Write shared notes, links, formula shortcuts, or exam schedules here..." class="w-full h-40 input-bg border rounded-2xl p-3.5 text-xs focus:outline-none font-mono leading-relaxed shadow-sm"></textarea>
                 </div>
 
-                <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
+                <div class="panel p-5 rounded-3xl space-y-3 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📊 Working Resource URL Sheet</h3>
                         <button onclick="addResourceRowPrompt()" class="text-xs font-bold text-indigo-500 hover:underline">+ Add Link Row</button>
@@ -473,22 +464,11 @@
         Accountability Hub &bull; Nishant & Naqeeba
     </footer>
 
-    <!-- REALTIME PERSISTENCE ENGINE -->
+    <!-- ENGINE SCRIPT -->
     <script>
-        // Firebase Cloud Persistence Initialization
-        const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForFirestoreIntegration",
-            authDomain: "duostudy-hub.firebaseapp.com",
-            projectId: "duostudy-hub",
-            storageBucket: "duostudy-hub.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abcdef123456"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.firestore();
+        const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR";
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const STORAGE_KEY = "DUOSTUDY_PERSISTENT_STATE";
 
@@ -526,19 +506,33 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
             renderAll();
 
-            db.collection("duostudy").doc("global").set(newState, { merge: true }).catch(err => {
-                console.log("Local sync updated.");
-            });
+            db.from('app_state')
+                .upsert({ id: 'global', data: newState, updated_at: new Date() })
+                .then(({ error }) => { if (error) console.log("Cloud sync note:", error.message); });
         }
 
-        // Subscribe to Cloud Sync Realtime Engine
-        db.collection("duostudy").doc("global").onSnapshot(doc => {
-            if (doc.exists && doc.data()) {
-                localState = doc.data();
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
-                renderAll();
+        async function fetchCloudState() {
+            try {
+                const { data } = await db.from('app_state').select('data').eq('id', 'global').single();
+                if (data && data.data && Object.keys(data.data).length > 0) {
+                    localState = data.data;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
+                    renderAll();
+                }
+            } catch (err) {
+                console.log("Operating in local mode");
             }
-        });
+        }
+
+        db.channel('public:app_state')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, payload => {
+                if (payload.new && payload.new.data) {
+                    localState = payload.new.data;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
+                    renderAll();
+                }
+            })
+            .subscribe();
 
         function toggleInlineForm(formId) {
             const el = document.getElementById(formId);
@@ -572,7 +566,7 @@
                 document.getElementById(`tab-${id}`).className = "tab-transition px-4 py-2 text-xs font-bold rounded-xl text-sub hover:text-heading";
             });
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).className = "tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md";
+            document.getElementById(`tab-${tabId}`).className = "tab-transition px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo";
             if (tabId === 'analytics') renderChart();
         }
 
@@ -847,7 +841,7 @@
                             backgroundColor: 'rgba(59, 130, 246, 0.85)',
                             borderColor: '#3B82F6',
                             borderWidth: 2,
-                            borderRadius: 6
+                            borderRadius: 8
                         },
                         {
                             label: 'Naqeeba (Hours)',
@@ -855,7 +849,7 @@
                             backgroundColor: 'rgba(244, 114, 182, 0.85)',
                             borderColor: '#F472B6',
                             borderWidth: 2,
-                            borderRadius: 6
+                            borderRadius: 8
                         }
                     ]
                 },
@@ -945,10 +939,10 @@
             const timerBtn = document.getElementById('btn-timer-toggle');
             if (state.activeTimerSession && state.activeTimerSession.running) {
                 timerBtn.innerText = "Pause Session";
-                timerBtn.className = "px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
+                timerBtn.className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95";
             } else {
                 timerBtn.innerText = "Start Session";
-                timerBtn.className = "px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
+                timerBtn.className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md glow-indigo cursor-pointer hover:scale-105 active:scale-95";
             }
 
             if (state.activeTimerSession) {
@@ -961,16 +955,16 @@
             document.getElementById('streak-naqeeba').innerText = `${naqeebaCount} Days`;
 
             const activeMode = state.calendarMarkMode || 'naqeeba';
-            document.getElementById('btn-mode-naqeeba').className = activeMode === 'naqeeba' ? "px-2.5 py-1 bg-pink-400 text-white rounded-lg text-xs font-bold glow-pink" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
-            document.getElementById('btn-mode-nishant').className = activeMode === 'nishant' ? "px-2.5 py-1 bg-blue-500 text-white rounded-lg text-xs font-bold glow-blue" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
-            document.getElementById('btn-mode-holiday').className = activeMode === 'holiday' ? "px-2.5 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
+            document.getElementById('btn-mode-naqeeba').className = activeMode === 'naqeeba' ? "px-2.5 py-1 bg-pink-400 text-white rounded-xl text-xs font-bold glow-pink" : "px-2.5 py-1 sub-panel text-sub rounded-xl text-xs font-bold";
+            document.getElementById('btn-mode-nishant').className = activeMode === 'nishant' ? "px-2.5 py-1 bg-blue-500 text-white rounded-xl text-xs font-bold glow-blue" : "px-2.5 py-1 sub-panel text-sub rounded-xl text-xs font-bold";
+            document.getElementById('btn-mode-holiday').className = activeMode === 'holiday' ? "px-2.5 py-1 bg-rose-600 text-white rounded-xl text-xs font-bold" : "px-2.5 py-1 sub-panel text-sub rounded-xl text-xs font-bold";
 
             const photoGallery = document.getElementById('photo-gallery');
             if (!state.photos || state.photos.length === 0) {
-                photoGallery.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-sub sub-panel rounded-xl">No photos uploaded. Click "+ Add Photo" above.</div>`;
+                photoGallery.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-sub sub-panel rounded-2xl">No photos uploaded. Click "+ Add Photo" above.</div>`;
             } else {
                 photoGallery.innerHTML = state.photos.map(p => `
-                    <div class="sub-panel rounded-xl overflow-hidden group relative animate-pop">
+                    <div class="sub-panel rounded-2xl overflow-hidden group relative animate-pop shadow-sm">
                         <img src="${p.url}" alt="${p.caption}" class="w-full h-32 object-cover">
                         <div class="p-2.5 flex justify-between items-center">
                             <span class="text-xs font-semibold text-heading truncate">${p.caption}</span>
@@ -982,16 +976,16 @@
 
             const tasksContainer = document.getElementById('tasks-container');
             if (!state.tasks || state.tasks.length === 0) {
-                tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-sub panel rounded-xl">No tasks set. Click "+ Add Task" above.</div>`;
+                tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-sub panel rounded-2xl">No tasks set. Click "+ Add Task" above.</div>`;
             } else {
                 tasksContainer.innerHTML = state.tasks.map(t => `
-                    <div class="panel p-3.5 rounded-xl flex items-center justify-between hover:border-slate-400 transition-all animate-pop">
+                    <div class="panel p-3.5 rounded-2xl flex items-center justify-between hover:border-slate-400 transition-all animate-pop shadow-sm">
                         <div class="flex items-center space-x-3">
                             <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask('${t.id}')" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
                             <span class="text-xs ${t.completed ? 'line-through text-sub' : 'text-heading'} font-medium">${t.title}</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="text-[10px] px-2 py-0.5 rounded sub-panel text-sub font-mono font-semibold">• ${t.name}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-lg sub-panel text-sub font-mono font-semibold">• ${t.name}</span>
                             <button onclick="deleteTask('${t.id}')" class="text-sub hover:text-rose-500 text-xs px-1">✕</button>
                         </div>
                     </div>
@@ -1003,9 +997,9 @@
                 penaltiesContainer.innerHTML = `<div class="text-xs text-sub text-center py-2">No active forfeits logged.</div>`;
             } else {
                 penaltiesContainer.innerHTML = state.penalties.map(p => `
-                    <div class="sub-panel p-2.5 rounded-xl flex items-center justify-between">
+                    <div class="sub-panel p-2.5 rounded-2xl flex items-center justify-between">
                         <span class="text-xs ${p.paid ? 'line-through text-sub' : 'text-rose-500 font-medium'}">${p.text}</span>
-                        <button onclick="togglePenalty('${p.id}')" class="text-[10px] px-2 py-0.5 rounded font-semibold ${p.paid ? 'sub-panel text-sub' : 'bg-rose-500/20 text-rose-500 border border-rose-500/30'}">
+                        <button onclick="togglePenalty('${p.id}')" class="text-[10px] px-2 py-0.5 rounded-lg font-semibold ${p.paid ? 'sub-panel text-sub' : 'bg-rose-500/20 text-rose-500 border border-rose-500/30'}">
                             ${p.paid ? 'Resolved' : 'Settle'}
                         </button>
                     </div>
@@ -1031,7 +1025,7 @@
                 else if (isSunday) bgClass = 'border-rose-400/50 text-rose-500 font-bold sub-panel';
 
                 calHTML += `
-                    <button onclick="toggleCalendarDay(${i})" class="p-1.5 rounded-xl border text-xs cursor-pointer transition-all relative group ${bgClass}">
+                    <button onclick="toggleCalendarDay(${i})" class="p-1.5 rounded-2xl border text-xs cursor-pointer transition-all relative group ${bgClass}">
                         <span>${i}</span>
                         ${note ? `<span class="block text-[8px] truncate font-mono text-amber-300">${note}</span>` : ''}
                     </button>
@@ -1074,7 +1068,7 @@
                     const completed = subTopics.filter(s => s.status === 'Completed').length;
                     const pct = Math.round((completed / subTopics.length) * 100);
                     return `
-                        <div class="panel p-4 rounded-xl space-y-2 animate-pop">
+                        <div class="panel p-4 rounded-2xl space-y-2 animate-pop shadow-sm">
                             <div class="flex justify-between text-xs font-bold">
                                 <span class="text-heading">${sub}</span>
                                 <span class="text-indigo-500 font-mono">${pct}%</span>
@@ -1106,6 +1100,7 @@
         }
 
         renderAll();
+        fetchCloudState();
     </script>
 </body>
 </html>
