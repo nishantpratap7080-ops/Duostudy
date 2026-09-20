@@ -938,21 +938,55 @@
         }
 
         function savePhotoFromGallery() {
-            const caption = document.getElementById('input-photo-caption').value.trim();
+            const captionInput = document.getElementById('input-photo-caption');
             const fileInput = document.getElementById('input-photo-file');
-            if (!caption || !fileInput.files || !fileInput.files[0]) return;
+            const caption = captionInput ? captionInput.value.trim() : 'Study Desk';
+            
+            if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+                alert("Please select an image file first.");
+                return;
+            }
 
+            const file = fileInput.files[0];
             const reader = new FileReader();
+
             reader.onload = function (e) {
-                const state = getState();
-                if (!state.photos) state.photos = [];
-                state.photos.unshift({ id: Date.now().toString(), caption: caption, url: e.target.result });
-                saveStateToCloud(state);
-                toggleInlineForm('form-add-photo');
-                document.getElementById('input-photo-caption').value = '';
-                fileInput.value = '';
+                const img = new Image();
+                img.onload = function() {
+                    const canvasMat = document.createElement('canvas');
+                    const maxDim = 800;
+                    let w = img.width;
+                    let h = img.height;
+                    
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) {
+                            h = Math.round((h * maxDim) / w);
+                            w = maxDim;
+                        } else {
+                            w = Math.round((w * maxDim) / h);
+                            h = maxDim;
+                        }
+                    }
+
+                    canvasMat.width = w;
+                    canvasMat.height = h;
+                    const ctxMat = canvasMat.getContext('2d');
+                    ctxMat.drawImage(img, 0, 0, w, h);
+                    const compressedDataUrl = canvasMat.toDataURL('image/jpeg', 0.7);
+
+                    const state = getState();
+                    if (!state.photos) state.photos = [];
+                    state.photos.unshift({ id: Date.now().toString(), caption: caption || 'Desk Capture', url: compressedDataUrl });
+                    saveStateToCloud(state);
+
+                    if (captionInput) captionInput.value = '';
+                    fileInput.value = '';
+                    toggleInlineForm('form-add-photo');
+                };
+                img.src = e.target.result;
             };
-            reader.readAsDataURL(fileInput.files[0]);
+
+            reader.readAsDataURL(file);
         }
 
         function deletePhoto(id) {
@@ -963,14 +997,21 @@
 
         function saveTaskInline() {
             const owner = document.getElementById('input-task-owner').value;
-            const title = document.getElementById('input-task-title').value.trim();
-            if (!title) return;
+            const titleInput = document.getElementById('input-task-title');
+            const title = titleInput ? titleInput.value.trim() : '';
+
+            if (!title) {
+                alert("Please enter a task title.");
+                return;
+            }
+
             const state = getState();
             if (!state.tasks) state.tasks = [];
             state.tasks.unshift({ id: Date.now().toString(), name: owner, title: title, completed: false });
             saveStateToCloud(state);
+
+            if (titleInput) titleInput.value = '';
             toggleInlineForm('form-add-task');
-            document.getElementById('input-task-title').value = '';
         }
 
         function toggleTask(id) {
@@ -987,14 +1028,15 @@
         }
 
         function savePenaltyInline() {
-            const text = document.getElementById('input-penalty-text').value.trim();
+            const textInput = document.getElementById('input-penalty-text');
+            const text = textInput ? textInput.value.trim() : '';
             if (!text) return;
             const state = getState();
             if (!state.penalties) state.penalties = [];
             state.penalties.unshift({ id: Date.now().toString(), text: text, paid: false });
             saveStateToCloud(state);
             toggleInlineForm('form-add-penalty');
-            document.getElementById('input-penalty-text').value = '';
+            if (textInput) textInput.value = '';
         }
 
         function togglePenalty(id) {
@@ -1092,18 +1134,27 @@
         }
 
         function saveSyllabusInline() {
-            const subject = document.getElementById('input-syllabus-subject').value.trim();
-            const topic = document.getElementById('input-syllabus-topic').value.trim();
-            const owner = document.getElementById('input-syllabus-owner').value;
-            if (!subject || !topic) return;
+            const subjectInput = document.getElementById('input-syllabus-subject');
+            const topicInput = document.getElementById('input-syllabus-topic');
+            const ownerSelect = document.getElementById('input-syllabus-owner');
+
+            const subject = subjectInput ? subjectInput.value.trim() : '';
+            const topic = topicInput ? topicInput.value.trim() : '';
+            const owner = ownerSelect ? ownerSelect.value : 'Nishant';
+
+            if (!subject || !topic) {
+                alert("Please enter both Subject and Topic names.");
+                return;
+            }
 
             const state = getState();
             if (!state.syllabus) state.syllabus = [];
             state.syllabus.push({ id: Date.now().toString(), subject: subject, topic: topic, owner: owner, status: 'Not Started' });
             saveStateToCloud(state);
+
+            if (subjectInput) subjectInput.value = '';
+            if (topicInput) topicInput.value = '';
             toggleInlineForm('form-add-syllabus');
-            document.getElementById('input-syllabus-subject').value = '';
-            document.getElementById('input-syllabus-topic').value = '';
         }
 
         function cycleSyllabusStatus(id) {
