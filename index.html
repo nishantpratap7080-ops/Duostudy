@@ -6,6 +6,7 @@
     <title>Accountability - Co-Working & Progress Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
@@ -13,48 +14,24 @@
         .font-cursive { font-family: 'Dancing Script', cursive; }
         .font-corsiva { font-family: 'Playfair Display', serif; font-style: italic; }
         
-        /* Light Theme (Default) */
-        .theme-light {
-            background-color: #F8FAFC;
-            color: #0F172A;
-        }
-        .theme-light .panel {
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
-        }
-        .theme-light .sub-panel {
-            background: #F1F5F9;
-            border: 1px solid #E2E8F0;
-        }
+        .theme-light { background-color: #F8FAFC; color: #0F172A; }
+        .theme-light .panel { background: #FFFFFF; border: 1px solid #E2E8F0; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05); }
+        .theme-light .sub-panel { background: #F1F5F9; border: 1px solid #E2E8F0; }
         .theme-light .text-heading { color: #0F172A; }
         .theme-light .text-sub { color: #475569; }
         .theme-light .nav-bg { background: rgba(255, 255, 255, 0.95); border-color: #E2E8F0; }
         .theme-light .input-bg { background: #FFFFFF; border-color: #CBD5E1; color: #0F172A; }
         .theme-light .quote-text { color: #000000 !important; }
 
-        /* Dark Theme */
-        .theme-dark {
-            background-color: #0B0F19;
-            color: #F1F5F9;
-        }
-        .theme-dark .panel {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(12px);
-        }
-        .theme-dark .sub-panel {
-            background: rgba(2, 6, 23, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        .theme-dark { background-color: #0B0F19; color: #F1F5F9; }
+        .theme-dark .panel { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5); backdrop-filter: blur(12px); }
+        .theme-dark .sub-panel { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); }
         .theme-dark .text-heading { color: #FFFFFF; }
         .theme-dark .text-sub { color: #94A3B8; }
         .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.95); border-color: rgba(255, 255, 255, 0.1); }
         .theme-dark .input-bg { background: #020617; border-color: #1E293B; color: #F1F5F9; }
         .theme-dark .quote-text { color: #FFFFFF !important; }
 
-        /* Micro-Animations & Glow Effects */
         .animate-pop { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .animate-pop:hover { transform: translateY(-3px) scale(1.005); }
         .tab-transition { transition: all 0.25s ease-in-out; }
@@ -83,13 +60,11 @@
             </nav>
 
             <div class="flex items-center space-x-4">
-                <!-- Live Date & 12-Hour Clock -->
                 <div class="text-right hidden md:block">
                     <div id="realtime-clock" class="text-xs font-bold font-mono text-heading">12:00:00 PM</div>
                     <div id="realtime-date" class="text-[10px] text-sub font-medium">Sunday, Sep 20</div>
                 </div>
 
-                <!-- Dual Separate Streaks (Bullet Points) -->
                 <div class="flex items-center space-x-2 text-xs font-bold">
                     <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl text-blue-600 flex items-center gap-1">
                         <span>• Nishant:</span>
@@ -115,10 +90,7 @@
         <!-- VIEW 1: FOCUS ROOM -->
         <section id="view-focus" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Left Column -->
                 <div class="space-y-6">
-                    
                     <!-- Timer -->
                     <div class="panel p-6 rounded-2xl text-center relative overflow-hidden animate-pop">
                         <div class="flex justify-between items-center mb-3">
@@ -130,9 +102,7 @@
                                 <option value="stopwatch">Stopwatch</option>
                             </select>
                         </div>
-
                         <div id="timer-display" class="text-6xl font-black text-heading font-mono my-4 tracking-tighter">50:00</div>
-                        
                         <div class="flex justify-center gap-3">
                             <button onclick="toggleTimer()" id="btn-timer-toggle" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer">Start Session</button>
                             <button onclick="resetTimer()" class="px-5 py-2.5 sub-panel text-sub font-semibold rounded-xl text-xs transition-all hover:text-heading cursor-pointer">Reset</button>
@@ -145,7 +115,6 @@
                             <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Daily Target Goal</h3>
                             <button onclick="toggleInlineForm('form-edit-goal')" class="text-xs text-indigo-500 font-semibold hover:underline">Edit Goal</button>
                         </div>
-
                         <div id="form-edit-goal" class="hidden sub-panel p-3 rounded-xl space-y-2">
                             <input type="number" step="0.5" id="input-target-hours" placeholder="Target hours (e.g., 5.0)" class="w-full input-bg border rounded-lg p-2 text-xs">
                             <div class="flex gap-2">
@@ -153,7 +122,6 @@
                                 <button onclick="toggleInlineForm('form-edit-goal')" class="w-1/2 py-1 sub-panel text-sub rounded text-xs">Cancel</button>
                             </div>
                         </div>
-
                         <div class="grid grid-cols-2 gap-3">
                             <div class="sub-panel p-3 rounded-xl">
                                 <span class="text-[10px] text-sub font-semibold uppercase block">Completed</span>
@@ -169,7 +137,6 @@
                     <!-- Live Status Center -->
                     <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status Center</h3>
-                        
                         <div class="space-y-2">
                             <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-blue-500">
                                 <span class="text-xs font-bold text-heading">Nishant</span>
@@ -179,7 +146,6 @@
                                     <option value="Away">⚪ Away</option>
                                 </select>
                             </div>
-
                             <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-pink-300">
                                 <span class="text-xs font-bold text-heading">Naqeeba</span>
                                 <select onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
@@ -194,8 +160,6 @@
 
                 <!-- Right Column -->
                 <div class="lg:col-span-2 space-y-6">
-                    
-                    <!-- Call Launcher -->
                     <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[220px] animate-pop">
                         <div class="flex items-center justify-between border-b border-slate-700/20 pb-3 mb-4">
                             <div class="flex items-center space-x-2">
@@ -204,7 +168,6 @@
                             </div>
                             <span class="text-xs text-sub font-medium">Google Meet / Discord</span>
                         </div>
-
                         <div class="space-y-4 max-w-lg mx-auto text-center py-2">
                             <div class="space-y-2">
                                 <input type="text" id="meet-link-input" placeholder="https://meet.google.com/abc-xyz-123" class="w-full input-bg border rounded-xl px-4 py-2.5 text-xs focus:outline-none font-mono">
@@ -224,11 +187,10 @@
                         <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                             <div>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Study Desk & Photo Showcase</h3>
-                                <p class="text-sub text-xs">Share gallery uploads or study notes directly across all active screens.</p>
+                                <p class="text-sub text-xs">Share gallery uploads or study notes directly across all active devices.</p>
                             </div>
                             <button onclick="toggleInlineForm('form-add-photo')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Photo</button>
                         </div>
-
                         <div id="form-add-photo" class="hidden sub-panel p-4 rounded-xl space-y-3">
                             <h4 class="text-xs font-bold text-heading">Upload Image from Gallery</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -240,21 +202,15 @@
                                 <button onclick="toggleInlineForm('form-add-photo')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
                             </div>
                         </div>
-
-                        <div id="photo-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            <!-- Loaded dynamically -->
-                        </div>
+                        <div id="photo-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
                     </div>
-
                 </div>
-
             </div>
         </section>
 
         <!-- VIEW 2: DAILY TASK DECK & FORFEITS -->
         <section id="view-tasks" class="space-y-6 hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
                 <div class="lg:col-span-2 space-y-4">
                     <div class="flex justify-between items-start">
                         <div>
@@ -280,10 +236,7 @@
                             <button onclick="toggleInlineForm('form-add-task')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
                         </div>
                     </div>
-
-                    <div id="tasks-container" class="space-y-2.5">
-                        <!-- Loaded dynamically -->
-                    </div>
+                    <div id="tasks-container" class="space-y-2.5"></div>
                 </div>
 
                 <div class="space-y-4">
@@ -292,7 +245,6 @@
                             <h3 class="text-xs font-bold uppercase tracking-wider text-rose-500">beta galti to kr di</h3>
                             <button onclick="toggleInlineForm('form-add-penalty')" class="text-xs font-semibold text-sub hover:text-heading">+ Log</button>
                         </div>
-
                         <div id="form-add-penalty" class="hidden sub-panel p-3 rounded-xl space-y-2">
                             <input type="text" id="input-penalty-text" placeholder="Penalty Description (e.g., Buy Coffee)" class="w-full input-bg border rounded-lg p-2 text-xs">
                             <div class="flex gap-2">
@@ -300,14 +252,10 @@
                                 <button onclick="toggleInlineForm('form-add-penalty')" class="w-1/2 py-1.5 sub-panel text-sub rounded text-xs">Cancel</button>
                             </div>
                         </div>
-
                         <p class="text-sub text-xs">Missed daily goals or study hour targets get recorded here.</p>
-                        <div id="penalties-container" class="space-y-2">
-                            <!-- Loaded dynamically -->
-                        </div>
+                        <div id="penalties-container" class="space-y-2"></div>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -319,8 +267,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Chart Module -->
                 <div class="lg:col-span-2 panel rounded-2xl p-5 space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-3">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Weekly Hour Comparison & Consistency Graph</h3>
@@ -329,13 +275,11 @@
                             <span class="text-pink-400">• Naqeeba</span>
                         </div>
                     </div>
-                    
                     <div class="w-full h-72">
                         <canvas id="studyChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Calendar Widget -->
                 <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Attendance & Notes Calendar</h3>
@@ -345,7 +289,6 @@
                         </select>
                     </div>
 
-                    <!-- Attendance Selector -->
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-bold text-sub">Select Marking Mode:</span>
@@ -355,7 +298,6 @@
                                 <button onclick="setCalendarMarkMode('holiday')" id="btn-mode-holiday" class="px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold">• Holiday</button>
                             </div>
                         </div>
-
                         <button onclick="toggleInlineForm('form-calendar-note')" class="w-full py-1.5 bg-indigo-600/10 border border-indigo-500/30 text-indigo-500 rounded-xl text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">
                             + Add Google-Style Note to Date
                         </button>
@@ -375,12 +317,8 @@
                     <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-sub mb-1">
                         <span class="text-rose-500">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
                     </div>
-                    
-                    <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs">
-                        <!-- Loaded dynamically -->
-                    </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs"></div>
                 </div>
-
             </div>
         </section>
 
@@ -410,9 +348,7 @@
                 </div>
             </div>
 
-            <div id="syllabus-progress-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Loaded dynamically -->
-            </div>
+            <div id="syllabus-progress-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
 
             <div class="panel rounded-2xl overflow-hidden">
                 <table class="w-full text-left border-collapse">
@@ -425,15 +361,12 @@
                             <th class="p-4 text-right">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="syllabus-table-body" class="divide-y divide-slate-700/20 text-xs text-sub">
-                        <!-- Loaded dynamically -->
-                    </tbody>
+                    <tbody id="syllabus-table-body" class="divide-y divide-slate-700/20 text-xs text-sub"></tbody>
                 </table>
             </div>
 
             <!-- RESOURCES & NOTEPAD MODULE -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
-                
                 <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
                     <div class="flex justify-between items-center border-b border-slate-700/20 pb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📝 Shared Resources & Notepad</h3>
@@ -447,7 +380,6 @@
                         <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📊 Working Resource URL Sheet</h3>
                         <button onclick="addResourceRowPrompt()" class="text-xs font-bold text-indigo-500 hover:underline">+ Add Link Row</button>
                     </div>
-                    
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -457,13 +389,10 @@
                                     <th class="p-2 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="resource-table-body" class="divide-y divide-slate-700/20 text-xs text-sub">
-                                <!-- Loaded dynamically -->
-                            </tbody>
+                            <tbody id="resource-table-body" class="divide-y divide-slate-700/20 text-xs text-sub"></tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -473,9 +402,12 @@
         Accountability Hub &bull; Nishant & Naqeeba
     </footer>
 
-    <!-- Application Script Engine -->
+    <!-- SUPABASE CLOUD LIVE REALTIME ENGINE -->
     <script>
-        const syncChannel = new BroadcastChannel('DUOSTUDY_LIVE_SYNC');
+        // Initialize Supabase Client
+        const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
+        const SUPABASE_ANON_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE"; // <--- Paste your sb_publishable_... key here
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const DEFAULT_STATE = {
             theme: 'light',
@@ -496,50 +428,67 @@
                 nishant: [3, 6, 9, 14, 18, 20],
                 holidays: [1, 26]
             },
-            calendarNotes: {
-                20: 'Revision Session'
-            },
-            penalties: [
-                { id: '1', text: 'Missed 4-hr mark (Buy Coffee)', paid: false }
-            ],
+            calendarNotes: { 20: 'Revision Session' },
+            penalties: [{ id: '1', text: 'Missed 4-hr mark (Buy Coffee)', paid: false }],
             syllabus: [
                 { id: '1', subject: 'Computer Science', topic: 'Data Structures & Algorithms', owner: 'Nishant', status: 'In Progress' },
                 { id: '2', subject: 'Computer Science', topic: 'Operating Systems & IPC', owner: 'Naqeeba', status: 'Not Started' }
             ],
             notepad: 'Nishant & Naqeeba Shared Notepad:\n- Target Exam: May 2027\n- Daily Minimum Goal: 4 Hours',
-            resources: [
-                { id: '1', title: 'OS Documentation', url: 'https://docs.kernel.org' }
-            ]
+            resources: [{ id: '1', title: 'OS Documentation', url: 'https://docs.kernel.org' }]
         };
 
-        function getState() {
-            const saved = localStorage.getItem('ACCOUNTABILITY_HUB_V2_STATE');
-            return saved ? JSON.parse(saved) : DEFAULT_STATE;
-        }
+        let localState = DEFAULT_STATE;
 
-        function saveState(state, broadcast = true) {
-            localStorage.setItem('ACCOUNTABILITY_HUB_V2_STATE', JSON.stringify(state));
-            if (broadcast) syncChannel.postMessage({ type: 'STATE_UPDATE' });
+        // Fetch Cloud State from Supabase
+        async function fetchCloudState() {
+            try {
+                const { data, error } = await db.from('app_state').select('data').eq('id', 'global').single();
+                if (data && data.data && Object.keys(data.data).length > 0) {
+                    localState = data.data;
+                } else {
+                    saveStateToCloud(DEFAULT_STATE);
+                }
+            } catch (err) {
+                console.error("Cloud fetch fallback:", err);
+            }
             renderAll();
         }
 
-        syncChannel.onmessage = (event) => {
-            if (event.data && event.data.type === 'STATE_UPDATE') {
-                renderAll();
+        // Save State to Supabase Live
+        async function saveStateToCloud(newState) {
+            localState = newState;
+            renderAll();
+            try {
+                await db.from('app_state').upsert({ id: 'global', data: newState, updated_at: new Date() });
+            } catch (err) {
+                console.error("Cloud save failed:", err);
             }
-        };
+        }
+
+        // Subscribe to Live Realtime Changes across all devices
+        db.channel('public:app_state')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, payload => {
+                if (payload.new && payload.new.data) {
+                    localState = payload.new.data;
+                    renderAll();
+                }
+            })
+            .subscribe();
+
+        function getState() {
+            return localState;
+        }
 
         function toggleInlineForm(formId) {
             const el = document.getElementById(formId);
             if (el) el.classList.toggle('hidden');
         }
 
-        // Theme Controller
         function applyTheme(theme) {
             const body = document.getElementById('app-body');
             const icon = document.getElementById('theme-icon');
             const text = document.getElementById('theme-text');
-            
             if (theme === 'light') {
                 body.className = "theme-light min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900";
                 icon.innerText = "☀️";
@@ -554,7 +503,7 @@
         function toggleTheme() {
             const state = getState();
             state.theme = state.theme === 'light' ? 'dark' : 'light';
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function switchTab(tabId) {
@@ -567,25 +516,21 @@
             if (tabId === 'analytics') renderChart();
         }
 
-        // 12-Hour Clock Engine with AM/PM
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const seconds = now.getSeconds().toString().padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
-            
             hours = hours % 12;
-            hours = hours ? hours : 12; // 0 becomes 12
+            hours = hours ? hours : 12;
             const hoursStr = hours.toString().padStart(2, '0');
-
             document.getElementById('realtime-clock').innerText = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('realtime-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Fixed Pomodoro & Stopwatch Timer Logic
         let timerSeconds = 50 * 60;
         let timerInterval = null;
         let isRunning = false;
@@ -613,7 +558,6 @@
                 isRunning = true;
                 btn.innerText = "Pause Session";
                 btn.className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md cursor-pointer";
-                
                 timerInterval = setInterval(() => {
                     if (activeTimerMode === 'stopwatch') {
                         timerSeconds++;
@@ -628,7 +572,7 @@
                             const added = parseFloat((parseInt(activeTimerMode) / 60).toFixed(2));
                             const state = getState();
                             state.hoursToday = parseFloat((state.hoursToday + added).toFixed(2));
-                            saveState(state);
+                            saveStateToCloud(state);
                             alert(`🎉 Session logged! Added ${added} hours.`);
                             resetTimer();
                         }
@@ -652,14 +596,14 @@
             if (!val || isNaN(val)) return;
             const state = getState();
             state.targetHours = parseFloat(parseFloat(val).toFixed(1));
-            saveState(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-edit-goal');
         }
 
         function updateUserStatus(userKey, newStatus) {
             const state = getState();
             state.userStatuses[userKey] = newStatus;
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function saveMeetLink() {
@@ -667,7 +611,7 @@
             if (!link) return;
             const state = getState();
             state.meetLink = link;
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function launchMeetCall() {
@@ -676,7 +620,6 @@
             if (link) window.open(link, '_blank');
         }
 
-        // Gallery Upload
         function savePhotoFromGallery() {
             const caption = document.getElementById('input-photo-caption').value.trim();
             const fileInput = document.getElementById('input-photo-file');
@@ -686,7 +629,7 @@
             reader.onload = function (e) {
                 const state = getState();
                 state.photos.unshift({ id: Date.now().toString(), caption: caption, url: e.target.result });
-                saveState(state);
+                saveStateToCloud(state);
                 toggleInlineForm('form-add-photo');
                 document.getElementById('input-photo-caption').value = '';
                 fileInput.value = '';
@@ -697,17 +640,16 @@
         function deletePhoto(id) {
             const state = getState();
             state.photos = state.photos.filter(p => p.id !== id);
-            saveState(state);
+            saveStateToCloud(state);
         }
 
-        // Tasks & Penalties
         function saveTaskInline() {
             const owner = document.getElementById('input-task-owner').value;
             const title = document.getElementById('input-task-title').value.trim();
             if (!title) return;
             const state = getState();
             state.tasks.unshift({ id: Date.now().toString(), name: owner, title: title, completed: false });
-            saveState(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-add-task');
             document.getElementById('input-task-title').value = '';
         }
@@ -716,13 +658,13 @@
             const state = getState();
             const t = state.tasks.find(x => x.id === id);
             if (t) t.completed = !t.completed;
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function deleteTask(id) {
             const state = getState();
             state.tasks = state.tasks.filter(x => x.id !== id);
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function savePenaltyInline() {
@@ -730,7 +672,7 @@
             if (!text) return;
             const state = getState();
             state.penalties.unshift({ id: Date.now().toString(), text: text, paid: false });
-            saveState(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-add-penalty');
             document.getElementById('input-penalty-text').value = '';
         }
@@ -739,20 +681,19 @@
             const state = getState();
             const p = state.penalties.find(x => x.id === id);
             if (p) p.paid = !p.paid;
-            saveState(state);
+            saveStateToCloud(state);
         }
 
-        // Calendar Engine
         function setCalendarMarkMode(mode) {
             const state = getState();
             state.calendarMarkMode = mode;
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function changeCalendarViewMode() {
             const state = getState();
             state.calendarViewMode = document.getElementById('calendar-view-mode').value;
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function toggleCalendarDay(day) {
@@ -769,7 +710,7 @@
                 if (idx > -1) marks.splice(idx, 1);
                 else marks.push(day);
             }
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function saveCalendarNoteInline() {
@@ -779,13 +720,12 @@
 
             const state = getState();
             state.calendarNotes[day] = text;
-            saveState(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-calendar-note');
             document.getElementById('input-note-day').value = '';
             document.getElementById('input-note-text').value = '';
         }
 
-        // Analytics Chart
         let myChart = null;
         function renderChart() {
             const ctx = document.getElementById('studyChart');
@@ -826,7 +766,6 @@
             });
         }
 
-        // Syllabus & Resources
         function saveSyllabusInline() {
             const subject = document.getElementById('input-syllabus-subject').value.trim();
             const topic = document.getElementById('input-syllabus-topic').value.trim();
@@ -835,7 +774,7 @@
 
             const state = getState();
             state.syllabus.push({ id: Date.now().toString(), subject: subject, topic: topic, owner: owner, status: 'Not Started' });
-            saveState(state);
+            saveStateToCloud(state);
             toggleInlineForm('form-add-syllabus');
             document.getElementById('input-syllabus-subject').value = '';
             document.getElementById('input-syllabus-topic').value = '';
@@ -849,20 +788,20 @@
                 else if (s.status === 'In Progress') s.status = 'Completed';
                 else s.status = 'Not Started';
             }
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function deleteSyllabusTopic(id) {
             const state = getState();
             state.syllabus = state.syllabus.filter(x => x.id !== id);
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function saveNotepad() {
             const text = document.getElementById('resource-notepad').value;
             const state = getState();
             state.notepad = text;
-            saveState(state);
+            saveStateToCloud(state);
             alert("Notepad saved!");
         }
 
@@ -874,16 +813,15 @@
 
             const state = getState();
             state.resources.push({ id: Date.now().toString(), title: title, url: url });
-            saveState(state);
+            saveStateToCloud(state);
         }
 
         function deleteResourceRow(id) {
             const state = getState();
             state.resources = state.resources.filter(r => r.id !== id);
-            saveState(state);
+            saveStateToCloud(state);
         }
 
-        // Render Controller
         function renderAll() {
             const state = getState();
             applyTheme(state.theme);
@@ -893,19 +831,16 @@
             document.getElementById('meet-link-input').value = state.meetLink || '';
             document.getElementById('resource-notepad').value = state.notepad || '';
 
-            // Bullet Streaks
-            document.getElementById('streak-nishant').innerText = `${state.calendarMarks.nishant.length} Days`;
-            document.getElementById('streak-naqeeba').innerText = `${state.calendarMarks.naqeeba.length} Days`;
+            document.getElementById('streak-nishant').innerText = `${state.calendarMarks.nishant ? state.calendarMarks.nishant.length : 0} Days`;
+            document.getElementById('streak-naqeeba').innerText = `${state.calendarMarks.naqeeba ? state.calendarMarks.naqeeba.length : 0} Days`;
 
-            // Active Mode Buttons
             const activeMode = state.calendarMarkMode || 'naqeeba';
             document.getElementById('btn-mode-naqeeba').className = activeMode === 'naqeeba' ? "px-2.5 py-1 bg-pink-400 text-white rounded-lg text-xs font-bold glow-pink" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
             document.getElementById('btn-mode-nishant').className = activeMode === 'nishant' ? "px-2.5 py-1 bg-blue-500 text-white rounded-lg text-xs font-bold glow-blue" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
             document.getElementById('btn-mode-holiday').className = activeMode === 'holiday' ? "px-2.5 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold" : "px-2.5 py-1 sub-panel text-sub rounded-lg text-xs font-bold";
 
-            // Gallery
             const photoGallery = document.getElementById('photo-gallery');
-            if (state.photos.length === 0) {
+            if (!state.photos || state.photos.length === 0) {
                 photoGallery.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-sub sub-panel rounded-xl">No photos uploaded. Click "+ Add Photo" above.</div>`;
             } else {
                 photoGallery.innerHTML = state.photos.map(p => `
@@ -919,9 +854,8 @@
                 `).join('');
             }
 
-            // Tasks
             const tasksContainer = document.getElementById('tasks-container');
-            if (state.tasks.length === 0) {
+            if (!state.tasks || state.tasks.length === 0) {
                 tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-sub panel rounded-xl">No tasks set. Click "+ Add Task" above.</div>`;
             } else {
                 tasksContainer.innerHTML = state.tasks.map(t => `
@@ -938,9 +872,8 @@
                 `).join('');
             }
 
-            // Penalties
             const penaltiesContainer = document.getElementById('penalties-container');
-            if (state.penalties.length === 0) {
+            if (!state.penalties || state.penalties.length === 0) {
                 penaltiesContainer.innerHTML = `<div class="text-xs text-sub text-center py-2">No active forfeits logged.</div>`;
             } else {
                 penaltiesContainer.innerHTML = state.penalties.map(p => `
@@ -953,17 +886,16 @@
                 `).join('');
             }
 
-            // Calendar
             const calGrid = document.getElementById('calendar-grid');
             let calHTML = '';
             const isYearly = state.calendarViewMode === 'yearly';
 
             for (let i = 1; i <= (isYearly ? 35 : 31); i++) {
-                const isNaqeeba = state.calendarMarks.naqeeba.includes(i);
-                const isNishant = state.calendarMarks.nishant.includes(i);
-                const isHoliday = state.calendarMarks.holidays.includes(i);
+                const isNaqeeba = state.calendarMarks && state.calendarMarks.naqeeba && state.calendarMarks.naqeeba.includes(i);
+                const isNishant = state.calendarMarks && state.calendarMarks.nishant && state.calendarMarks.nishant.includes(i);
+                const isHoliday = state.calendarMarks && state.calendarMarks.holidays && state.calendarMarks.holidays.includes(i);
                 const isSunday = (i % 7 === 1);
-                const note = state.calendarNotes[i];
+                const note = state.calendarNotes ? state.calendarNotes[i] : null;
                 
                 let bgClass = 'sub-panel text-sub';
                 if (isHoliday) bgClass = 'bg-rose-500 text-white font-bold';
@@ -981,9 +913,8 @@
             }
             calGrid.innerHTML = calHTML;
 
-            // Syllabus
             const tbody = document.getElementById('syllabus-table-body');
-            if (state.syllabus.length === 0) {
+            if (!state.syllabus || state.syllabus.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-sub">No syllabus topics added yet.</td></tr>`;
             } else {
                 tbody.innerHTML = state.syllabus.map(s => `
@@ -1008,7 +939,7 @@
             }
 
             const progressCards = document.getElementById('syllabus-progress-cards');
-            const subjects = [...new Set(state.syllabus.map(s => s.subject))];
+            const subjects = [...new Set((state.syllabus || []).map(s => s.subject))];
             if (subjects.length === 0) {
                 progressCards.innerHTML = '';
             } else {
@@ -1030,9 +961,8 @@
                 }).join('');
             }
 
-            // Resources
             const resourceBody = document.getElementById('resource-table-body');
-            if (state.resources.length === 0) {
+            if (!state.resources || state.resources.length === 0) {
                 resourceBody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-sub">No resource links added.</td></tr>`;
             } else {
                 resourceBody.innerHTML = state.resources.map(r => `
@@ -1049,7 +979,8 @@
             }
         }
 
-        renderAll();
+        // Initialize Cloud Realtime Engine
+        fetchCloudState();
     </script>
 </body>
 </html>
