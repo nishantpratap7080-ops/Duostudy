@@ -12,7 +12,6 @@
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            transition: background-color 0.4s ease, color 0.4s ease; 
             margin: 0; 
             overflow-x: hidden; 
             background: #0B0E14;
@@ -21,7 +20,6 @@
         .font-cursive { font-family: 'Dancing Script', cursive; }
         .font-corsiva { font-family: 'Playfair Display', serif; font-style: italic; }
         
-        /* Deep Cosmic Celestial Background Canvas */
         #space-canvas {
             position: fixed;
             top: 0;
@@ -32,7 +30,6 @@
             background: #0B0E14;
         }
 
-        /* Responsive Light Glass Cards over Cosmic Space */
         .panel { 
             background: rgba(255, 255, 255, 0.94); 
             border: 1px solid rgba(255, 255, 255, 0.6); 
@@ -49,13 +46,12 @@
         .text-heading { color: #0F172A !important; }
         .text-sub { color: #475569 !important; }
         
-        /* High Visibility Pure White Headings over Canvas */
         .text-canvas-heading { color: #FFFFFF !important; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
         .text-canvas-sub { color: #CBD5E1 !important; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
         .text-canvas-quote { color: #FDE047 !important; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
 
         .nav-bg { 
-            background: rgba(15, 23, 42, 0.85); 
+            background: rgba(15, 23, 42, 0.88); 
             border-color: rgba(255, 255, 255, 0.15); 
             backdrop-filter: blur(24px); 
         }
@@ -65,22 +61,65 @@
             color: #0F172A !important; 
         }
 
-        /* Animations & Responsive Mobile Touch Adjustments */
         .animate-pop { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
         .animate-pop:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
         .tab-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
         .glow-indigo { box-shadow: 0 0 20px -3px rgba(99, 102, 241, 0.6); }
 
-        /* Custom Scrollbars for Mobile Horizontal Containers */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body id="app-body" class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Interactive Background Canvas -->
+    <!-- Background Space Canvas -->
     <canvas id="space-canvas"></canvas>
+
+    <!-- AUTHENTICATION OVERLAY MODAL -->
+    <div id="auth-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl">
+        <div class="panel p-6 sm:p-8 rounded-3xl max-w-md w-full text-center space-y-5 shadow-2xl border border-white/40 animate-pop">
+            <div class="w-16 h-16 rounded-2xl bg-emerald-100 border-2 border-emerald-400 mx-auto flex items-center justify-center p-2 shadow-md">
+                <svg viewBox="0 0 100 100" class="w-full h-full">
+                    <ellipse cx="50" cy="62" rx="42" ry="32" fill="#10B981"/>
+                    <ellipse cx="32" cy="35" rx="20" ry="20" fill="#FFFFFF"/>
+                    <ellipse cx="68" cy="35" rx="20" ry="20" fill="#FFFFFF"/>
+                    <circle cx="32" cy="35" r="10" fill="#1E293B"/>
+                    <circle cx="68" cy="35" r="10" fill="#1E293B"/>
+                    <circle cx="28" cy="60" r="7" fill="#F43F5E"/>
+                    <circle cx="72" cy="60" r="7" fill="#F43F5E"/>
+                    <path d="M 38 70 Q 50 82 62 70" stroke="#064E3B" stroke-width="5" stroke-linecap="round" fill="none"/>
+                </svg>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-extrabold text-heading">Accountability Hub</h2>
+                <p class="text-xs text-sub mt-1">Select your profile and enter passcode to enter workspace.</p>
+            </div>
+
+            <div class="space-y-3 text-left">
+                <div>
+                    <label class="text-xs font-bold text-sub block mb-1">Select User Profile</label>
+                    <select id="login-user-select" class="w-full input-bg border rounded-2xl p-3 text-xs font-bold focus:outline-none">
+                        <option value="nishant">💙 Nishant</option>
+                        <option value="naqeeba">💖 Naqeeba</option>
+                        <option value="admin">⚙️ Admin Control Portal</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-sub block mb-1">Passcode Access</label>
+                    <input type="password" id="login-passcode-input" placeholder="Enter password..." class="w-full input-bg border rounded-2xl p-3 text-xs focus:outline-none font-mono">
+                </div>
+
+                <div id="auth-error-msg" class="text-xs text-rose-600 font-bold hidden text-center">Incorrect passcode. Try again.</div>
+
+                <button onclick="attemptLogin()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md glow-indigo">
+                    Authenticate Access ➔
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Navigation Header -->
     <header class="border-b nav-bg sticky top-0 z-50">
@@ -88,7 +127,6 @@
             
             <div class="flex items-center justify-between w-full md:w-auto">
                 <div class="flex items-center space-x-3">
-                    <!-- Embedded Green Frog Logo Container -->
                     <div class="w-10 h-10 rounded-2xl overflow-hidden shadow-lg border-2 border-emerald-400/80 bg-emerald-100 flex items-center justify-center shrink-0 p-1">
                         <svg viewBox="0 0 100 100" class="w-full h-full">
                             <ellipse cx="50" cy="62" rx="42" ry="32" fill="#10B981"/>
@@ -107,18 +145,17 @@
                     </div>
                 </div>
 
-                <!-- Clock for Mobile Header Top-Right -->
                 <div class="text-right block md:hidden">
                     <div id="realtime-clock-mobile" class="text-xs font-bold font-mono text-amber-300">12:00:00 PM</div>
                 </div>
             </div>
             
-            <!-- Mobile-Friendly Scrollable Tab Bar -->
+            <!-- Crisp Black Text Tab Navigation Bar -->
             <nav class="flex space-x-1.5 sub-panel p-1.5 rounded-2xl w-full md:w-auto overflow-x-auto no-scrollbar">
-                <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo whitespace-nowrap">Focus Room</button>
-                <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-transition px-3.5 py-2 text-xs font-bold rounded-xl text-slate-300 hover:text-white whitespace-nowrap">Daily Deck</button>
-                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-transition px-3.5 py-2 text-xs font-bold rounded-xl text-slate-300 hover:text-white whitespace-nowrap">Analytics & Logs</button>
-                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="tab-transition px-3.5 py-2 text-xs font-bold rounded-xl text-slate-300 hover:text-white whitespace-nowrap">Syllabus</button>
+                <button onclick="switchTab('focus')" id="tab-focus" class="tab-transition px-3.5 py-2 text-xs font-black rounded-xl bg-black text-white shadow-md whitespace-nowrap">Focus Room</button>
+                <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-transition px-3.5 py-2 text-xs font-black rounded-xl text-black hover:bg-white/80 whitespace-nowrap">Daily Deck</button>
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-transition px-3.5 py-2 text-xs font-black rounded-xl text-black hover:bg-white/80 whitespace-nowrap">Analytics & Logs</button>
+                <button onclick="switchTab('syllabus')" id="tab-syllabus" class="tab-transition px-3.5 py-2 text-xs font-black rounded-xl text-black hover:bg-white/80 whitespace-nowrap">Syllabus</button>
             </nav>
 
             <div class="hidden md:flex items-center space-x-4">
@@ -137,12 +174,45 @@
                         <span id="streak-naqeeba">0 Days</span>
                     </div>
                 </div>
+
+                <button onclick="logoutUser()" class="px-3 py-1.5 sub-panel rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 transition-all">
+                    Switch User
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Responsive Workspace -->
+    <!-- Main Workspace -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 w-full flex-grow relative z-10">
+
+        <!-- ADMIN SECURITY PANEL -->
+        <section id="view-admin" class="space-y-6 hidden">
+            <div class="panel p-6 rounded-3xl space-y-4 max-w-xl mx-auto animate-pop">
+                <h2 class="text-xl font-bold text-heading border-b pb-3">⚙️ Admin Security Portal</h2>
+                <p class="text-xs text-sub">Manage and update workspace passwords for Nishant and Naqeeba.</p>
+
+                <div class="space-y-3 pt-2">
+                    <div class="sub-panel p-3.5 rounded-2xl space-y-2">
+                        <label class="text-xs font-bold text-heading block">Nishant Passcode</label>
+                        <input type="text" id="admin-passcode-nishant" class="w-full input-bg border rounded-xl p-2 text-xs font-mono">
+                    </div>
+
+                    <div class="sub-panel p-3.5 rounded-2xl space-y-2">
+                        <label class="text-xs font-bold text-heading block">Naqeeba Passcode</label>
+                        <input type="text" id="admin-passcode-naqeeba" class="w-full input-bg border rounded-xl p-2 text-xs font-mono">
+                    </div>
+
+                    <div class="sub-panel p-3.5 rounded-2xl space-y-2">
+                        <label class="text-xs font-bold text-heading block">Admin Master Passcode</label>
+                        <input type="text" id="admin-passcode-master" class="w-full input-bg border rounded-xl p-2 text-xs font-mono">
+                    </div>
+
+                    <button onclick="saveAdminPasswords()" class="w-full py-2.5 bg-indigo-600 text-white font-bold rounded-xl text-xs glow-indigo">
+                        Save Password Changes To Database
+                    </button>
+                </div>
+            </div>
+        </section>
 
         <!-- VIEW 1: FOCUS ROOM -->
         <section id="view-focus" class="space-y-6">
@@ -166,13 +236,14 @@
 
                         <div id="timer-display" class="text-5xl sm:text-6xl font-black text-heading font-mono my-4 tracking-tighter">00:00:00</div>
                         
-                        <div class="flex justify-center gap-2.5">
-                            <button onclick="toggleActiveTimer()" id="btn-timer-toggle" class="px-5 sm:px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md glow-indigo cursor-pointer hover:scale-105 active:scale-95">Start Session</button>
-                            <button onclick="stopAndCompleteSession()" class="px-4 sm:px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95">Complete Session</button>
+                        <div class="flex justify-center flex-wrap gap-2">
+                            <button onclick="startFocusTimer()" id="btn-timer-start" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md glow-indigo">Start</button>
+                            <button onclick="pauseFocusTimer()" id="btn-timer-pause" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md">Pause</button>
+                            <button onclick="stopAndCompleteSession()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md">Complete</button>
                         </div>
                     </div>
 
-                    <!-- Individual Completed Hours -->
+                    <!-- Individual Hours Today -->
                     <div class="panel p-5 rounded-3xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Individual Hours Today</h3>
@@ -496,7 +567,7 @@
 
     <!-- SCRIPT ENGINE -->
     <script>
-        // Space Canvas Animation with Stars & Orbiting Planet
+        // Canvas Cosmic Background
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -562,7 +633,7 @@
         }
         animateSpace();
 
-        // Supabase Cloud State Synchronization
+        // Database-First State Engine (Supabase Persistence Protection)
         const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_7JxcJZC1kXBj7PDFaMG98Q_1-LywjiR";
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -570,6 +641,7 @@
         const STORAGE_KEY = "DUOSTUDY_PERSISTENT_STATE";
 
         const DEFAULT_STATE = {
+            passcodes: { nishant: "shishu", naqeeba: "nqb", admin: "admin123" },
             targetHours: 4.0,
             hoursNishantToday: 0.0,
             hoursNaqeebaToday: 0.0,
@@ -630,18 +702,72 @@
             })
             .subscribe();
 
+        // Passcode Authentication
+        let currentUserSession = localStorage.getItem("DUOSTUDY_CURRENT_USER") || null;
+
+        function attemptLogin() {
+            const selectedUser = document.getElementById('login-user-select').value;
+            const inputPasscode = document.getElementById('login-passcode-input').value.trim();
+            const state = getState();
+            const passcodes = state.passcodes || DEFAULT_STATE.passcodes;
+
+            if (inputPasscode === passcodes[selectedUser]) {
+                currentUserSession = selectedUser;
+                localStorage.setItem("DUOSTUDY_CURRENT_USER", selectedUser);
+                document.getElementById('auth-modal').classList.add('hidden');
+                document.getElementById('auth-error-msg').classList.add('hidden');
+
+                if (selectedUser === 'admin') {
+                    switchTab('admin');
+                } else {
+                    switchTab('focus');
+                }
+            } else {
+                document.getElementById('auth-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function logoutUser() {
+            currentUserSession = null;
+            localStorage.removeItem("DUOSTUDY_CURRENT_USER");
+            document.getElementById('login-passcode-input').value = '';
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function saveAdminPasswords() {
+            const newNishant = document.getElementById('admin-passcode-nishant').value.trim();
+            const newNaqeeba = document.getElementById('admin-passcode-naqeeba').value.trim();
+            const newMaster = document.getElementById('admin-passcode-master').value.trim();
+
+            if (!newNishant || !newNaqeeba || !newMaster) {
+                alert("Passcodes cannot be empty.");
+                return;
+            }
+
+            const state = getState();
+            state.passcodes = { nishant: newNishant, naqeeba: newNaqeeba, admin: newMaster };
+            saveStateToCloud(state);
+            alert("🔒 Password configurations updated successfully in cloud database!");
+        }
+
         function toggleInlineForm(formId) {
             const el = document.getElementById(formId);
             if (el) el.classList.toggle('hidden');
         }
 
         function switchTab(tabId) {
-            ['focus', 'tasks', 'analytics', 'syllabus'].forEach(id => {
-                document.getElementById(`view-${id}`).classList.add('hidden');
-                document.getElementById(`tab-${id}`).className = "tab-transition px-3.5 py-2 text-xs font-bold rounded-xl text-slate-300 hover:text-white whitespace-nowrap";
+            ['focus', 'tasks', 'analytics', 'syllabus', 'admin'].forEach(id => {
+                const view = document.getElementById(`view-${id}`);
+                const tab = document.getElementById(`tab-${id}`);
+                if (view) view.classList.add('hidden');
+                if (tab) tab.className = "tab-transition px-3.5 py-2 text-xs font-black rounded-xl text-black hover:bg-white/80 whitespace-nowrap";
             });
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).className = "tab-transition px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-md glow-indigo whitespace-nowrap";
+
+            const activeView = document.getElementById(`view-${tabId}`);
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if (activeView) activeView.classList.remove('hidden');
+            if (activeTab) activeTab.className = "tab-transition px-3.5 py-2 text-xs font-black rounded-xl bg-black text-white shadow-md whitespace-nowrap";
+            
             if (tabId === 'analytics') renderChart();
         }
 
@@ -703,25 +829,43 @@
             });
         }
 
-        function toggleActiveTimer() {
+        // Timer Controls Linked directly to Live Status Break Center
+        function startFocusTimer() {
             const state = getState();
-            if (!state.activeTimerSession) {
-                state.activeTimerSession = { user: 'nishant', running: false, startTime: null, accumulatedSeconds: 0 };
-            }
-
             const selectedUser = document.getElementById('timer-user-select').value;
-            state.activeTimerSession.user = selectedUser;
-
-            if (state.activeTimerSession.running) {
-                const now = Date.now();
-                const sessionSeconds = Math.floor((now - state.activeTimerSession.startTime) / 1000);
-                state.activeTimerSession.accumulatedSeconds = (state.activeTimerSession.accumulatedSeconds || 0) + sessionSeconds;
-                state.activeTimerSession.running = false;
-                state.activeTimerSession.startTime = null;
-            } else {
-                state.activeTimerSession.running = true;
-                state.activeTimerSession.startTime = Date.now();
+            
+            if (!state.activeTimerSession) {
+                state.activeTimerSession = { user: selectedUser, running: false, startTime: null, accumulatedSeconds: 0 };
             }
+
+            state.activeTimerSession.user = selectedUser;
+            state.activeTimerSession.running = true;
+            state.activeTimerSession.startTime = Date.now();
+
+            if (!state.userStatuses) state.userStatuses = {};
+            state.userStatuses[selectedUser] = 'Active Studying';
+            if (state.breakStartTimes) state.breakStartTimes[selectedUser] = null;
+
+            saveStateToCloud(state);
+        }
+
+        function pauseFocusTimer() {
+            const state = getState();
+            if (!state.activeTimerSession || !state.activeTimerSession.running) return;
+
+            const now = Date.now();
+            const sessionSeconds = Math.floor((now - state.activeTimerSession.startTime) / 1000);
+            state.activeTimerSession.accumulatedSeconds = (state.activeTimerSession.accumulatedSeconds || 0) + sessionSeconds;
+            state.activeTimerSession.running = false;
+            state.activeTimerSession.startTime = null;
+
+            const selectedUser = state.activeTimerSession.user || 'nishant';
+            if (!state.userStatuses) state.userStatuses = {};
+            if (!state.breakStartTimes) state.breakStartTimes = {};
+
+            state.userStatuses[selectedUser] = 'In Break';
+            state.breakStartTimes[selectedUser] = Date.now();
+
             saveStateToCloud(state);
         }
 
@@ -1007,6 +1151,11 @@
 
         function renderAll() {
             const state = getState();
+            const passcodes = state.passcodes || DEFAULT_STATE.passcodes;
+
+            document.getElementById('admin-passcode-nishant').value = passcodes.nishant || "shishu";
+            document.getElementById('admin-passcode-naqeeba').value = passcodes.naqeeba || "nqb";
+            document.getElementById('admin-passcode-master').value = passcodes.admin || "admin123";
 
             document.getElementById('hours-nishant-today').innerText = `${state.hoursNishantToday || 0.0} hrs`;
             document.getElementById('hours-naqeeba-today').innerText = `${state.hoursNaqeebaToday || 0.0} hrs`;
@@ -1016,15 +1165,6 @@
             if (state.userStatuses) {
                 document.getElementById('status-select-nishant').value = state.userStatuses.nishant || 'Active Studying';
                 document.getElementById('status-select-naqeeba').value = state.userStatuses.naqeeba || 'Active Studying';
-            }
-
-            const timerBtn = document.getElementById('btn-timer-toggle');
-            if (state.activeTimerSession && state.activeTimerSession.running) {
-                timerBtn.innerText = "Pause Session";
-                timerBtn.className = "px-5 sm:px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95";
-            } else {
-                timerBtn.innerText = "Start Session";
-                timerBtn.className = "px-5 sm:px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl text-xs transition-all shadow-md glow-indigo cursor-pointer hover:scale-105 active:scale-95";
             }
 
             if (state.activeTimerSession) {
@@ -1179,6 +1319,13 @@
                     </tr>
                 `).join('');
             }
+        }
+
+        // Initialize Authentication Check
+        if (currentUserSession) {
+            document.getElementById('auth-modal').classList.add('hidden');
+        } else {
+            document.getElementById('auth-modal').classList.remove('hidden');
         }
 
         renderAll();
