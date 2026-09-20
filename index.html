@@ -124,12 +124,11 @@
     </footer>
 
     <!-- Frontend Controller Script -->
-    <!-- Frontend Controller Script -->
     <script>
-        // Initialize Supabase Client
+        // Initialize Supabase Client (Using 'db' to prevent name collision)
         const SUPABASE_URL = "https://ekcoaiwrvrykrgpmqhio.supabase.co";
-        const SUPABASE_ANON_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE"; // Ensure your publishable key is here
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_ANON_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE"; // <--- Paste your publishable key here
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Tab Switcher logic
         function switchTab(tabId) {
@@ -202,15 +201,16 @@
             const container = document.getElementById('tasks-container');
             container.innerHTML = `<div class="p-4 text-slate-500 text-sm text-center">Loading tasks from database...</div>`;
             
-            const { data, error } = await supabase.from('daily_tasks').select('*').order('created_at', { ascending: false });
+            const { data, error } = await db.from('daily_tasks').select('*').order('created_at', { ascending: false });
             
             if (error) {
-                container.innerHTML = `<div class="p-4 text-rose-400 text-sm text-center">Error loading tasks. Ensure RLS policies or tables are ready.</div>`;
+                console.error(error);
+                container.innerHTML = `<div class="p-4 text-rose-400 text-sm text-center">Error loading tasks. Check browser console.</div>`;
                 return;
             }
 
             if (!data || data.length === 0) {
-                container.innerHTML = `<div class="p-4 text-slate-500 text-sm text-center">No tasks for today yet. Add one below!</div>`;
+                container.innerHTML = `<div class="p-4 text-slate-500 text-sm text-center">No tasks for today yet. Click "+ Add Task" above!</div>`;
                 return;
             }
 
@@ -227,18 +227,18 @@
 
         // Add a New Task
         async function openTaskModal() {
-            const userName = prompt("Enter your name (e.g., Nishant or Partner):");
+            const userName = prompt("Enter your name:");
             if (!userName) return;
-            const taskTitle = prompt("Enter your daily goal / deliverable:");
+            const taskTitle = prompt("Enter your daily goal:");
             if (!taskTitle) return;
 
-            await supabase.from('daily_tasks').insert([{ user_name: userName, task_title: taskTitle, is_completed: false }]);
+            await db.from('daily_tasks').insert([{ user_name: userName, task_title: taskTitle, is_completed: false }]);
             fetchTasks();
         }
 
         // Toggle Task Completion
         async function toggleTask(taskId, newStatus) {
-            await supabase.from('daily_tasks').update({ is_completed: newStatus }).eq('id', taskId);
+            await db.from('daily_tasks').update({ is_completed: newStatus }).eq('id', taskId);
             fetchTasks();
         }
 
@@ -247,7 +247,7 @@
             const tbody = document.getElementById('syllabus-table-body');
             tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">Loading syllabus...</td></tr>`;
 
-            const { data, error } = await supabase.from('syllabus').select('*');
+            const { data, error } = await db.from('syllabus').select('*');
 
             if (error || !data || data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">No syllabus topics added yet.</td></tr>`;
