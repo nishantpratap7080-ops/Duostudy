@@ -5,50 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accountability - Co-Working & Progress Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
         body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
         .font-cursive { font-family: 'Dancing Script', cursive; }
+        .font-corsiva { font-family: 'Playfair Display', serif; font-style: italic; }
         
-        /* Smooth Theme Styling */
-        .theme-dark {
-            background-color: #0B0F19;
-            color: #F1F5F9;
-        }
-        .theme-dark .panel {
-            background: rgba(15, 23, 42, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-        }
-        .theme-dark .sub-panel {
-            background: rgba(2, 6, 23, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        .theme-dark { background-color: #0B0F19; color: #F1F5F9; }
+        .theme-dark .panel { background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5); }
+        .theme-dark .sub-panel { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); }
         .theme-dark .text-heading { color: #FFFFFF; }
         .theme-dark .text-sub { color: #94A3B8; }
         .theme-dark .nav-bg { background: rgba(15, 23, 42, 0.9); border-color: rgba(255, 255, 255, 0.1); }
         .theme-dark .input-bg { background: #020617; border-color: #1E293B; color: #F1F5F9; }
 
-        .theme-light {
-            background-color: #F8FAFC;
-            color: #1E293B;
-        }
-        .theme-light .panel {
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-        }
-        .theme-light .sub-panel {
-            background: #F1F5F9;
-            border: 1px solid #E2E8F0;
-        }
+        .theme-light { background-color: #F8FAFC; color: #1E293B; }
+        .theme-light .panel { background: #FFFFFF; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); }
+        .theme-light .sub-panel { background: #F1F5F9; border: 1px solid #E2E8F0; }
         .theme-light .text-heading { color: #0F172A; }
         .theme-light .text-sub { color: #64748B; }
         .theme-light .nav-bg { background: #FFFFFF; border-color: #E2E8F0; }
         .theme-light .input-bg { background: #F8FAFC; border-color: #CBD5E1; color: #0F172A; }
 
-        /* Micro-Animations */
         .animate-pop { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .animate-pop:hover { transform: scale(1.01); }
         .tab-transition { transition: all 0.25s ease-in-out; }
@@ -100,10 +80,10 @@
         <section id="view-focus" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                <!-- Left Column: Controls & Status -->
+                <!-- Left Column -->
                 <div class="space-y-6">
                     
-                    <!-- Timer & Mode Switcher -->
+                    <!-- Timer -->
                     <div class="panel p-6 rounded-2xl text-center relative overflow-hidden animate-pop">
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-[11px] font-bold uppercase tracking-wider text-sub">Timer Mode</span>
@@ -123,14 +103,13 @@
                         </div>
                     </div>
 
-                    <!-- Target Hours & Goal -->
+                    <!-- Target Goals -->
                     <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Daily Target Goal</h3>
                             <button onclick="toggleInlineForm('form-edit-goal')" class="text-xs text-indigo-500 font-semibold hover:underline">Edit Goal</button>
                         </div>
 
-                        <!-- Inline Edit Goal Form -->
                         <div id="form-edit-goal" class="hidden sub-panel p-3 rounded-xl space-y-2">
                             <input type="number" step="0.5" id="input-target-hours" placeholder="Target hours (e.g., 5.0)" class="w-full input-bg border rounded-lg p-2 text-xs">
                             <div class="flex gap-2">
@@ -151,12 +130,12 @@
                         </div>
                     </div>
 
-                    <!-- User Live Status Panel -->
+                    <!-- Live Status Panel -->
                     <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Live Status Center</h3>
                         
                         <div class="space-y-2">
-                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl">
+                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-blue-500">
                                 <span class="text-xs font-bold text-heading">Nishant</span>
                                 <select onchange="updateUserStatus('nishant', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
                                     <option value="Active Studying">🟢 Active Studying</option>
@@ -165,7 +144,7 @@
                                 </select>
                             </div>
 
-                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl">
+                            <div class="flex items-center justify-between sub-panel p-3 rounded-xl border-l-4 border-pink-500">
                                 <span class="text-xs font-bold text-heading">Naqeeba</span>
                                 <select onchange="updateUserStatus('naqeeba', this.value)" class="input-bg text-xs font-semibold rounded-lg px-2.5 py-1">
                                     <option value="Active Studying">🟢 Active Studying</option>
@@ -177,11 +156,11 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Call Launcher + Photos -->
+                <!-- Right Column -->
                 <div class="lg:col-span-2 space-y-6">
                     
-                    <!-- Call Launcher Panel -->
-                    <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[260px] animate-pop">
+                    <!-- Call Launcher -->
+                    <div class="panel rounded-2xl p-6 flex flex-col justify-between min-h-[240px] animate-pop">
                         <div class="flex items-center justify-between border-b border-slate-700/30 pb-3 mb-4">
                             <div class="flex items-center space-x-2">
                                 <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -192,7 +171,7 @@
 
                         <div class="space-y-4 max-w-lg mx-auto text-center py-2">
                             <p class="text-xs text-sub leading-relaxed">
-                                Paste your Google Meet or Discord link below. Launch the meeting in a side tab while keeping your timer and tasks active here.
+                                Paste your Google Meet or Discord link below. Launch the meeting in a side tab while keeping your timer active here.
                             </p>
 
                             <div class="space-y-2">
@@ -213,20 +192,20 @@
                         <div class="flex justify-between items-center border-b border-slate-700/30 pb-3">
                             <div>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-heading">Study Desk & Photo Showcase</h3>
-                                <p class="text-sub text-xs">Share desk setups, moodboard stills, or study notes with each other.</p>
+                                <p class="text-sub text-xs">Share desk setups, gallery uploads, or study notes.</p>
                             </div>
                             <button onclick="toggleInlineForm('form-add-photo')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Photo</button>
                         </div>
 
-                        <!-- Inline Add Photo Form -->
+                        <!-- Gallery Upload Form -->
                         <div id="form-add-photo" class="hidden sub-panel p-4 rounded-xl space-y-3">
-                            <h4 class="text-xs font-bold text-heading">Upload New Showcase Photo</h4>
+                            <h4 class="text-xs font-bold text-heading">Upload Image from Gallery</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <input type="text" id="input-photo-caption" placeholder="Photo Caption / Title" class="input-bg border rounded-lg p-2 text-xs">
-                                <input type="text" id="input-photo-url" placeholder="Image URL (e.g., Unsplash link)" class="input-bg border rounded-lg p-2 text-xs">
+                                <input type="text" id="input-photo-caption" placeholder="Photo Title / Caption" class="input-bg border rounded-lg p-2 text-xs">
+                                <input type="file" id="input-photo-file" accept="image/*" class="input-bg border rounded-lg p-1 text-xs">
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="savePhotoInline()" class="px-4 py-1.5 bg-indigo-600 text-white font-bold rounded-lg text-xs">Save Photo</button>
+                                <button onclick="savePhotoFromGallery()" class="px-4 py-1.5 bg-indigo-600 text-white font-bold rounded-lg text-xs">Upload Image</button>
                                 <button onclick="toggleInlineForm('form-add-photo')" class="px-4 py-1.5 sub-panel text-sub rounded-lg text-xs">Cancel</button>
                             </div>
                         </div>
@@ -249,14 +228,15 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-xl font-bold tracking-tight text-heading">Daily Commitments</h2>
-                            <p class="text-xs font-bold text-indigo-400 mt-1">Naqeeba u know what the only thing standing between u and everything you want is trying one more time</p>
+                            <p class="text-sm font-corsiva font-semibold text-pink-400 mt-1 leading-snug">
+                                Naqeeba u know what the only thing standing between u and everything you ever wanted is trying one more time ... go get out girl !!
+                            </p>
                         </div>
                         <button onclick="toggleInlineForm('form-add-task')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Task</button>
                     </div>
 
-                    <!-- Inline Add Task Form -->
                     <div id="form-add-task" class="hidden panel p-4 rounded-xl space-y-3">
-                        <h4 class="text-xs font-bold text-heading">Add Daily Goal Deliverable</h4>
+                        <h4 class="text-xs font-bold text-heading">Add Daily Deliverable</h4>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <select id="input-task-owner" class="input-bg border rounded-lg p-2 text-xs font-semibold">
                                 <option value="Nishant">Nishant</option>
@@ -282,7 +262,6 @@
                             <button onclick="toggleInlineForm('form-add-penalty')" class="text-xs font-semibold text-sub hover:text-heading">+ Log</button>
                         </div>
 
-                        <!-- Inline Add Penalty Form -->
                         <div id="form-add-penalty" class="hidden sub-panel p-3 rounded-xl space-y-2">
                             <input type="text" id="input-penalty-text" placeholder="Penalty Description (e.g., Buy Coffee)" class="w-full input-bg border rounded-lg p-2 text-xs">
                             <div class="flex gap-2">
@@ -301,37 +280,43 @@
             </div>
         </section>
 
-        <!-- VIEW 3: ANALYTICS & SESSION LOGS -->
+        <!-- VIEW 3: ANALYTICS & VISUAL GRAPH ENGINE -->
         <section id="view-analytics" class="space-y-6 hidden">
             <div>
-                <h2 class="text-xl font-bold tracking-tight text-heading">Study Analytics & Session History</h2>
-                <p class="text-sub text-xs">Review study sessions, room join logs, and monthly calendar streaks.</p>
+                <h2 class="text-xl font-bold tracking-tight text-heading">Study Analytics & Consistency Engine</h2>
+                <p class="text-sub text-xs">Track daily hours visually and manage individual streaks on the calendar.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
+                <!-- Visual Graph Module (2 Cols) -->
                 <div class="lg:col-span-2 panel rounded-2xl p-5 space-y-4 animate-pop">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Logged Co-Working Sessions</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-700/30 text-[11px] font-bold text-sub uppercase">
-                                    <th class="p-3">User</th>
-                                    <th class="p-3">Date</th>
-                                    <th class="p-3">Start / End</th>
-                                    <th class="p-3">Duration</th>
-                                </tr>
-                            </thead>
-                            <tbody id="session-logs-body" class="divide-y divide-slate-700/20 text-xs text-sub">
-                                <!-- Loaded dynamically -->
-                            </tbody>
-                        </table>
+                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Study Hours & Progress Graph</h3>
+                        <span class="text-xs font-mono text-emerald-400 font-bold">Daily Tracking</span>
+                    </div>
+                    
+                    <div class="w-full h-64">
+                        <canvas id="studyChart"></canvas>
                     </div>
                 </div>
 
+                <!-- Manual Individual Streak Calendar (1 Col) -->
                 <div class="panel p-5 rounded-2xl space-y-4 animate-pop">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Activity Calendar</h3>
-                    <div class="grid grid-cols-7 gap-1.5 text-center text-xs font-semibold text-sub mb-2">
+                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sub">Individual Attendance Calendar</h3>
+                    </div>
+
+                    <div class="flex items-center justify-around py-1">
+                        <button onclick="setCalendarMode('naqeeba')" class="px-3 py-1 bg-pink-500/20 text-pink-400 border border-pink-500/40 rounded-lg text-xs font-bold hover:bg-pink-500 hover:text-white transition-all">
+                            💖 Naqeeba (Pink)
+                        </button>
+                        <button onclick="setCalendarMode('nishant')" class="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/40 rounded-lg text-xs font-bold hover:bg-blue-500 hover:text-white transition-all">
+                            💙 Nishant (Blue)
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-1.5 text-center text-xs font-semibold text-sub mb-1">
                         <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
                     </div>
                     <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs">
@@ -342,19 +327,18 @@
             </div>
         </section>
 
-        <!-- VIEW 4: MASTER SYLLABUS -->
+        <!-- VIEW 4: MASTER SYLLABUS & RESOURCES ENGINE -->
         <section id="view-syllabus" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-xl font-bold tracking-tight text-heading">Master Syllabus Board</h2>
-                    <p class="text-sub text-xs">Manage modules, assign topics, and track subject progress.</p>
+                    <h2 class="text-xl font-bold tracking-tight text-heading">Master Syllabus & Resource Center</h2>
+                    <p class="text-sub text-xs">Manage modules, assign topics, and maintain working notes and URLs.</p>
                 </div>
                 <button onclick="toggleInlineForm('form-add-syllabus')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-sm">+ Add Topic</button>
             </div>
 
-            <!-- Inline Add Syllabus Form -->
             <div id="form-add-syllabus" class="hidden panel p-4 rounded-xl space-y-3">
-                <h4 class="text-xs font-bold text-heading">Add Subject Topic / Chapter</h4>
+                <h4 class="text-xs font-bold text-heading">Add Subject Topic</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <input type="text" id="input-syllabus-subject" placeholder="Subject (e.g., Computer Science)" class="input-bg border rounded-lg p-2 text-xs">
                     <input type="text" id="input-syllabus-topic" placeholder="Topic / Chapter Name" class="input-bg border rounded-lg p-2 text-xs">
@@ -389,11 +373,47 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- RESOURCES & NOTEPAD MODULE -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+                
+                <!-- Notepad Section -->
+                <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
+                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📝 Shared Resources & Notepad</h3>
+                        <button onclick="saveNotepad()" class="text-xs font-bold text-indigo-400 hover:underline">Save Notes</button>
+                    </div>
+                    <textarea id="resource-notepad" placeholder="Write shared notes, links, formula shortcuts, or exam schedules here..." class="w-full h-40 input-bg border rounded-xl p-3 text-xs focus:outline-none font-mono leading-relaxed"></textarea>
+                </div>
+
+                <!-- Excel-style Resource Link Sheet -->
+                <div class="panel p-5 rounded-2xl space-y-3 animate-pop">
+                    <div class="flex justify-between items-center border-b border-slate-700/30 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-heading">📊 Working Resource URL Sheet</h3>
+                        <button onclick="addResourceRowPrompt()" class="text-xs font-bold text-indigo-400 hover:underline">+ Add Link Row</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-700/30 text-[10px] font-bold text-sub uppercase">
+                                    <th class="p-2">Title</th>
+                                    <th class="p-2">Working URL Link</th>
+                                    <th class="p-2 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resource-table-body" class="divide-y divide-slate-700/20 text-xs text-sub">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
     <footer class="border-t nav-bg py-4 text-center text-xs text-sub">
         Accountability Hub &bull; Nishant & Naqeeba
     </footer>
@@ -406,36 +426,41 @@
             hoursToday: 0.0,
             streak: 1,
             meetLink: 'https://meet.google.com/',
+            activeCalendarUser: 'naqeeba',
             userStatuses: { nishant: 'Active Studying', naqeeba: 'Active Studying' },
             photos: [
-                { id: '1', caption: 'Nishant Desk Setup', url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop&q=60' },
-                { id: '2', caption: 'Naqeeba Notes', url: 'https://images.unsplash.com/photo-1517842645767-c639042777db?w=500&auto=format&fit=crop&q=60' }
+                { id: '1', caption: 'Nishant Desk Setup', url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop&q=60' }
             ],
             tasks: [
                 { id: '1', name: 'Nishant', title: 'Complete 2 Focus Sessions', completed: false },
                 { id: '2', name: 'Naqeeba', title: 'Finish OS Module Notes', completed: false }
             ],
-            sessionLogs: [
-                { id: '1', user: 'Nishant', date: '2026-09-20', times: '10:00 AM - 10:50 AM', duration: '50 mins' },
-                { id: '2', user: 'Naqeeba', date: '2026-09-20', times: '11:15 AM - 12:05 PM', duration: '50 mins' }
-            ],
+            graphData: [2.5, 4.0, 3.5, 5.0, 4.5, 3.0, 4.2],
+            calendarMarks: {
+                naqeeba: [2, 5, 8, 12, 15, 20],
+                nishant: [3, 6, 9, 14, 18, 20]
+            },
             penalties: [
                 { id: '1', text: 'Missed 4-hr mark (Buy Coffee)', paid: false }
             ],
             syllabus: [
                 { id: '1', subject: 'Computer Science', topic: 'Data Structures & Algorithms', owner: 'Nishant', status: 'In Progress' },
-                { id: '2', subject: 'Computer Science', topic: 'Operating Systems & IPC', owner: 'Naqeeba', status: 'Not Started' },
-                { id: '3', subject: 'Mathematics', topic: 'Linear Algebra & Calculus', owner: 'Nishant', status: 'Completed' }
+                { id: '2', subject: 'Computer Science', topic: 'Operating Systems & IPC', owner: 'Naqeeba', status: 'Not Started' }
+            ],
+            notepad: 'Nishant & Naqeeba Shared Notepad:\n- Review Module 1 by Thursday\n- https://github.com/nishantpratap7080-ops/Duostudy',
+            resources: [
+                { id: '1', title: 'OS Documentation', url: 'https://docs.kernel.org' },
+                { id: '2', title: 'DSA Sheet', url: 'https://leetcode.com' }
             ]
         };
 
         function getState() {
-            const saved = localStorage.getItem('ACCOUNTABILITY_HUB_STATE');
+            const saved = localStorage.getItem('ACCOUNTABILITY_HUB_REFINED_STATE');
             return saved ? JSON.parse(saved) : DEFAULT_STATE;
         }
 
         function saveState(state) {
-            localStorage.setItem('ACCOUNTABILITY_HUB_STATE', JSON.stringify(state));
+            localStorage.setItem('ACCOUNTABILITY_HUB_REFINED_STATE', JSON.stringify(state));
             renderAll();
         }
 
@@ -444,7 +469,7 @@
             if (el) el.classList.toggle('hidden');
         }
 
-        // Theme Controller
+        // Theme Engine
         function applyTheme(theme) {
             const body = document.getElementById('app-body');
             const icon = document.getElementById('theme-icon');
@@ -467,7 +492,6 @@
             saveState(state);
         }
 
-        // Navigation
         function switchTab(tabId) {
             ['focus', 'tasks', 'analytics', 'syllabus'].forEach(id => {
                 document.getElementById(`view-${id}`).classList.add('hidden');
@@ -475,6 +499,7 @@
             });
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
             document.getElementById(`tab-${tabId}`).className = "tab-transition px-4 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-sm";
+            if (tabId === 'analytics') renderChart();
         }
 
         // Realtime Clock
@@ -493,8 +518,7 @@
         let activeTimerMode = "50";
 
         function changeTimerMode() {
-            const mode = document.getElementById('timer-mode-select').value;
-            activeTimerMode = mode;
+            activeTimerMode = document.getElementById('timer-mode-select').value;
             resetTimer();
         }
 
@@ -515,8 +539,6 @@
                 document.getElementById('btn-timer-toggle').innerText = "Pause Session";
                 document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md";
                 
-                const startTime = new Date();
-                
                 timerInterval = setInterval(() => {
                     if (activeTimerMode === 'stopwatch') {
                         timerSeconds++;
@@ -528,8 +550,11 @@
                         } else {
                             clearInterval(timerInterval);
                             isRunning = false;
-                            const addedHours = parseFloat((parseInt(activeTimerMode) / 60).toFixed(2));
-                            logCompletedSession("Nishant", startTime, new Date(), `${activeTimerMode} mins`, addedHours);
+                            const added = parseFloat((parseInt(activeTimerMode) / 60).toFixed(2));
+                            const state = getState();
+                            state.hoursToday = parseFloat((state.hoursToday + added).toFixed(2));
+                            saveState(state);
+                            alert(`🎉 Session logged! Added ${added} hours.`);
                             resetTimer();
                         }
                     }
@@ -542,26 +567,8 @@
             isRunning = false;
             document.getElementById('btn-timer-toggle').innerText = "Start Session";
             document.getElementById('btn-timer-toggle').className = "px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all shadow-md";
-            
-            if (activeTimerMode === 'stopwatch') {
-                timerSeconds = 0;
-            } else {
-                timerSeconds = parseInt(activeTimerMode) * 60;
-            }
+            timerSeconds = activeTimerMode === 'stopwatch' ? 0 : parseInt(activeTimerMode) * 60;
             updateTimerDisplay();
-        }
-
-        function logCompletedSession(user, startTime, endTime, durationStr, hoursAmount) {
-            const state = getState();
-            state.hoursToday = parseFloat((state.hoursToday + hoursAmount).toFixed(2));
-            state.sessionLogs.unshift({
-                id: Date.now().toString(),
-                user: user,
-                date: new Date().toISOString().split('T')[0],
-                times: `${startTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${endTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`,
-                duration: durationStr
-            });
-            saveState(state);
         }
 
         function saveTargetHoursInline() {
@@ -593,18 +600,22 @@
             if (link) window.open(link, '_blank');
         }
 
-        // Inline Handlers
-        function savePhotoInline() {
+        // Direct Gallery Image Upload
+        function savePhotoFromGallery() {
             const caption = document.getElementById('input-photo-caption').value.trim();
-            const url = document.getElementById('input-photo-url').value.trim();
-            if (!caption || !url) return;
+            const fileInput = document.getElementById('input-photo-file');
+            if (!caption || !fileInput.files || !fileInput.files[0]) return;
 
-            const state = getState();
-            state.photos.unshift({ id: Date.now().toString(), caption: caption, url: url });
-            saveState(state);
-            toggleInlineForm('form-add-photo');
-            document.getElementById('input-photo-caption').value = '';
-            document.getElementById('input-photo-url').value = '';
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const state = getState();
+                state.photos.unshift({ id: Date.now().toString(), caption: caption, url: e.target.result });
+                saveState(state);
+                toggleInlineForm('form-add-photo');
+                document.getElementById('input-photo-caption').value = '';
+                fileInput.value = '';
+            };
+            reader.readAsDataURL(fileInput.files[0]);
         }
 
         function deletePhoto(id) {
@@ -613,11 +624,11 @@
             saveState(state);
         }
 
+        // Tasks & Penalties
         function saveTaskInline() {
             const owner = document.getElementById('input-task-owner').value;
             const title = document.getElementById('input-task-title').value.trim();
             if (!title) return;
-
             const state = getState();
             state.tasks.unshift({ id: Date.now().toString(), name: owner, title: title, completed: false });
             saveState(state);
@@ -641,7 +652,6 @@
         function savePenaltyInline() {
             const text = document.getElementById('input-penalty-text').value.trim();
             if (!text) return;
-
             const state = getState();
             state.penalties.unshift({ id: Date.now().toString(), text: text, paid: false });
             saveState(state);
@@ -656,6 +666,56 @@
             saveState(state);
         }
 
+        // Calendar Individual Streak Toggles
+        function setCalendarMode(user) {
+            const state = getState();
+            state.activeCalendarUser = user;
+            saveState(state);
+        }
+
+        function toggleCalendarDay(day) {
+            const state = getState();
+            const user = state.activeCalendarUser || 'naqeeba';
+            const marks = state.calendarMarks[user];
+            const idx = marks.indexOf(day);
+            if (idx > -1) marks.splice(idx, 1);
+            else marks.push(day);
+            saveState(state);
+        }
+
+        // Analytics Visual Chart
+        let myChart = null;
+        function renderChart() {
+            const ctx = document.getElementById('studyChart');
+            if (!ctx) return;
+            const state = getState();
+
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Study Hours Logged',
+                        data: state.graphData,
+                        backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                        borderColor: '#6366F1',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Syllabus & Resources
         function saveSyllabusInline() {
             const subject = document.getElementById('input-syllabus-subject').value.trim();
             const topic = document.getElementById('input-syllabus-topic').value.trim();
@@ -687,6 +747,31 @@
             saveState(state);
         }
 
+        function saveNotepad() {
+            const text = document.getElementById('resource-notepad').value;
+            const state = getState();
+            state.notepad = text;
+            saveState(state);
+            alert("Notepad saved!");
+        }
+
+        function addResourceRowPrompt() {
+            const title = prompt("Resource Title:");
+            if (!title) return;
+            const url = prompt("Working URL Link (https://...):");
+            if (!url) return;
+
+            const state = getState();
+            state.resources.push({ id: Date.now().toString(), title: title, url: url });
+            saveState(state);
+        }
+
+        function deleteResourceRow(id) {
+            const state = getState();
+            state.resources = state.resources.filter(r => r.id !== id);
+            saveState(state);
+        }
+
         // Render Controller
         function renderAll() {
             const state = getState();
@@ -696,11 +781,12 @@
             document.getElementById('hours-target').innerText = `${state.targetHours} hrs`;
             document.getElementById('streak-counter').innerText = `${state.streak} Day${state.streak > 1 ? 's' : ''}`;
             document.getElementById('meet-link-input').value = state.meetLink || '';
+            document.getElementById('resource-notepad').value = state.notepad || '';
 
-            // Render Photos
+            // Gallery
             const photoGallery = document.getElementById('photo-gallery');
             if (state.photos.length === 0) {
-                photoGallery.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-sub sub-panel rounded-xl">No photos added yet. Click "+ Add Photo" above.</div>`;
+                photoGallery.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-sub sub-panel rounded-xl">No photos uploaded. Click "+ Add Photo" above.</div>`;
             } else {
                 photoGallery.innerHTML = state.photos.map(p => `
                     <div class="sub-panel rounded-xl overflow-hidden group relative animate-pop">
@@ -713,7 +799,7 @@
                 `).join('');
             }
 
-            // Render Tasks
+            // Tasks
             const tasksContainer = document.getElementById('tasks-container');
             if (state.tasks.length === 0) {
                 tasksContainer.innerHTML = `<div class="p-6 text-center text-xs text-sub panel rounded-xl">No tasks set. Click "+ Add Task" above.</div>`;
@@ -732,7 +818,7 @@
                 `).join('');
             }
 
-            // Render Penalties
+            // Penalties
             const penaltiesContainer = document.getElementById('penalties-container');
             if (state.penalties.length === 0) {
                 penaltiesContainer.innerHTML = `<div class="text-xs text-sub text-center py-2">No active forfeits logged.</div>`;
@@ -747,35 +833,28 @@
                 `).join('');
             }
 
-            // Session Logs
-            const logsBody = document.getElementById('session-logs-body');
-            if (state.sessionLogs.length === 0) {
-                logsBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-sub">No session logs recorded yet.</td></tr>`;
-            } else {
-                logsBody.innerHTML = state.sessionLogs.map(l => `
-                    <tr class="border-b border-slate-700/20">
-                        <td class="p-3 font-semibold text-heading">${l.user}</td>
-                        <td class="p-3 font-mono text-sub">${l.date}</td>
-                        <td class="p-3 text-sub">${l.times}</td>
-                        <td class="p-3 font-mono text-indigo-500 font-bold">${l.duration}</td>
-                    </tr>
-                `).join('');
-            }
-
-            // Calendar
+            // Individual Streak Calendar Grid
             const calGrid = document.getElementById('calendar-grid');
             let calHTML = '';
+            const activeUser = state.activeCalendarUser || 'naqeeba';
             for (let i = 1; i <= 30; i++) {
-                const isActive = (i === 20);
+                const isNaqeeba = state.calendarMarks.naqeeba.includes(i);
+                const isNishant = state.calendarMarks.nishant.includes(i);
+                
+                let bgClass = 'sub-panel text-sub';
+                if (isNaqeeba && isNishant) bgClass = 'bg-gradient-to-r from-pink-500 to-blue-500 text-white font-bold';
+                else if (isNaqeeba) bgClass = 'bg-pink-500 text-white font-bold';
+                else if (isNishant) bgClass = 'bg-blue-500 text-white font-bold';
+
                 calHTML += `
-                    <div class="p-2 rounded-lg border ${isActive ? 'bg-indigo-600 text-white font-bold border-indigo-600' : 'sub-panel text-sub'}">
+                    <button onclick="toggleCalendarDay(${i})" class="p-2 rounded-lg border text-xs cursor-pointer transition-all ${bgClass}">
                         ${i}
-                    </div>
+                    </button>
                 `;
             }
             calGrid.innerHTML = calHTML;
 
-            // Syllabus
+            // Syllabus Progress Cards & Table
             const tbody = document.getElementById('syllabus-table-body');
             if (state.syllabus.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-sub">No syllabus topics added yet.</td></tr>`;
@@ -801,10 +880,8 @@
                 `).join('');
             }
 
-            // Progress Cards
             const progressCards = document.getElementById('syllabus-progress-cards');
             const subjects = [...new Set(state.syllabus.map(s => s.subject))];
-            
             if (subjects.length === 0) {
                 progressCards.innerHTML = '';
             } else {
@@ -824,6 +901,24 @@
                         </div>
                     `;
                 }).join('');
+            }
+
+            // Resource Excel Sheet Table
+            const resourceBody = document.getElementById('resource-table-body');
+            if (state.resources.length === 0) {
+                resourceBody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-sub">No resource links added.</td></tr>`;
+            } else {
+                resourceBody.innerHTML = state.resources.map(r => `
+                    <tr class="border-b border-slate-700/20">
+                        <td class="p-2 font-semibold text-heading">${r.title}</td>
+                        <td class="p-2">
+                            <a href="${r.url}" target="_blank" class="text-indigo-400 font-mono underline hover:text-indigo-300 truncate block max-w-xs">${r.url}</a>
+                        </td>
+                        <td class="p-2 text-right">
+                            <button onclick="deleteResourceRow('${r.id}')" class="text-sub hover:text-rose-500 text-xs">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
             }
         }
 
